@@ -11,7 +11,7 @@
 
 ## 최초 Pages 활성화
 
-예상 주소는 https://claudelove.github.io/trade_monitor/ 이다. 실제 배포 성공·HTTP 응답을 확인하기 전에는 활성 주소라고 단정하지 않는다.
+현재 주소는 **https://claudelove.github.io/trade_monitor/** 이다. 2026-11-03 17:23 KST 배포 성공 및 HTML·스크립트·데이터·version.json HTTP 200 확인. 확인된 코드 배포 커밋은 38f3ffb다. 이 저장소의 최초 Pages 활성화와 work 환경 허용은 이미 완료했다. 아래는 새 저장소/복구 시 참고 절차다.
 
 Actions에서 Pages 활성화를 시도한다. GitHub 기본 토큰으로 사이트 생성 권한이 부족하면 계정 소유자가 [Settings → Pages](https://github.com/claudelove/trade_monitor/settings/pages)에서 Source를 **GitHub Actions**로 한 번 지정하고 최신 Prototype checks 실행을 재실행한다. 별도 도메인은 필요 없다.
 

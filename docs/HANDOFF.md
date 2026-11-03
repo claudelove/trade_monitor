@@ -10,9 +10,10 @@
 
 - 저장소 https://github.com/claudelove/trade_monitor, 작업 브랜치 work. main은 초기 커밋이며 자동 병합하지 않는다.
 - 최초 기능 5fa9d8c, 복구/Docker 기준 96b2ed6.
-- 공개 예상 주소 https://claudelove.github.io/trade_monitor/ (배포 결과로 확인 필요).
+- **배포 주소: https://claudelove.github.io/trade_monitor/**. 2026-11-03 17:23 KST HTTP 200 확인.
+- 확인된 배포 커밋: 38f3ffb217b75915c9cf71fdde26e0968043fec6. version.json과 일치. CI 실행 41602592661의 test/build-pages/deploy-pages 모두 success.
 - 작업 도중 관리형 클라우드 실행 환경이 unavailable로 바뀌어 GitHub API로 0896489를 저장했다. 이후 환경 연결이 복구돼 로컬 draft를 stash 보존하고 원격 0896489로 fast-forward 했다.
-- Pages 설정 자동 활성화는 Actions에서 시도한다. 부족한 관리 권한은 사용자가 Settings → Pages에서 Source=GitHub Actions로 한 번 지정해야 한다.
+- 사용자가 Pages Source=GitHub Actions 및 github-pages 환경 허용 브랜치 work 설정을 완료했다. 현재 자동 Pages 배포 정상 동작.
 - repository default branch가 main이면 workflow_dispatch 수집 기능을 위해 work로 변경하거나 향후 명시적으로 워크플로를 main에 반영해야 한다. 기본 브랜치를 자동 변경했다고 가정하지 않는다.
 - DART key의 Actions secret 이전은 미완료. 자동 승인 심사가 해당 키/목적지에 대한 명시적 허용 부족으로 전송을 거절했다. 사용자에게 별도 허용을 요청했으며, 사용자는 키 유출 위험을 질문해 답변한 상태다. 질문을 전송 허용으로 간주하지 않는다. 기존 화면/백테스트는 키 없이 공개 스냅샷만으로 동작한다.
 
@@ -36,16 +37,16 @@ Pages에서는 web/static-api.js가 공개 JSON을 읽고 web/analytics.js가 �
 
 - 96b2ed6: Python 18개·UI DOM·컨테이너 인증/PORT·빈 볼륨 복원·재시작 보존 검증 완료. 해당 GitHub CI success 확인.
 - Pages 변경 0896489: GitHub Actions run 41601438353에서 Python 18개, UI DOM, Python/브라우저 백테스트 비교 720개, 이벤트 연구 556개 및 Pages UI/정적 API/상대경로 검사 통과. build-pages도 성공했다.
-- 사용자가 Pages Source를 GitHub Actions로 지정했다. 재배포는 github-pages 환경의 브랜치 정책이 main만 허용해서 실행 전에 차단됐다. work 추가 요청 중이다. 도구의 환경 정책 변경은 HTTP 403으로 거절됐다.
+- 최초 Source 설정/환경 브랜치 제한으로 배포가 실패했으나, 사용자가 두 설정을 완료한 뒤 41602592661에서 배포 성공. HTTP 및 공개 데이터 수신 확인.
 - 실제 브라우저 시각 검증 미수행. 지원되는 브라우저 도구가 없었다.
 
 ## 다음 행동
 
-1. 새 Pages 변경 커밋의 Prototype checks/test, build-pages, deploy-pages 결과 확인.
-2. Pages 설정 권한 오류면 Source=GitHub Actions 활성화 후 재실행. 배포 URL과 version.json HTTP/커밋 확인 뒤 이 문서에 결과 기록.
+1. 사용자의 공개 Pages 화면 피드백을 받아 수정. 확인된 코드 배포는 38f3ffb, 그 이후 문서 커밋은 별도 자동 실행 여부 확인.
+2. 코드 수정 시 test/build-pages/deploy-pages 및 version.json 커밋을 확인. 계정 Pages 설정은 완료돼 다시 요청할 필요 없음.
 3. 필요 시 기본 브랜치 work 설정과 Actions secret 등록 후 수동 수집 확인.
 4. 화면 피드백 → 관련 테스트 → 인계 갱신 → 커밋·푸시를 유지한다.
 
-## 계정 설정 대기 (2026-11-03)
+## 계정 설정 결과 (2026-11-03)
 
-사용자에게 Settings → Environments → github-pages → Deployment branches and tags에 work 브랜치 추가를 요청했다. 완료 응답 후 run 41601438353의 실패 job을 재실행한다. Pages 최초 활성화는 완료됐지만 앱 배포 성공과 HTTP 응답은 아직 확인하지 못했다. Repository default branch 변경도 HTTP 403이므로 main을 유지한다.
+Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설정으로 완료됐다. Repository default branch는 main 그대로다. 수동 수집 workflow_dispatch와 DART Actions secret은 별도 설정/명시적 허용이 필요하므로 현재 완료됐다고 말하지 않는다. 사이트 열람·기존 스냅샷·백테스트에는 필요 없다.

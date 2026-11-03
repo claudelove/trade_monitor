@@ -2,9 +2,9 @@
 
 한국 주식의 **공시 → 촉매 분류 → 뉴스 검토 → 주가 반응 → 백테스트**를 연결하는 Python 웹 프로토타입입니다. 실데이터와 합성 데모는 별도 보관합니다. 실시간 호가·주문·자동 매매 시스템은 아닙니다.
 
-[GitHub Pages 배포·사용 안내](docs/DEPLOYMENT.md) · [현재 상태/새 채팅 인계](docs/HANDOFF.md)
+[대시보드 열기](https://claudelove.github.io/trade_monitor/) · [GitHub Pages 배포·사용 안내](docs/DEPLOYMENT.md) · [현재 상태/새 채팅 인계](docs/HANDOFF.md)
 
-별도 서버 없이 GitHub Pages로 프로토타입을 확인하도록 전환했습니다. Pages는 공개 스냅샷과 브라우저 백테스트를 제공하고 Python 수집은 GitHub Actions에서 실행합니다. 사이트의 실제 배포 상태는 인계 문서를 확인하세요. 인증키는 소스·페이지에 포함하지 않고 Actions secrets로만 전달합니다.
+별도 서버 없이 GitHub Pages로 프로토타입을 확인하도록 전환했습니다. Pages는 공개 스냅샷과 브라우저 백테스트를 제공하고 Python 수집은 GitHub Actions에서 실행합니다. GitHub Pages 배포와 HTTP 응답을 확인했으며 상세 상태는 인계 문서에 기록합니다. 인증키는 소스·페이지에 포함하지 않고 Actions secrets로만 전달합니다.
 
 ## 실행
 

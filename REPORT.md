@@ -113,3 +113,5 @@ KRX는 메인 페이지에 접근 가능하므로 도메인 접속 허용이 적
 작업 중 클라우드 실행 환경 연결이 끊겨 마지막 로컬 검사 결과를 확인할 수 없었다. 원격 GitHub API로 복구 커밋을 작성하고 GitHub Actions에서 검증하도록 했다. 실제 배포·검사 결과를 확인하기 전 성공으로 보고하지 않는다. DART secret 이전과 Pages 계정 설정이 끝났다고 가정하지 않는다.
 
 원격 검증 결과: 0896489의 Python 18개, 브라우저/Python 백테스트 비교 720개, 이벤트 연구 556개, Pages UI·경로·정적 빌드 모두 통과했다. 사용자의 Pages 활성화 후 github-pages 환경이 main만 허용하는 추가 제한을 확인했고 work 추가를 요청했다. DART key의 Actions secret 전송은 자동 승인 심사가 명시적 허용 부족으로 거절해 미실행이다.
+
+최종 배포 확인 (2026-11-03 17:23 KST): 사용자 Pages 활성화와 work 허용 후 CI run 41602592661의 test/build-pages/deploy-pages 모두 성공. https://claudelove.github.io/trade_monitor/ 및 version.json, app.js, static-api.js, live.json HTTP 200. version.json의 배포 커밋은 38f3ffb217b75915c9cf71fdde26e0968043fec6. 공개 스냅샷은 공시 502건·뉴스 74건·12종목이다. DART key 이전은 여전히 미실행이며 기존 데이터 조회와 백테스트에는 영향 없다.
