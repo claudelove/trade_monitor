@@ -115,3 +115,10 @@ KRX는 메인 페이지에 접근 가능하므로 도메인 접속 허용이 적
 원격 검증 결과: 0896489의 Python 18개, 브라우저/Python 백테스트 비교 720개, 이벤트 연구 556개, Pages UI·경로·정적 빌드 모두 통과했다. 사용자의 Pages 활성화 후 github-pages 환경이 main만 허용하는 추가 제한을 확인했고 work 추가를 요청했다. DART key의 Actions secret 전송은 자동 승인 심사가 명시적 허용 부족으로 거절해 미실행이다.
 
 최종 배포 확인 (2026-11-03 17:23 KST): 사용자 Pages 활성화와 work 허용 후 CI run 41602592661의 test/build-pages/deploy-pages 모두 성공. https://claudelove.github.io/trade_monitor/ 및 version.json, app.js, static-api.js, live.json HTTP 200. version.json의 배포 커밋은 38f3ffb217b75915c9cf71fdde26e0968043fec6. 공개 스냅샷은 공시 502건·뉴스 74건·12종목이다. DART key 이전은 여전히 미실행이며 기존 데이터 조회와 백테스트에는 영향 없다.
+
+
+# 2026-11-03 터미널 테마 변경
+
+검정 바탕·주황 탐색/제목·청록 데이터·녹색/빨강 수익률, 모노스페이스, 상단 메뉴, 사각 패널·입력창·조밀한 표·고정 표 헤더/내부 스크롤로 변경했다. 차트의 종목 선은 주황, 벤치마크는 청록으로 통일했다. 기존 분류/분석 로직과 데이터는 변경하지 않았다. 공시 분류는 제목 키워드 매칭이며 본문 거래 조건 파싱은 아직 구현하지 않았다.
+
+테마 변경 검증: JS 구문·UI DOM·Python/브라우저 백테스트 비교 720개·이벤트 연구 556개 및 Pages 정적 API/경로/UI 검사를 통과했다. 실제 브라우저 시각 검증은 수행하지 않았다. 배포는 work 푸시 후 GitHub Actions 결과와 version.json으로 확인한다.

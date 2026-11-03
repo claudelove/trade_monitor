@@ -50,3 +50,11 @@ Pages에서는 web/static-api.js가 공개 JSON을 읽고 web/analytics.js가 �
 ## 계정 설정 결과 (2026-11-03)
 
 Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설정으로 완료됐다. Repository default branch는 main 그대로다. 수동 수집 workflow_dispatch와 DART Actions secret은 별도 설정/명시적 허용이 필요하므로 현재 완료됐다고 말하지 않는다. 사이트 열람·기존 스냅샷·백테스트에는 필요 없다.
+
+## 최신 화면 변경 (2026-11-03)
+
+사용자 요청으로 Bloomberg Terminal 스타일의 검정/주황/청록 테마로 변경했다. 상단 가로 메뉴, 모노스페이스, 사각 테두리, 촘촘한 표와 고정 헤더·내부 스크롤, 차트 색상을 적용했다. Catalyst 명칭과 기존 기능을 유지한다.
+
+공시 분류는 monitor/strategies.py의 제목 정규화+키워드 최초 일치 규칙이다. 본문/금액/조건 파싱이나 복합 이벤트 다중 분류가 아니다. 이번 요청에서는 테마만 수정했고 분류 규칙과 분석 계산은 변경하지 않았다.
+
+테마 변경 검증: JS 구문·UI DOM·Python/브라우저 백테스트 비교 720개·이벤트 연구 556개 및 Pages 정적 API/경로/UI 검사를 통과했다. 실제 브라우저 시각 검증은 수행하지 않았다. 배포는 work 푸시 후 GitHub Actions 결과와 version.json으로 확인한다.
