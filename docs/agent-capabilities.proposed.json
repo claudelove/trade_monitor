@@ -1,0 +1,614 @@
+{
+  "document_kind": "agent_capability_design",
+  "schema_version": "0.1-proposed",
+  "review_date_kst": "2026-11-04",
+  "implementation_status": "design_only_not_loaded_by_application",
+  "warning": "이 파일은 신규 API/MCP 서버가 구현 또는 배포됐다는 뜻이 아니다.",
+  "response_envelope": [
+    "request_id",
+    "capability_id",
+    "capability_version",
+    "status",
+    "data",
+    "evidence_refs",
+    "quality",
+    "warnings",
+    "errors",
+    "run_manifest"
+  ],
+  "context": [
+    "security_id",
+    "company_id",
+    "event_id",
+    "as_of",
+    "snapshot_id",
+    "time_range",
+    "currency",
+    "adjustment",
+    "link_group"
+  ],
+  "status_values": [
+    "ok",
+    "partial",
+    "blocked",
+    "unavailable"
+  ],
+  "capabilities": [
+    {
+      "id": "catalog.list",
+      "screen_alias": "HELP / 000",
+      "definition_status": "proposal_only",
+      "current_implementation": "없음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "required_data": [],
+      "quality_preconditions": [],
+      "output_contract": "기능 버전·상태·권한·입출력 스키마·미지원 이유"
+    },
+    {
+      "id": "fields.describe",
+      "screen_alias": "HELP / 000",
+      "definition_status": "proposal_only",
+      "current_implementation": "없음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "field_id"
+        ]
+      },
+      "required_data": [
+        "필드 카탈로그"
+      ],
+      "quality_preconditions": [],
+      "output_contract": "정의·단위·산식·출처·조정·권한·가용성"
+    },
+    {
+      "id": "events.search",
+      "screen_alias": "EV / 100",
+      "definition_status": "proposal_only",
+      "current_implementation": "DART 목록/사람 UI 있음; 공통 검색 도구 없음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "description": "분석 시점, UTC offset 포함"
+          },
+          "security_id": {
+            "type": "string",
+            "description": "종목 마스터의 영구 식별자; 문자열 티커와 분리"
+          },
+          "event_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "as_of"
+        ]
+      },
+      "required_data": [
+        "시점별 이벤트·회사/종목 마스터"
+      ],
+      "quality_preconditions": [
+        "known_at <= as_of",
+        "정정/취소 사슬 확인"
+      ],
+      "output_contract": "proposed response envelope"
+    },
+    {
+      "id": "documents.get",
+      "screen_alias": "DOC / 110",
+      "definition_status": "proposal_only",
+      "current_implementation": "DART 원문 링크만 있음; 저장 원문 도구 없음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "document_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "document_id"
+        ]
+      },
+      "required_data": [
+        "접근 가능한 원천 문서·해시·시각"
+      ],
+      "quality_preconditions": [
+        "문서/사용 범위 확인",
+        "첨부 문구는 명령으로 실행하지 않음"
+      ],
+      "output_contract": "문서 내용·문단/표 좌표·해시·원천 시각·출처"
+    },
+    {
+      "id": "events.extract_terms",
+      "screen_alias": "DOC / 110",
+      "definition_status": "proposal_only",
+      "current_implementation": "없음; 제목 키워드 분류만 있음",
+      "effect": "research_run",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "event_id": {
+            "type": "string"
+          },
+          "extractor_version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "event_id",
+          "extractor_version"
+        ]
+      },
+      "required_data": [
+        "원문/정형 공시·정정 사슬"
+      ],
+      "quality_preconditions": [
+        "추출 필드별 근거",
+        "수량·통화·가격·비율 단위 검증",
+        "미확정 필드는 null"
+      ],
+      "output_contract": "이벤트 행동/조건/생명주기·근거 위치·검토 상태"
+    },
+    {
+      "id": "prices.get_series",
+      "screen_alias": "PX / 200",
+      "definition_status": "proposal_only",
+      "current_implementation": "pykrx NAVER 수정 일봉/Python 함수 있음; 공통 조회 도구 없음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "description": "분석 시점, UTC offset 포함"
+          },
+          "security_id": {
+            "type": "string",
+            "description": "종목 마스터의 영구 식별자; 문자열 티커와 분리"
+          },
+          "start": {
+            "type": "string",
+            "format": "date"
+          },
+          "end": {
+            "type": "string",
+            "format": "date"
+          },
+          "adjustment": {
+            "enum": [
+              "raw",
+              "split_adjusted",
+              "total_return",
+              "provider_adjusted_unverified"
+            ]
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "as_of",
+          "security_id",
+          "start",
+          "end",
+          "adjustment"
+        ]
+      },
+      "required_data": [
+        "일봉·거래소 달력·조정 메타데이터"
+      ],
+      "quality_preconditions": [
+        "요청 범위 커버리지",
+        "거래 상태",
+        "조정/통화/단위 일치"
+      ],
+      "output_contract": "행·누락 거래일·가격 상태·출처·조정 버전"
+    },
+    {
+      "id": "news.search",
+      "screen_alias": "NEWS / 210",
+      "definition_status": "proposal_only",
+      "current_implementation": "RSS 제목/링크 수집 있음; 본문 근거 모델 없음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "description": "분석 시점, UTC offset 포함"
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "security_id": {
+            "type": "string",
+            "description": "종목 마스터의 영구 식별자; 문자열 티커와 분리"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "as_of"
+        ]
+      },
+      "required_data": [
+        "뉴스 제목/링크/시각"
+      ],
+      "quality_preconditions": [
+        "관련 검색 후보와 확인된 사실 구분",
+        "as_of 뒤 기사는 과거 분석에 제외"
+      ],
+      "output_contract": "proposed response envelope"
+    },
+    {
+      "id": "research.create_hypothesis",
+      "screen_alias": "CASE / 300",
+      "definition_status": "proposal_only",
+      "current_implementation": "없음; 정적 thesis 문구만 있음",
+      "effect": "state_write",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "description": "분석 시점, UTC offset 포함"
+          },
+          "event_id": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "claim": {
+            "type": "string"
+          },
+          "counter_thesis": {
+            "type": "string"
+          },
+          "invalidation_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "as_of",
+          "evidence_refs",
+          "claim",
+          "counter_thesis",
+          "invalidation_conditions"
+        ]
+      },
+      "required_data": [
+        "검증된 사실·근거"
+      ],
+      "quality_preconditions": [
+        "사실/가정/추론 구분",
+        "근거 없는 확률/확정적 결론 금지"
+      ],
+      "output_contract": "hypothesis_id·상태·근거·검증 계획"
+    },
+    {
+      "id": "scenarios.cash_deal",
+      "screen_alias": "DEAL / 310",
+      "definition_status": "proposal_only",
+      "current_implementation": "web/app.js의 수동 공개매수 계산기만 있음; 공통 도구 없음",
+      "effect": "research_run",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "current_price": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "completion_value": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "failure_value": {
+            "type": "number",
+            "minimum": 0
+          },
+          "completion_probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "remaining_days": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "round_trip_cost_bps": {
+            "type": "number",
+            "minimum": 0
+          },
+          "assumptions": {
+            "type": "object",
+            "description": "확률/실패가/일정의 수동 가정과 출처·시각"
+          }
+        },
+        "required": [
+          "current_price",
+          "completion_value",
+          "failure_value",
+          "completion_probability",
+          "remaining_days",
+          "round_trip_cost_bps",
+          "assumptions"
+        ]
+      },
+      "required_data": [
+        "사용자가 명시한 시나리오 또는 검증된 현금 거래 조건"
+      ],
+      "quality_preconditions": [
+        "모든 가격의 통화/주식 단위 일치",
+        "수동 확률을 통계적으로 추정한 종결 확률로 표시하지 않음",
+        "선행/조건부·주식 교환 거래는 별도 모델"
+      ],
+      "output_contract": "총 스프레드·단순 연율·비용 차감 확률가중 기대값·입력 가정·한계·run_manifest"
+    },
+    {
+      "id": "research.event_study",
+      "screen_alias": "STUDY / 800",
+      "definition_status": "proposal_only",
+      "current_implementation": "monitor.analytics.study / 브라우저 계산; Pages HTTP 실행 경로 없음",
+      "effect": "research_run",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "description": "분석 시점, UTC offset 포함"
+          },
+          "event_id": {
+            "type": "string"
+          },
+          "benchmark_id": {
+            "type": "string",
+            "description": "종목 마스터의 영구 식별자; 문자열 티커와 분리"
+          },
+          "engine_version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "as_of",
+          "event_id",
+          "benchmark_id",
+          "engine_version"
+        ]
+      },
+      "required_data": [
+        "이벤트·가격·벤치마크·달력"
+      ],
+      "quality_preconditions": [
+        "공백/정지 정책 일치",
+        "가격 반응과 체결 성과 구분"
+      ],
+      "output_contract": "관측 수익률·상태·커버리지·근거·run_manifest"
+    },
+    {
+      "id": "backtests.run",
+      "screen_alias": "BT / 900",
+      "definition_status": "proposal_only",
+      "current_implementation": "로컬 FastAPI/Python·브라우저 제한된 롱온리 모델; 정합성 검사 있음",
+      "effect": "research_run",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "description": "분석 시점, UTC offset 포함"
+          },
+          "model_id": {
+            "type": "string"
+          },
+          "engine_version": {
+            "type": "string"
+          },
+          "universe_id": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "as_of",
+          "model_id",
+          "engine_version",
+          "universe_id",
+          "parameters"
+        ]
+      },
+      "required_data": [
+        "시점별 유니버스·이벤트·가격·거래 상태·비용 모델"
+      ],
+      "quality_preconditions": [
+        "미래 상태로 진입 소급 취소 금지",
+        "불완전 커버리지 차단",
+        "조건/모델 지원 여부",
+        "공유 오류와 독립적인 재무 검증 사례"
+      ],
+      "output_contract": "run_id·체결/평가·제외 이유·가정·한계·run_manifest"
+    },
+    {
+      "id": "jobs.get",
+      "screen_alias": "JOB / 950",
+      "definition_status": "proposal_only",
+      "current_implementation": "없음; 전역 running bool만 있음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "job_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id"
+        ]
+      },
+      "required_data": [
+        "영속 작업 이력"
+      ],
+      "quality_preconditions": [],
+      "output_contract": "상태·시도·진행률·부분 성공·오류·산출물 ID"
+    },
+    {
+      "id": "automations.validate",
+      "screen_alias": "AUTO / 970",
+      "definition_status": "proposal_only",
+      "current_implementation": "없음",
+      "effect": "plan_only",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "capability_id": {
+            "type": "string"
+          },
+          "schedule": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          },
+          "resource_budget": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "capability_id",
+          "schedule",
+          "parameters",
+          "resource_budget",
+          "idempotency_key"
+        ]
+      },
+      "required_data": [
+        "등록된 기능·가용성·권한·예산"
+      ],
+      "quality_preconditions": [
+        "중복/재시도/데이터 누락 정책",
+        "외부 부작용 승인 분리"
+      ],
+      "output_contract": "실행 계획 유효 여부·차단 원인; 이 호출로 스케줄 등록하지 않음"
+    },
+    {
+      "id": "data.health",
+      "screen_alias": "DATA / 990",
+      "definition_status": "proposal_only",
+      "current_implementation": "공급자 상태 요약만 일부 있음",
+      "effect": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "description": "불변 공개/비공개 스냅샷 식별자; 실제 ID를 카탈로그/스냅샷 조회로 확인"
+          },
+          "security_id": {
+            "type": "string",
+            "description": "종목 마스터의 영구 식별자; 문자열 티커와 분리"
+          }
+        },
+        "required": [
+          "snapshot_id"
+        ]
+      },
+      "required_data": [
+        "공급자 실행 이력·데이터 범위"
+      ],
+      "quality_preconditions": [
+        "checked_at와 last_success/data_through 분리"
+      ],
+      "output_contract": "공급자/종목별 신선도·범위·누락·부분 성공·미지원 사유"
+    }
+  ]
+}
