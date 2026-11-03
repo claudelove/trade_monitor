@@ -11,7 +11,7 @@
 - 저장소 https://github.com/claudelove/trade_monitor, 작업 브랜치 work. main은 초기 커밋이며 자동 병합하지 않는다.
 - 최초 기능 5fa9d8c, 복구/Docker 기준 96b2ed6.
 - **배포 주소: https://claudelove.github.io/trade_monitor/**. 2026-11-03 17:23 KST HTTP 200 확인.
-- 확인된 테마 코드 배포 커밋: fa76a9f1e0a5781fa94f49b2d09ee3458f0bcb46. version.json과 일치. CI 실행 41603727268의 test/build-pages/deploy-pages 모두 success. 후속 문서 커밋은 별도 자동 배포될 수 있다.
+- 확인된 테마 코드 배포 커밋: bf8bd4091109d2fd33714e08a58985501f177aaf. version.json과 일치. CI 실행 41626471554의 test/build-pages/deploy-pages 모두 success. 후속 문서 커밋은 별도 자동 배포될 수 있다.
 - 작업 도중 관리형 클라우드 실행 환경이 unavailable로 바뀌어 GitHub API로 0896489를 저장했다. 이후 환경 연결이 복구돼 로컬 draft를 stash 보존하고 원격 0896489로 fast-forward 했다.
 - 사용자가 Pages Source=GitHub Actions 및 github-pages 환경 허용 브랜치 work 설정을 완료했다. 현재 자동 Pages 배포 정상 동작.
 - repository default branch가 main이면 workflow_dispatch 수집 기능을 위해 work로 변경하거나 향후 명시적으로 워크플로를 main에 반영해야 한다. 기본 브랜치를 자동 변경했다고 가정하지 않는다.
@@ -42,7 +42,7 @@ Pages에서는 web/static-api.js가 공개 JSON을 읽고 web/analytics.js가 �
 
 ## 다음 행동
 
-1. 사용자의 공개 Pages 화면 피드백을 받아 수정. 확인된 테마 코드 배포는 fa76a9f, 그 이후 문서 커밋은 별도 자동 실행 여부 확인.
+1. 사용자의 공개 Pages 화면 피드백을 받아 수정. 확인된 테마 코드 배포는 bf8bd40, 그 이후 문서 커밋은 별도 자동 실행 여부 확인.
 2. 코드 수정 시 test/build-pages/deploy-pages 및 version.json 커밋을 확인. 계정 Pages 설정은 완료돼 다시 요청할 필요 없음.
 3. 필요 시 기본 브랜치 work 설정과 Actions secret 등록 후 수동 수집 확인.
 4. 화면 피드백 → 관련 테스트 → 인계 갱신 → 커밋·푸시를 유지한다.
@@ -66,3 +66,5 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 사용자가 제공한 표 중심 레퍼런스를 기준으로 장식을 더 줄였다. 사용자는 검정 배경·차분한 회색 글자를 명시적으로 선택했다. 카드/표/태그/입력창 테두리, 메뉴 번호·로고 배지·장식 아이콘, 주황/청록 강조를 제거했다. 헤더와 숫자를 작게 조정하고 중립 회색 계층을 사용한다. 수익률 글자도 회색이며, 방향은 옅은 녹색/적색 셀 배경과 부호로만 구분한다. 차트도 저채도 회색 선이다.
 
 이번 변경은 web/style.css와 차트 색상만 수정했고 기능·데이터·분류·백테스트 계산은 유지했다. JS 구문/기존 UI DOM 검사를 실행하며, work 푸시 후 GitHub CI/Pages 및 version.json·배포 CSS로 결과를 확인한다. 실제 브라우저 시각 검증을 수행했다고 주장하지 않는다.
+
+간소화 배포 확인: bf8bd40의 원격 검사/Pages 배포 후 공개 version.json 일치, index HTTP 200, 회색 기본 글자와 장식 테두리 없는 새 CSS 수신을 확인했다.
