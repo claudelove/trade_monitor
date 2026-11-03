@@ -111,3 +111,5 @@ KRX는 메인 페이지에 접근 가능하므로 도메인 접속 허용이 적
 정적 Pages 대시보드와 브라우저 이벤트 연구/백테스트, Python/JavaScript 엔진 정합성 검사, 공개 JSON 빌드, 수동 수집 Actions와 자동 Pages 배포를 추가했다. 원래 Python 서버/Docker 경로는 유지했다. 수집 키는 소스가 아닌 repository Actions secret에서만 사용하도록 구성했다.
 
 작업 중 클라우드 실행 환경 연결이 끊겨 마지막 로컬 검사 결과를 확인할 수 없었다. 원격 GitHub API로 복구 커밋을 작성하고 GitHub Actions에서 검증하도록 했다. 실제 배포·검사 결과를 확인하기 전 성공으로 보고하지 않는다. DART secret 이전과 Pages 계정 설정이 끝났다고 가정하지 않는다.
+
+원격 검증 결과: 0896489의 Python 18개, 브라우저/Python 백테스트 비교 720개, 이벤트 연구 556개, Pages UI·경로·정적 빌드 모두 통과했다. 사용자의 Pages 활성화 후 github-pages 환경이 main만 허용하는 추가 제한을 확인했고 work 추가를 요청했다. DART key의 Actions secret 전송은 자동 승인 심사가 명시적 허용 부족으로 거절해 미실행이다.
