@@ -1,0 +1,31 @@
+# Render Blueprint: private-by-password prototype, single process + persistent SQLite.
+services:
+  - type: web
+    name: catalyst-research
+    runtime: docker
+    repo: https://github.com/claudelove/trade_monitor
+    branch: work
+    plan: starter
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeployTrigger: checksPass
+    healthCheckPath: /healthz
+    numInstances: 1
+    disk:
+      name: catalyst-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: MONITOR_DB
+        value: /var/data/monitor.db
+      - key: MONITOR_BOOTSTRAP
+        value: /app/fixtures/bootstrap-live.json
+      - key: MONITOR_REQUIRE_AUTH
+        value: "1"
+      - key: MONITOR_USERNAME
+        value: research
+      - key: MONITOR_PASSWORD
+        generateValue: true
+      - key: DART_API_KEY
+        sync: false

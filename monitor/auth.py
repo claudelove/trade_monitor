@@ -11,7 +11,7 @@ class AccessGate:
 
     async def __call__(self, scope, receive, send):
         password = os.environ.get('MONITOR_PASSWORD')
-        if scope['type'] != 'http' or not password:
+        if scope['type'] != 'http' or scope.get('path') == '/healthz' or not password:
             return await self.app(scope, receive, send)
         authenticated = False
         header = dict(scope['headers']).get(b'authorization', b'')

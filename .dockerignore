@@ -1,6 +1,7 @@
 .git
 .venv
 .env
+.env.*
 work
 node_modules
 .pytest_cache

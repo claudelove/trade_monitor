@@ -1,6 +1,8 @@
 import asyncio
 import datetime as dt
 import re
+import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
 from fastapi import FastAPI, HTTPException
@@ -14,7 +16,18 @@ from monitor.strategies import STRATEGIES
 from monitor.analytics import study, backtest
 from monitor.auth import AccessGate
 
-app = FastAPI(title='Catalyst | Event Research', version='0.1.0')
+@asynccontextmanager
+async def lifespan(app):
+    if os.environ.get('MONITOR_REQUIRE_AUTH') == '1' and not os.environ.get('MONITOR_PASSWORD'):
+        raise RuntimeError('MONITOR_PASSWORD is required in hosted mode')
+    bootstrap = os.environ.get('MONITOR_BOOTSTRAP')
+    if bootstrap:
+        from monitor.recovery import restore_if_empty
+        restore_if_empty(Path(bootstrap))
+    yield
+
+
+app = FastAPI(title='Catalyst | Event Research', version='0.1.0', lifespan=lifespan)
 app.add_middleware(AccessGate)
 WEB = Path(__file__).resolve().parent.parent / 'web'
 app.mount('/assets', StaticFiles(directory=WEB), name='assets')
@@ -39,6 +52,11 @@ async def index():
 @app.get('/api/health')
 async def health():
     return {'status': 'ok', 'refreshing': running}
+
+
+@app.get('/healthz', include_in_schema=False)
+async def public_health():
+    return {'status': 'ok'}
 
 
 @app.get('/api/snapshot')

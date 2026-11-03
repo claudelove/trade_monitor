@@ -2,6 +2,10 @@
 
 한국 주식의 **공시 → 촉매 분류 → 뉴스 검토 → 주가 반응 → 백테스트**를 연결하는 Python 웹 프로토타입입니다. 실데이터와 합성 데모는 별도 보관합니다. 실시간 호가·주문·자동 매매 시스템은 아닙니다.
 
+[Render 배포 설정 열기](https://render.com/deploy?repo=https://github.com/claudelove/trade_monitor/tree/work) · [배포·복구 안내](docs/DEPLOYMENT.md) · [현재 상태/새 채팅 인계](docs/HANDOFF.md)
+
+코드와 공개 기준 스냅샷은 GitHub에서 복구할 수 있습니다. Render 배포 후 운영 데이터는 영속 디스크에 보관합니다. 비밀 값은 Render에만 입력하며 Codex 채팅 환경을 바꿀 필요가 없습니다. **Render 서비스는 아직 생성하지 않았습니다.**
+
 ## 실행
 
 Python 3.12 이상을 권장합니다. Node는 프런트엔드 테스트에만 필요합니다.
@@ -91,7 +95,7 @@ docker compose up --build -d
 
 Compose는 비밀번호 설정을 요구하며 포트는 호스트의 `127.0.0.1:8000`에만 연결합니다. 기본 인증 사용자명은 `research`이고 `MONITOR_USERNAME`으로 변경할 수 있습니다. 외부 접속에는 TLS 리버스 프록시/관리형 HTTPS와 영속 볼륨을 연결하세요. 비밀번호를 브라우저 JS에 넣지 않습니다. 단독 로컬 실행은 `MONITOR_PASSWORD`를 생략할 수 있습니다.
 
-이번 작업에서 Docker 이미지를 빌드하거나 공개 URL로 배포하지는 않았습니다. Python FastAPI 서버를 운영할 수 있는 호스팅이 필요합니다. Sites의 Workers 런타임만으로 Python 수집기를 그대로 운영할 수는 없습니다.
+Docker/복구 검증과 실제 배포 상태는 [작업 인계](docs/HANDOFF.md)에 기록합니다. 공개 URL 배포는 최초 Render 계정 연결 후 진행합니다. Python FastAPI 서버를 운영할 수 있는 호스팅이 필요합니다. Sites의 Workers 런타임만으로 Python 수집기를 그대로 운영할 수는 없습니다.
 
 ## 검증
 
