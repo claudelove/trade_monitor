@@ -1,0 +1,1 @@
+"""Catalyst research monitor."""

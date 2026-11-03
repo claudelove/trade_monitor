@@ -1,0 +1,13 @@
+{
+  "name": "catalyst-monitor-ui",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Buildless dashboard; Node is only needed for DOM tests",
+  "scripts": {
+    "test:ui": "node tests/frontend.mjs",
+    "pretest:ui": ".venv/bin/python tests/ui_fixtures.py"
+  },
+  "devDependencies": {
+    "jsdom": "^27.0.0"
+  }
+}

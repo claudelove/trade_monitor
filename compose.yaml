@@ -1,0 +1,14 @@
+services:
+  catalyst:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DART_API_KEY: ${DART_API_KEY:?DART_API_KEY must be set}
+      MONITOR_USERNAME: ${MONITOR_USERNAME:-research}
+      MONITOR_PASSWORD: ${MONITOR_PASSWORD:?MONITOR_PASSWORD must be set}
+    volumes:
+      - catalyst-data:/app/data
+    restart: unless-stopped
+volumes:
+  catalyst-data:
