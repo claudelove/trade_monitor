@@ -1,0 +1,68 @@
+name: Refresh public market snapshot
+on:
+  workflow_dispatch:
+    inputs:
+      start:
+        description: '시작일 YYYY-MM-DD (비우면 KST 오늘-30일)'
+        required: false
+      end:
+        description: '종료일 YYYY-MM-DD (비우면 KST 오늘)'
+        required: false
+      tickers:
+        description: '수정 일봉 종목, 쉼표 구분, 최대 12개'
+        default: '005930,000660,035420,005380,105560,069500'
+        required: true
+      query:
+        description: '뉴스 검색어'
+        default: '한국 기업 자사주 공개매수 실적'
+        required: true
+concurrency:
+  group: catalyst-publication
+  cancel-in-progress: false
+jobs:
+  collect:
+    if: github.ref == 'refs/heads/work'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Collect and export only public fields
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          INPUT_START: ${{ inputs.start }}
+          INPUT_END: ${{ inputs.end }}
+          INPUT_TICKERS: ${{ inputs.tickers }}
+          INPUT_QUERY: ${{ inputs.query }}
+        run: python scripts/collect_for_pages.py
+      - name: Record refreshed public data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add fixtures/bootstrap-live.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh public market research snapshot'
+            git push origin HEAD:work
+          fi
+      - run: python scripts/build_pages.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy-pages:
+    needs: collect
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

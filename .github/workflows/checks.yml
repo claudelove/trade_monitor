@@ -3,6 +3,11 @@ on:
   push:
     branches: [work, main]
   pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: catalyst-publication
+  cancel-in-progress: false
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,3 +28,32 @@ jobs:
       - run: npm ci
       - run: node --check web/app.js
       - run: npm run test:ui
+      - run: npm run test:pages
+  build-pages:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/work'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/build_pages.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy-pages:
+    needs: build-pages
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/deploy-pages@v4
+        id: deployment

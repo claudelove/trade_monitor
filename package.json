@@ -5,9 +5,12 @@
   "description": "Buildless dashboard; Node is only needed for DOM tests",
   "scripts": {
     "test:ui": "node tests/frontend.mjs",
-    "pretest:ui": ".venv/bin/python tests/ui_fixtures.py"
+    "pretest:ui": ".venv/bin/python tests/ui_fixtures.py",
+    "pretest:pages": ".venv/bin/python tests/pages_fixtures.py",
+    "test:pages": "node tests/pages.mjs"
   },
   "devDependencies": {
     "jsdom": "^27.0.0"
-  }
+  },
+  "type": "module"
 }
