@@ -21,7 +21,10 @@ w.fetch=async(path,options)=>({ok:true,json:async()=>path==='/api/runtime/contra
 w.eval('const screens=window.screens;const ChartLinkBus=window.ChartLinkBus;const strategyAnalysis=window.strategyAnalysis;const strategyUI=window.strategyUI;const analysisExample=window.analysisExample;const WindowWorkspace=window.WindowWorkspace;const nativeUI=window.nativeUI;const terminal=window.terminal;const {strategyView:renderStrategyView,runsView:renderRunsView}=window.runtimeUI;const validateBundle=window.validateBundle;\n'+readFileSync('web/app.js','utf8').replace(/^import .*;$/gm,''));
 const settle=()=>new Promise(r=>setTimeout(r,15));
 await settle();
-assert.match($('#banner').textContent,/STRATEGY MONITOR/);assert.equal($$('[data-tool=performance]').length,1);w.switchDesk('market');assert.match($('#banner').textContent,/LIVE SNAPSHOT/);
+assert.equal($$('nav button').length,4);assert.equal($$('[data-desk]').length,0);
+for(const desk of ['strategy','market','backtest','analysis']){w.switchDesk(desk);assert.ok($('.workspace-canvas'));assert.equal($$('nav button.active').length,1)}
+w.switchDesk('backtest');assert.match($('#page').textContent,/실행 엔진 연결이 필요/);assert.ok($('[data-load-report]'));assert.equal($('#refresh-button').textContent,'결과 파일 열기');
+w.switchDesk('strategy');assert.match($('#banner').textContent,/STRATEGY MONITOR/);assert.equal($$('[data-tool=performance]').length,1);w.switchDesk('market');assert.match($('#banner').textContent,/LIVE SNAPSHOT/);
 assert.equal($$('[data-event]').length,0);
 $('#mode').value='demo';$('#mode').dispatchEvent(new w.Event('change'));await settle();
 assert.match($('#banner').textContent,/SYNTHETIC DATA/);
@@ -46,7 +49,7 @@ assert.ok($('#detail').hasAttribute('open'));
 assert.match($('#detail-body').textContent,/이벤트 전후 주가/);assert.doesNotMatch($('#detail-body').textContent,/리서치 가설/);
 $('#close-detail').click();
 $('[data-star]').click();
-assert.equal($('#watch-count').textContent,'1');
+assert.equal(JSON.parse(w.localStorage.getItem('catalyst-watch')).length,1);
 $('#layout-button').click();
 $('[data-widget="stats"]').checked=false;$('[data-widget="stats"]').dispatchEvent(new w.Event('change'));
 assert.equal($('.stats'),null);
@@ -58,6 +61,7 @@ assert.match($('#page').textContent,/아직 전달된 실행 결과가 없습니
 assert.equal($('#backtest-form'),null);
 w.selectPage('sources');
 assert.equal($$('.source-card').length,3);
+w.switchDesk('market');
 const normalFetch=w.fetch;w.fetch=async(path,options)=>{if(path==='/api/snapshot?mode=live')await new Promise(r=>setTimeout(r,60));return normalFetch(path,options)};
 w.eval("changeMode('live');changeMode('demo')");await new Promise(r=>setTimeout(r,100));assert.match($('#banner').textContent,/SYNTHETIC DATA/);assert.equal($('#context-symbol').disabled,false);
 console.log('UI DOM checks passed: live/demo isolation, search, event study modal, watchlist, widget controls, external strategy boundary, empty runtime monitoring, source status.');

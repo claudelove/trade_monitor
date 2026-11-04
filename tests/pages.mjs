@@ -57,6 +57,7 @@ assert.equal(w.document.querySelector('#backtest-form'),null);
 w.testFile={size:2000,text:async()=>JSON.stringify(report)};
 await w.eval('openRuntimeFile(window.testFile)');
 w.selectPage('strategies');assert.match(w.document.querySelector('#page').textContent,/연동 형식 예시/);
+w.document.querySelector('[data-runtime-refresh]').click();await settle();assert.match(w.document.querySelector('#page').textContent,/연동 형식 예시/);assert.equal(w.document.querySelector('#context-run').value,report.runs[0].run_id,'refresh must preserve the imported report');
 w.selectPage('runs');
 assert.match(w.document.querySelector('#page').textContent,/example-report-only/);
 assert.match(w.document.querySelector('#page').textContent,/외부 코드 정의 리스크/);

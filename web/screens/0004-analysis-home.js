@@ -1,0 +1,1 @@
+export default {id:'analysis-home',number:'0004',command:'ANALYSIS',desk:'analysis',kind:'workspace',title:'통계 · 데이터',subtitle:'전략 상관 · 보고 품질 · 데이터 출처',nav:true,navOrder:4,navLabel:'통계 · 데이터',render:()=>'<div data-workspace-host></div>',mount:(root,ctx)=>ctx.actions.mountWorkspace(root.querySelector('[data-workspace-host]'))};

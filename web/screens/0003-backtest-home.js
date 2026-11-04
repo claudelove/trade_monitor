@@ -1,0 +1,1 @@
+export default {id:'backtest-home',number:'0003',command:'BT',desk:'backtest',kind:'workspace',title:'백테스트 대시보드',subtitle:'전략 연결 · 실행 환경 · 결과 검토',nav:true,navOrder:3,navLabel:'백테스트',render:()=>'<div data-workspace-host></div>',mount:(root,ctx)=>ctx.actions.mountWorkspace(root.querySelector('[data-workspace-host]'))};

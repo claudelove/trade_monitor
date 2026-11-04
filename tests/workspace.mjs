@@ -24,13 +24,11 @@ assert.equal(root.querySelectorAll('[id]').length,new Set([...root.querySelector
 const pane=desktop.panes.at(-1),find=()=>root.querySelector('[data-pane="'+pane.id+'"]');
 find().querySelector('[data-window-action="maximize"]').click();assert.ok(find().classList.contains('is-maximized'));
 find().querySelector('[data-window-action="maximize"]').click();assert.ok(!find().classList.contains('is-maximized'));
-find().querySelector('[data-window-action="minimize"]').click();assert.ok(find().classList.contains('is-minimized'));
-find().querySelector('[data-window-action="minimize"]').click();
-find().querySelector('[data-window-action="expand"]').click();assert.equal(expanded,'security');
+assert.equal(find().querySelector('[data-window-action="expand"]'),null);assert.equal(find().querySelector('[data-window-action="minimize"]'),null);
 desktop.tile();assert.equal(desktop.panes[0].x,0);assert.equal(desktop.panes[1].x,1/3);
-assert.ok(!w.localStorage.getItem('catalyst-window-layout-v2-market').includes('SYNTHETIC'),'persist geometry only, not report symbols');
+assert.ok(!w.localStorage.getItem('catalyst-window-layout-v3-market').includes('SYNTHETIC'),'persist geometry only, not report symbols');
 const restored=new WindowWorkspace(config);assert.equal(restored.panes.length,5);assert.equal(restored.panes.at(-1).symbol,undefined);
 find().querySelector('[data-window-action="close"]').click();assert.equal(root.querySelectorAll('.tool-window').length,4);
-desktop.reset();assert.equal(desktop.panes.length,4);
-w.localStorage.setItem('catalyst-window-layout-v2-market','[{"id":"<img>","type":"security","x":0,"y":0,"w":1,"h":1}]');assert.equal(new WindowWorkspace(config).panes.length,4);
+desktop.reset();assert.equal(desktop.panes.length,4);for(let i=0;i<4;i++)root.querySelector('[data-window-action="close"]').click();assert.equal(root.querySelectorAll('.tool-window').length,0);root.querySelector('[data-open-tool="market"]').click();assert.equal(root.querySelectorAll('.tool-window').length,1);
+w.localStorage.setItem('catalyst-window-layout-v3-market','[{"id":"<img>","type":"security","x":0,"y":0,"w":1,"h":1}]');assert.equal(new WindowWorkspace(config).panes.length,4);
 dom.window.close();console.log('Window/native contract checks passed: independent windows, controls/layout restore, geometry-only persistence, native account/run ownership/time validation, partial-error status and hashless DSL preserved.');

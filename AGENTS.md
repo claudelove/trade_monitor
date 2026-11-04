@@ -74,3 +74,9 @@
 - docs/SCREEN_MODULES.md와 docs/CHART_MODULE.md를 읽는다. 새 화면은 web/screens/NNNN-name.js에 번호/명령/렌더/mount/cleanup을 선언하고 scripts/sync_screens.py로 catalog를 갱신한다. app.js/메뉴/창 목록에 화면별 분기를 다시 넣지 않는다.
 - 차트는 charts/host.js의 slot/mountCharts와 공통 TerminalChart를 사용한다. 화면에 SVG 렌더러를 따로 만들지 않는다. 원본 시리즈·시각·결측·축 단위를 보존한다.
 - mount는 cleanup을 반환하며 ctx.signal을 사용한다. 화면 전환/닫기/오류 시 event·observer·chart bus를 해제한다. private chart state는 탭 메모리에만 유지하고 layout export에 넣지 않는다.
+
+## 필수 프레임 — 최신 사용자 지시 (2026-11-04)
+
+- 상위 메뉴는 포트폴리오/마켓/백테스트/통계·데이터 네 공간이다. 소화면을 상위 nav에 노출하거나 중복 전환 UI를 늘리지 않는다. 기능은 화면 모듈, 프레임은 배치/선택만 담당한다.
+- 미연결 실행/전략 추가 버튼을 동작하는 것처럼 만들지 않는다. 백테스트는 현재 외부 결과 조회다. 새로고침이 개인 파일을 닫지 않도록 유지한다.
+- OHLCV 상호작용은 차트 내부 툴팁과 실제 원본 첫/중간/마지막 봉 값의 브라우저 검증을 포함한다. 보조 기능은 접고 기본 조작을 단순하게 유지한다.

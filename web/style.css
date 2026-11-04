@@ -288,3 +288,20 @@ th { color:#f5c16b; background:#202020; }tbody tr.selected { background:#3c2c13;
 .window-body .interactive-chart { height:120px; }.tool-window.is-maximized .interactive-chart { height:clamp(240px,calc(100vh - 700px),480px); }#page>.panel .interactive-chart { height:320px; }
 .window-body>.analysis-panel>.panel-head { display:none; }.window-body .analysis-scope small { display:none; }.window-body .analysis-metrics { padding:2px 4px; }.window-body .analysis-metrics>div { padding:3px; }.window-body .analysis-metrics strong { font-size:16px; line-height:1.25; }.window-body .analysis-panel .section-note { font-size:9px; line-height:1.5; }
 @media(max-width:700px){.window-body .interactive-chart { height:145px; }.tool-window.is-maximized .interactive-chart { height:300px; }#page>.panel .interactive-chart { height:250px; }}
+/* A small shell: four desks, one screen menu, optional layout controls. */
+.screen-menu { display:flex; flex-wrap:wrap; gap:3px; flex:1; }
+.desktop-toolbar { align-items:flex-start; position:relative; }
+.workspace-options { position:relative; flex-shrink:0; color:#aaa; font-size:11px; }
+.workspace-options summary { cursor:pointer; padding:5px 8px; background:#202020; }
+.workspace-options[open]>div { position:absolute; right:0; top:28px; z-index:40; background:#171717; padding:8px; display:grid; gap:5px; width:180px; box-shadow:0 3px 12px #000; }
+.chart-tooltip { position:absolute; top:8px; z-index:3; max-width:calc(100% - 16px); pointer-events:none; background:#141414f5; border-left:2px solid #ff9b20; color:#ddd; padding:7px 9px; font-size:12px; line-height:1.6; overflow-wrap:anywhere; box-shadow:0 2px 8px #000; }
+.chart-tooltip-date { color:#ffb449; font-weight:600; }
+.chart-tooltip[hidden] { display:none; }
+.terminal-chart-readout { font-size:11px; color:#ddd; }
+@media(max-width:700px){.desktop-toolbar { flex-wrap:wrap; }.screen-menu{flex-basis:100%;}.chart-tooltip{font-size:11px;}nav button{font-size:12px;padding:7px 9px;}}
+.chart-options { position:relative; margin-left:auto; font-size:10px; color:#bbb; }
+.chart-options summary { cursor:pointer; padding:4px 7px; background:#252525; }
+.chart-options[open]>div { position:absolute; right:0; top:26px; z-index:5; background:#222; padding:5px; display:flex; gap:4px; white-space:nowrap; }
+.chart-tooltip-values { display:grid; grid-template-columns:repeat(3,minmax(65px,1fr)); gap:4px 16px; }
+.chart-tooltip-values span { color:#aaa; font-size:10px; }
+.chart-tooltip-values b { display:block; color:#f5d34e; font-size:12px; font-weight:500; }

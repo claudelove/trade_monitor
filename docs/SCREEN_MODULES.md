@@ -2,12 +2,22 @@
 
 화면 번호·명령·메뉴·창 목록·기본 배치·렌더링·연결 해제를 하나의 등록 계약으로 관리한다. app.js에 화면별 switch/뷰 목록/명령 목록을 추가하지 않는다. 기존 공개 UI의 데이터 계약과 비공개 엔진 소유권은 유지한다.
 
+## 상위 프레임
+
+포트폴리오(strategy) / 마켓(market) / 백테스트(backtest) / 통계·데이터(analysis) 네 작업공간만 상위 메뉴에 표시한다. 소화면 모듈은 해당 desk의 내부 메뉴·패널 선택기에 등록된다. 개별 화면의 nav 플래그로 상위 목차를 추가하지 않는다. 프레임에는 데이터 기능/전략 로직을 넣지 않는다.
+
+기본 배치는 포트폴리오 PERF/HOLD/RISK/ATTR, 마켓 QUOTE/GP/TOP/FIL, 백테스트 CODE/BTEXEC/BTRESULT, 통계·데이터 CORR/HEALTH/DATA다. CODE는 외부 코드 식별/결과 연결이며 코드 업로드·등록 실행기가 아니다. BTEXEC는 미연결 상태와 결과 열기만 제공한다. 실제 실행/전략 추가 어댑터는 비공개 엔진 계약을 확정한 뒤 연결한다.
+
+최대화·닫기를 기본으로 두고 배치 편집/정렬/리셋과 예시는 접힌 파일·배치 메뉴에 둔다. 기본 모드에서 창을 닫으면 남은 창을 재정렬한다. 배치는 v3 키로 작업공간별 저장하고 이전 v2 배치는 이관하지 않는다.
+
 ## 현재 화면
 
 | 번호 | 명령 | 모듈 / 용도 |
 | --- | --- | --- |
 | 0001 | OV | 전략 워크스페이스 |
 | 0002 | MKT | 마켓 워크스페이스 |
+| 0003 | BT | 백테스트 워크스페이스 |
+| 0004 | ANALYSIS | 통계·데이터 워크스페이스 |
 | 0101 | PERF | 전략 성과 |
 | 0102 | HOLD | 보유 구성 |
 | 0103 | RISK | 노출·집중도 |
@@ -25,8 +35,10 @@
 | 0205 | DATA | 시장 데이터 연결 |
 | 0206 | SAVED | 저장 공시 |
 | 0290 | EVENT | 공시 상세 다이얼로그 |
+| 0301 | BTEXEC | 외부 실행 환경/미연결 상태 |
+| 0302 | BTRESULT | 외부 백테스트 결과 성과 |
 
-명령창에 `0101`, `PERF`, `0202 005930` 등을 입력한다. 1–9 단축키는 등록된 shortcut에서 생성하며 4자리 화면 번호와 별개다. 패널 제목줄에 화면 번호를 표시하고, 창의 instance ID는 별도로 유지한다.
+명령창에 `0101`, `PERF`, `0202 005930` 등을 입력한다. 1–4 단축키는 네 작업공간 전환이고 4자리 화면 번호와 별개다. 기존 shortcut 메타데이터는 호환을 위해 보존하지만 소화면 단축키로 바인딩하지 않는다. 패널 제목줄에 화면 번호를 표시하고, 창의 instance ID는 별도로 유지한다.
 
 ## 새 화면 추가
 
@@ -43,7 +55,7 @@ export default {
   desk: 'strategy',
   title: '사용자 분석',
   subtitle: '외부 실행 결과를 조회합니다.',
-  nav: true,
+  nav: false,
   render(ctx, pane) {
     return `<section class="panel"><p>${esc(ctx.strategy.entry?.name || '전략 미연결')}</p>
       <button data-custom>조회</button></section>`;
@@ -71,7 +83,7 @@ npm run test:pages
 
 ## 계약
 
-- 필수: id, number(4자리), command, desk(strategy/market), title, render(ctx,pane).
+- 필수: id, number(4자리), command, desk(strategy/market/backtest/analysis), title, render(ctx,pane).
 - 파일명은 NNNN-lowercase-screen-name.js. 번호와 파일 prefix가 일치해야 한다. ID·번호·명령·aliases·shortcut·기본 slot 중복을 검출한다.
 - 선택: aliases, subtitle, nav/navLabel/navOrder, shortcut(1–9), defaultSlot, repeatable, selector, panel(false이면 전체 화면 전용), configure(root,ctx).
 - kind 기본 screen, workspace는 작업 공간 호스트, dialog는 다이얼로그다.
@@ -88,11 +100,11 @@ npm run test:pages
 - screens/*.js: 화면별 구현.
 - screens/catalog.js: 파일 검색으로 생성한 import 목록.
 - screen-registry.js / screens.js: 검증/등록/조회·수명 경계.
-- window-workspace.js: 배치/최대·최소/닫기와 패널 수명만 담당.
+- window-workspace.js: 배치/최대화/닫기와 패널 수명만 담당.
 - charts/: 공통 차트. [차트 API](CHART_MODULE.md).
 - ui/: DOM/표시 helper. strategy-analysis.js: 화면 진단 계산.
 - strategy-ui.js: 이전 직접 함수 호출의 호환 export. 실제 화면 라우팅에는 쓰지 않는다.
 
 ## 검증
 
-새 화면을 임시 레지스트리에 등록해 기존 코어 수정 없이 메뉴/번호/패널 목록에 나타나는지 검사한다. mount 실패 후 이벤트 잔존, 중복 번호/명령, chart bus 정리, 원본 데이터 불변을 함께 검사한다. Python/Pages/실제 Chromium 검증과 배포 버전 확인도 유지한다.
+새 화면을 임시 레지스트리에 등록해 기존 코어 수정 없이 내부 메뉴/번호/패널 목록에 나타나는지 검사한다. mount 실패 후 이벤트 잔존, 중복 번호/명령, chart bus 정리, 원본 데이터 불변을 함께 검사한다. Python/Pages/실제 Chromium 검증과 배포 버전 확인도 유지한다.
