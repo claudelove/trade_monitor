@@ -14,8 +14,8 @@
 
 - 저장소 https://github.com/claudelove/trade_monitor, 작업 브랜치 work. main은 초기 커밋이며 자동 병합하지 않는다.
 - 최초 기능 5fa9d8c, 복구/Docker 기준 96b2ed6.
-- **배포 주소: https://claudelove.github.io/trade_monitor/**. 2026-11-03 17:23 KST HTTP 200 확인.
-- 확인된 테마 코드 배포 커밋: 0284fb701b9474ad61e0be8016d680151ae432b7. version.json과 일치. CI 실행 41629452456의 test/build-pages/deploy-pages 모두 success. 후속 문서 커밋은 별도 자동 배포될 수 있다.
+- **배포 주소: https://claudelove.github.io/trade_monitor/**. 2026-11-04 최신 외부 전략 모니터 배포 HTTP 200 확인.
+- 확인된 최신 기능 배포 커밋: 7002b82aa3d6a7a3aff6c7ba0e40bc33eede018f. version.json과 일치. CI 실행 41743580578 성공. 후속 배포 기록 문서 커밋은 [skip ci]로 저장한다.
 - 작업 도중 관리형 클라우드 실행 환경이 unavailable로 바뀌어 GitHub API로 0896489를 저장했다. 이후 환경 연결이 복구돼 로컬 draft를 stash 보존하고 원격 0896489로 fast-forward 했다.
 - 사용자가 Pages Source=GitHub Actions 및 github-pages 환경 허용 브랜치 work 설정을 완료했다. 현재 자동 Pages 배포 정상 동작.
 - repository default branch가 main이면 workflow_dispatch 수집 기능을 위해 work로 변경하거나 향후 명시적으로 워크플로를 main에 반영해야 한다. 기본 브랜치를 자동 변경했다고 가정하지 않는다.
@@ -23,9 +23,9 @@
 
 ## 기능
 
-FastAPI·SQLite 기반 원래 Python 앱은 보존했다. 검색·필터·CSV·관심 목록·위젯, 5개 이벤트 전략 분류·검토 항목, DART 원문·뉴스, 전후 차트·초과수익, M&A 수동 시나리오, 롱온리 이벤트 백테스트를 지원한다.
+현재 기능: 공시·뉴스·가격 조회, 검색·필터·CSV·관심 목록·위젯, 문서 유형 분류, 외부 전략 코드 메타데이터와 실행 결과 모니터링이다. 내장 전략 라이브러리·M&A 계산·고정일 백테스트 UI는 제거했다. 전략 정책과 실행은 외부 코드 소유다.
 
-Pages에서는 web/static-api.js가 공개 JSON을 읽고 web/analytics.js가 브라우저에서 이벤트 연구·백테스트를 계산한다. scripts/build_pages.py는 상대 경로로 정적 산출물을 만들며 Python 서버는 실행하지 않는다. Python/브라우저 엔진의 정합성 검사를 tests/pages_fixtures.py와 tests/pages.mjs에 추가했다.
+Pages에서는 web/static-api.js가 공개 시장 JSON과 비어 있는 runtime-state를 읽는다. 개인 결과 파일은 탭 메모리에서만 연다. scripts/build_pages.py는 정적 산출물을 만들며 Python 서버는 실행하지 않는다. 과거 연구 계산은 호환 테스트 자료로만 보존하며 /api/backtest는 종료했다.
 
 수집 Actions는 입력을 환경 변수와 subprocess 인수로 전달한다. 사용자 입력을 쉘 코드에 삽입하지 않는다. 수집 결과는 공개 필드만 선별하고 키 포함 검사를 거쳐 커밋한다. 별도 정기 수집 스케줄은 없다.
 
@@ -46,7 +46,7 @@ Pages에서는 web/static-api.js가 공개 JSON을 읽고 web/analytics.js가 �
 
 ## 다음 행동
 
-1. 사용자의 공개 Pages 화면 피드백을 받아 수정. 확인된 테마 코드 배포는 0284fb7, 그 이후 문서 커밋은 별도 자동 실행 여부 확인.
+1. 사용자 제공 예정 전략 docs를 읽고 실행 어댑터를 맞춘다. 최신 배포는 7002b82이며 현재 관측 인프라만 연결돼 있다.
 2. 코드 수정 시 test/build-pages/deploy-pages 및 version.json 커밋을 확인. 계정 Pages 설정은 완료돼 다시 요청할 필요 없음.
 3. 필요 시 기본 브랜치 work 설정과 Actions secret 등록 후 수동 수집 확인.
 4. 화면 피드백 → 관련 테스트 → 인계 갱신 → 커밋·푸시를 유지한다.
@@ -107,3 +107,5 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 다음 작업: 사용자가 첨부할 docs에서 전략 코드 패키징·실행 진입점·백테스트/실거래 인터페이스·콜백 규약을 읽고, 이 관측 계약에 얇은 어댑터로 매핑한다. 대시보드에 별도 risk/entry/exit/order 정책을 추가하지 않는다.
 
 외부 전략 관측 인프라 검증: Python 32개 통과(버전 불변·중복/역순·원자적 롤백·미인증 쓰기·코드 미실행·공개 산출물 개인 자료 제외 포함), 기존 UI DOM 및 Pages 파일 검증/패널/XSS/분리 검사 통과. 과거 연구 예제의 Python/JS 비교 720개와 이벤트 연구 556개도 보존해 통과했다. JSON 형식 예시의 CLI validate 통과.
+
+배포 검증: GitHub Actions 41743580578 성공. 공개 version.json이 7002b82 전체 SHA와 일치하고, 새 메뉴·runtime UI/validator 모듈·계약/예시 JSON이 HTTP 200이다. 공개 runtime-state의 strategies/runs는 각각 0건이다. 실제 브라우저 시각 검증·외부 전략 실행·실주문은 수행하지 않았다.
