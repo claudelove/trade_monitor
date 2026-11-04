@@ -1,3 +1,5 @@
+import {screens} from '../web/screens.js';
+import {ChartLinkBus} from '../web/charts/model.js';
 import * as strategyAnalysis from '../web/strategy-analysis.js';
 import * as strategyUI from '../web/strategy-ui.js';
 import {analysisExample} from '../web/analysis-example.js';
@@ -37,8 +39,8 @@ const mismatched=structuredClone(report);mismatched.runs[0].code_sha256='f'.repe
 await assert.rejects(api('/api/refresh',{}),/GitHub Actions/);
 const html=readFileSync('dist/index.html','utf8');assert.ok(!html.includes('="/assets/'));assert.ok(html.includes('data-hosting="pages"'));assert.ok(html.includes('href="./"'));
 const dom=new JSDOM(html,{url:'https://claudelove.github.io/trade_monitor/',runScripts:'outside-only'}),w=dom.window;
-w.staticModule={api};w.strategyAnalysis=strategyAnalysis;w.strategyUI=strategyUI;w.analysisExample=analysisExample;w.WindowWorkspace=WindowWorkspace;w.nativeUI=nativeUI;w.terminal=terminal;w.runtimeUI=runtimeUI;w.validateBundle=validateBundle;w.scrollTo=()=>{};let opened='';w.open=url=>{opened=url};w.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','')};w.HTMLDialogElement.prototype.close=function(){this.removeAttribute('open')};
-w.eval('const strategyAnalysis=window.strategyAnalysis;const strategyUI=window.strategyUI;const analysisExample=window.analysisExample;const WindowWorkspace=window.WindowWorkspace;const nativeUI=window.nativeUI;const terminal=window.terminal;const {strategyView:renderStrategyView,runsView:renderRunsView}=window.runtimeUI;const validateBundle=window.validateBundle;\n'+readFileSync('web/app.js','utf8').replace(/^import .*;$/gm,'').replace("await import('./static-api.js')",'await Promise.resolve(window.staticModule)'));
+w.staticModule={api};w.screens=screens;w.ChartLinkBus=ChartLinkBus;w.strategyAnalysis=strategyAnalysis;w.strategyUI=strategyUI;w.analysisExample=analysisExample;w.WindowWorkspace=WindowWorkspace;w.nativeUI=nativeUI;w.terminal=terminal;w.runtimeUI=runtimeUI;w.validateBundle=validateBundle;w.scrollTo=()=>{};let opened='';w.open=url=>{opened=url};w.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','')};w.HTMLDialogElement.prototype.close=function(){this.removeAttribute('open')};
+w.eval('const screens=window.screens;const ChartLinkBus=window.ChartLinkBus;const strategyAnalysis=window.strategyAnalysis;const strategyUI=window.strategyUI;const analysisExample=window.analysisExample;const WindowWorkspace=window.WindowWorkspace;const nativeUI=window.nativeUI;const terminal=window.terminal;const {strategyView:renderStrategyView,runsView:renderRunsView}=window.runtimeUI;const validateBundle=window.validateBundle;\n'+readFileSync('web/app.js','utf8').replace(/^import .*;$/gm,'').replace("await import('./static-api.js')",'await Promise.resolve(window.staticModule)'));
 const settle=()=>new Promise(r=>setTimeout(r,30));await settle();
 assert.match(w.document.querySelector('#banner').textContent,/STRATEGY MONITOR/);w.switchDesk('market');assert.match(w.document.querySelector('#banner').textContent,/GITHUB PAGES/);
 assert.ok(w.document.querySelectorAll('[data-symbol]').length>0);

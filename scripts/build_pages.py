@@ -15,8 +15,15 @@ def build(output):
     assets = output / 'assets'
     data = assets / 'data'
     data.mkdir(parents=True, exist_ok=True)
-    for filename in ('app.js','style.css','analytics.js','static-api.js','runtime-ui.js','runtime-contract.js','terminal-ui.js','window-workspace.js','native-report.js','strategy-analysis.js','strategy-ui.js','analysis-example.js'):
-        shutil.copyfile(ROOT/'web'/filename, assets/filename)
+    from scripts.sync_screens import sync
+    sync(check=True)
+    for source in (ROOT/'web').rglob('*'):
+        if source.is_file() and source.suffix in {'.js','.css','.svg','.woff2'}:
+            if source.is_symlink() or any(part.startswith('.') for part in source.relative_to(ROOT/'web').parts):
+                raise ValueError('Public assets must be regular, non-hidden files')
+            target=assets/source.relative_to(ROOT/'web')
+            target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(source,target)
     html = (ROOT/'web/index.html').read_text()
     html = html.replace('<html lang="ko">','<html lang="ko" data-hosting="pages">')
     html = html.replace('href="/"','href="./"').replace('="/assets/','="./assets/')

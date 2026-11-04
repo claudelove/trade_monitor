@@ -212,3 +212,14 @@ QuantConnect 실행 결과와 IBKR PortfolioAnalyst의 공개 문서를 참고�
 검증: Python 32개, UI/Pages 및 분석 edge 사례. 실제 Chromium 1440px/390px에서 공유 전략/기여도/포트폴리오 전환·차트 모드·상관·마켓 출처/배치 분리·모바일/새로고침 메모리 격리 통과. 비공개 레포/엔진에 쓰기/푸시하거나 실제 서버/브로커에 접속하지 않았다.
 
 배포 완료: 기능 커밋 b4e3c84, Actions 41774974015 test/build-pages/deploy-pages success. 공개 version.json 전체 SHA 일치, 전략/마켓 메뉴와 strategy-analysis/strategy-ui/analysis-example 모듈 HTTP 200. 공개 기본 전략/실행 목록은 여전히 0건이며 합성 예시는 버튼으로만 생성한다. 공개 work에만 푸시하고 인계 기록 후속 커밋은 CI 생략.
+
+
+# 2026-11-04 화면 번호별 모듈·공통 인터랙티브 차트
+
+사용자 요청으로 화면 19개를 번호 모듈로 분리했다. 화면 계약 하나가 명령/aliases/메뉴/shortcut/기본 배치/렌더/mount/cleanup을 소유하며 app.js의 switch·뷰 목록·명령 목록을 제거했다. 파일 검색으로 catalog를 생성하고 공개 자산을 하위 폴더까지 빌드한다. 새 화면은 모듈 추가+catalog 재생성으로 확장한다. 중복 번호/명령/버전/파일 번호와 stale catalog를 검사한다.
+
+공식 Bloomberg Charts 소개와 첨부 가이드의 조회/비교 방식을 참고해 차트를 공통 모듈화했다. line/candle/volume·다중 series/좌우 축·20B/60B/ALL·wheel/drag/keyboard pan/zoom·cursor·LINK 시각/구간·standalone SVG를 구현했다. 창 크기의 실제 SVG 좌표를 사용하고 선택 문맥별 메모리 viewport를 보존한다. null/누락 시각은 선을 끊고 정확하지 않은 시각·값을 만들지 않는다.
+
+화면 mount는 AbortSignal/cleanup 경계를 갖고 오류가 다른 패널로 전파되지 않게 했다. 이벤트/observer/chart bus는 닫기·전환·오류에서 정리한다. 비공개 코드/전략/원천을 복사하거나 개인 데이터를 정적 산출물에 넣지 않았다. 엔진 실행/주문/직접 API 범위는 바꾸지 않았다.
+
+Python 32개 및 UI/Pages/새 차트·레지스트리 계약 검사와 실제 Chromium 검증을 수행했다. 번호 호출·선/캔들/거래량·linked cursor/range·wheel/drag/keyboard·metric 변경·SVG 저장·날짜-only precision·보고 닫기/문맥 변경·모바일을 확인하고 캡처를 검토했다. 참조/API/확장 예제는 docs/SCREEN_MODULES.md 및 docs/CHART_MODULE.md에 기록했다.

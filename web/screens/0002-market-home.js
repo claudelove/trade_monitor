@@ -1,0 +1,1 @@
+export default {id:'market-home',number:'0002',command:'MKT',desk:'market',kind:'workspace',title:'마켓 워크스페이스',subtitle:'종목 티커 → 가격·뉴스·공시',nav:true,shortcut:2,navLabel:'MARKET',render:()=>'<div data-workspace-host></div>',mount:(root,ctx)=>ctx.actions.mountWorkspace(root.querySelector('[data-workspace-host]'))};

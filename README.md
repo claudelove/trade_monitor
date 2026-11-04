@@ -28,6 +28,12 @@
 
 현재 실제 연결 범위는 선택 종목 일봉·공시·뉴스와 탭에 읽은 외부 결과입니다. 실시간 엔진 HTTP/브로커·sector/beta/VaR·실제 지연/증권사 대사는 미연결입니다. 전략 실행 UI는 없습니다.
 
+## 화면/차트 모듈 확장
+
+화면 19개를 `web/screens/NNNN-name.js`로 분리했습니다. 번호·명령·메뉴·기본 배치·렌더링·cleanup을 한 모듈이 선언합니다. 새 모듈을 추가하고 `python scripts/sync_screens.py`를 실행하면 메뉴·번호 호출·창 목록에 반영되며 app/index/build의 화면별 분기를 수정하지 않습니다. [화면 모듈 계약과 예제](docs/SCREEN_MODULES.md).
+
+공통 차트는 선/캔들·거래량·다중 시리즈/좌우 축, 커서 readout, 확대/구간 이동, 20B/60B/ALL, LINK 시각·구간 연동, 독립 SVG 다운로드를 제공합니다. `0101`, `0202 005930` 같은 번호 명령으로 열 수 있습니다. [차트 모듈 API](docs/CHART_MODULE.md).
+
 ## Python 서버
 
 ```bash

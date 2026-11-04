@@ -1,0 +1,1 @@
+export default {id:'overview',number:'0001',command:'OV',desk:'strategy',kind:'workspace',title:'전략 워크스페이스',subtitle:'포트폴리오 → 전략 → 성과·보유·리스크·체결',nav:true,shortcut:1,navLabel:'STRATEGY',render:()=>'<div data-workspace-host></div>',mount:(root,ctx)=>ctx.actions.mountWorkspace(root.querySelector('[data-workspace-host]'))};

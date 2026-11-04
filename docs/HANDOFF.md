@@ -4,6 +4,8 @@
 
 ## 최신 사용자 결정
 
+**최신 구조 지시: 번호별 화면 모듈과 공통 인터랙티브 차트로 전면 정리했다. web/screens에 19개 모듈, registry/catalog가 메뉴·명령·창 목록/기본 배치와 수명을 관리한다. 신규 화면은 모듈 추가+catalog 재생성으로 확장한다. docs/SCREEN_MODULES.md 및 CHART_MODULE.md 필독.**
+
 **최신: 전략 중심 STRATEGY와 종목 중심 MARKET을 분리한다. PORTFOLIO/STRATEGY 선택이 분석 패널 전체에 공유된다. 기본은 PERF/HOLD/RISK/EXEC이며 ATTR/CORR/HEALTH를 추가한다. 더 선명한 Bloomberg 참고 색상 적용. docs/STRATEGY_MONITORING.md가 현재 화면·분석 기준이다.**
 
 **최신 구체화: 비공개 엔진 응답을 기준으로 공개 대시보드가 맞춘다. 기본 화면은 4개 분할 패널/패널별 기능 선택과 저장된 배치이며 배치 편집에서만 이동/크기 조절한다. 자유창만으로 Bloomberg 기본 UI를 설명했던 것은 정정했다. docs/NATIVE_REPORTS.md와 TERMINAL_WORKSPACES.md 참고.**
@@ -154,3 +156,11 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 - Python 32개, UI/Pages/분석 edge 사례 검사, Chromium의 공유 전략/기여도/포트폴리오 전환·워크스페이스/출처/배치 분리·모바일/비공개 메모리 격리 확인. 스크린샷 직접 검토. 실제 계좌/HTTP/브로커 연결은 수행하지 않았다.
 
 전략 중심 배포 확인: CI 41774974015 전체 success. 공개 version.json=b4e3c844756f1873cbf9f206d58d8b9e67dcd7a0, 포트폴리오/전략·마켓 메뉴/새 분석 JS HTTP 200. 공개 runtime-state 전략/실행 0건 유지. 검증 기록 후속 문서는 [skip ci]로 저장한다.
+
+## 번호별 모듈·공통 인터랙티브 차트 (2026-11-04)
+
+- 전략/마켓/공시 상세 19개 번호 모듈. app.js의 화면별 switch/뷰/명령 목록 제거. catalog 파일 검색 생성, 중복/버전/파일 번호 검사, 하위 JS/CSS 공개 자산 빌드. 전략 UI는 화면별로 분리하고 이전 함수 export만 호환 유지.
+- ChartModel/TerminalChart/ChartLinkBus/host: line/candle/volume·다중 시리즈/좌우 축·범위/팬/줌·커서·LINK 시각/구간·단독 SVG. 0101/0103/0110/0202/0204/0290 차트가 공통 모듈 사용. 데이터 문맥별 메모리 viewport와 수명 관리.
+- 원본 배열/숫자/결측을 수정하지 않으며 null/없는 시각의 선은 끊는다. 날짜만 있으면 정확한 시각 미제공. 계좌/전략/원천/종목으로 chart group을 분리하고 부재 시각을 보간하지 않는다.
+- 새 계약 검사: 임시 모듈 추가가 기존 코어 수정 없이 메뉴/번호/패널에 반영, 충돌/실패한 mount 이벤트 해제, chart subscription cleanup·dual axis·gap·viewport·원본 불변.
+- Python 32개, UI/Pages/새 chart-registry 검사와 실제 Chromium 번호 호출/선·캔들/volume/커서·구간 연동/휠·포인터·키보드/SVG 다운로드/날짜 precision/문맥·닫기/mobile 검증. 화면 캡처 직접 확인. 비공개 저장소/엔진/실주문 변경 없음.

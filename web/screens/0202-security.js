@@ -1,0 +1,8 @@
+import {pricePanel,securityView,securities} from '../terminal-ui.js';
+import {esc,bindActions,listen} from '../ui/dom.js';
+import {mountCharts,marketGroup,marketLinkGroup} from '../charts/host.js';
+export default {id:'security',number:'0202',command:'GP',desk:'market',title:'종목 분석',subtitle:'저장된 가격·뉴스·공시를 조회합니다.',selector:'symbol',repeatable:true,defaultSlot:1,
+ parseArgs(args,ctx){if(!args.length)return {};const symbol=args.join(' ').toUpperCase();if(!securities(ctx.market).some(s=>s.symbol===symbol))throw Error('저장된 가격이 없는 종목입니다.');ctx.actions.setSymbol(symbol);return {symbol}},
+ render(ctx,pane){const symbol=pane.symbol||ctx.state.symbol,selector=ctx.presentation==='window'?`<div class="window-context"><label>종목 <select data-pane-symbol><option value="">공통 종목 연결</option>${securities(ctx.market).map(s=>`<option value="${esc(s.symbol)}" ${pane.symbol===s.symbol?'selected':''}>${esc(s.symbol)} · ${esc(s.name)}</option>`).join('')}</select></label></div>`:'';return selector+(ctx.presentation==='page'?securityView(ctx.market,symbol):pricePanel(ctx.market,symbol))},
+ mount(root,ctx,pane){const symbol=pane.symbol||ctx.state.symbol,cleanups=[bindActions(root,ctx.actions)],select=root.querySelector('[data-pane-symbol]');if(select)cleanups.push(listen(select,'change',()=>{pane.symbol=select.value||null;ctx.actions.render()}));const data=ctx.market.prices[symbol]||[];cleanups.push(mountCharts(root,ctx,pane,[{role:'price',key:marketGroup(ctx,symbol),linkGroup:marketLinkGroup(ctx),title:symbol+' / '+(ctx.market.price_unit||'KRW'),series:[{id:'price',label:symbol||'미선택',unit:ctx.market.price_unit||'KRW',color:'#f5d34e',type:'candle',data:data.map(p=>({...p,timestamp:p.timestamp||p.date}))}]}]));return ()=>cleanups.reverse().forEach(f=>f())}
+};

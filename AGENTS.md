@@ -68,3 +68,9 @@
 - 운용 워크스페이스는 PORTFOLIO→STRATEGY와 성과/보유/리스크/체결이 기본이다. MARKET만 종목 티커 중심이며 두 배치를 별도로 저장한다. docs/STRATEGY_MONITORING.md 참고.
 - 계좌 장부와 기여도는 엔진 보고값을 사용한다. 화면 진단은 계산 원천·단위·한계를 표시하고 누락을 0/정상으로 바꾸지 않는다. 초기 자본 손실·선물 승수·동일 시각 가격·체결 ID·동일 상관 구간을 보존한다.
 - 일반 글꼴/검정에 더 선명한 주황·황색·청록/녹색/적색을 사용한다. 합성 분석 예시는 명시적으로 선택한 경우에만 표시한다.
+
+## 화면 레지스트리·공통 차트 (2026-11-04)
+
+- docs/SCREEN_MODULES.md와 docs/CHART_MODULE.md를 읽는다. 새 화면은 web/screens/NNNN-name.js에 번호/명령/렌더/mount/cleanup을 선언하고 scripts/sync_screens.py로 catalog를 갱신한다. app.js/메뉴/창 목록에 화면별 분기를 다시 넣지 않는다.
+- 차트는 charts/host.js의 slot/mountCharts와 공통 TerminalChart를 사용한다. 화면에 SVG 렌더러를 따로 만들지 않는다. 원본 시리즈·시각·결측·축 단위를 보존한다.
+- mount는 cleanup을 반환하며 ctx.signal을 사용한다. 화면 전환/닫기/오류 시 event·observer·chart bus를 해제한다. private chart state는 탭 메모리에만 유지하고 layout export에 넣지 않는다.
