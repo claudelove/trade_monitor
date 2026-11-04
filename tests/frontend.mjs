@@ -41,6 +41,7 @@ command('TOP');w.selectPage('news');$('#news-search').value='unlikely-no-news';$
 command('RISK');w.selectPage('risk');assert.match($('#page').textContent,/전략 결과를 연결하세요/);
 command('ACC');w.selectPage('account');assert.match($('#page').textContent,/계좌 데이터 미연결/);
 w.selectPage('monitor');
+assert.equal($('#export-events,#open-demo'),null);
 assert.equal($$('[data-event]').length,49);
 $('#event-search').value='삼성전자';$('#event-search').dispatchEvent(new w.Event('input'));
 assert.equal($$('[data-event]').length,7);
