@@ -15,7 +15,7 @@ def build(output):
     assets = output / 'assets'
     data = assets / 'data'
     data.mkdir(parents=True, exist_ok=True)
-    for filename in ('app.js','style.css','analytics.js','static-api.js','runtime-ui.js','runtime-contract.js'):
+    for filename in ('app.js','style.css','analytics.js','static-api.js','runtime-ui.js','runtime-contract.js','terminal-ui.js'):
         shutil.copyfile(ROOT/'web'/filename, assets/filename)
     html = (ROOT/'web/index.html').read_text()
     html = html.replace('<html lang="ko">','<html lang="ko" data-hosting="pages">')

@@ -1,3 +1,4 @@
+import * as terminal from '../web/terminal-ui.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {runBacktest,eventStudy} from '../web/analytics.js';
@@ -30,10 +31,13 @@ const mismatched=structuredClone(report);mismatched.runs[0].code_sha256='f'.repe
 await assert.rejects(api('/api/refresh',{}),/GitHub Actions/);
 const html=readFileSync('dist/index.html','utf8');assert.ok(!html.includes('="/assets/'));assert.ok(html.includes('data-hosting="pages"'));assert.ok(html.includes('href="./"'));
 const dom=new JSDOM(html,{url:'https://claudelove.github.io/trade_monitor/',runScripts:'outside-only'}),w=dom.window;
-w.staticModule={api};w.runtimeUI=runtimeUI;w.validateBundle=validateBundle;w.scrollTo=()=>{};let opened='';w.open=url=>{opened=url};w.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','')};w.HTMLDialogElement.prototype.close=function(){this.removeAttribute('open')};
-w.eval('const {strategyView:renderStrategyView,runsView:renderRunsView}=window.runtimeUI;const validateBundle=window.validateBundle;\n'+readFileSync('web/app.js','utf8').replace(/^import .*;$/gm,'').replace("await import('./static-api.js')",'await Promise.resolve(window.staticModule)'));
+w.staticModule={api};w.terminal=terminal;w.runtimeUI=runtimeUI;w.validateBundle=validateBundle;w.scrollTo=()=>{};let opened='';w.open=url=>{opened=url};w.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','')};w.HTMLDialogElement.prototype.close=function(){this.removeAttribute('open')};
+w.eval('const terminal=window.terminal;const {strategyView:renderStrategyView,runsView:renderRunsView}=window.runtimeUI;const validateBundle=window.validateBundle;\n'+readFileSync('web/app.js','utf8').replace(/^import .*;$/gm,'').replace("await import('./static-api.js')",'await Promise.resolve(window.staticModule)'));
 const settle=()=>new Promise(r=>setTimeout(r,30));await settle();
 assert.match(w.document.querySelector('#banner').textContent,/GITHUB PAGES/);
+assert.ok(w.document.querySelectorAll('[data-symbol]').length>0);
+assert.match(w.document.querySelector('#page').textContent,/EXECUTION/);
+w.document.querySelector('[data-page="monitor"]').click();
 assert.ok(w.document.querySelectorAll('[data-event]').length>0);
 w.document.querySelector('#refresh-button').click();assert.match(opened,/actions\/workflows\/collect-live.yml/);
 w.document.querySelector('[data-event]').click();await settle();assert.equal(w.document.querySelector('#event-news-fetch'),null);
@@ -48,6 +52,10 @@ assert.match(w.document.querySelector('#page').textContent,/연동 형식 예시
 w.document.querySelector('[data-page="runs"]').click();
 assert.match(w.document.querySelector('#page').textContent,/example-report-only/);
 assert.match(w.document.querySelector('#page').textContent,/외부 코드 정의 리스크/);
+w.document.querySelector('[data-page="risk"]').click();assert.match(w.document.querySelector('#page').textContent,/외부 코드 정의 리스크/);
+assert.equal(w.document.querySelector('#context-run').value,report.runs[0].run_id);
+w.document.querySelector('[data-page="overview"]').click();assert.ok(w.document.querySelector('#page').textContent.includes(report.runs[0].run_id));
+w.document.querySelector('[data-page="account"]').click();assert.match(w.document.querySelector('#page').textContent,/독립 전략 실행 결과를 더해/);
 assert.equal(w.localStorage.getItem('runtime'),null);
 const escaped=structuredClone(report);escaped.strategies[0].name='<img src=x onerror=alert(1)>';
 w.testFile={size:2000,text:async()=>JSON.stringify(escaped)};await w.eval('openRuntimeFile(window.testFile)');

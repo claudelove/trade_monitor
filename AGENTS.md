@@ -44,3 +44,9 @@
 - docs/STRATEGY_INTEGRATION.md를 현재 계약으로 읽는다. 실제 실행 ABI는 사용자 제공 예정 docs가 우선이며 관측 스키마와 구분한다.
 - 등록된 code_ref/코드 문자열을 eval/import/shell로 자동 실행하지 않는다. 관측 mode=live는 실행 승인이나 주문 호출이 아니다.
 - 개인 실행 결과는 공개 Pages/Git export에 포함하지 않는다. 정적 빌드의 runtime-state는 비어 있어야 한다.
+
+## 종합 터미널 방향 (2026-11-04)
+
+- 이벤트 트레이딩에 첫 화면/전체 메뉴를 종속시키지 않는다. OVERVIEW·MARKET·SECURITY·NEWS·FILINGS·EXECUTION·RISK·STRATEGY·ACCOUNT·DATA를 연결한다. docs/TERMINAL_WORKSPACES.md 참고.
+- 비공개 레퍼런스는 설계/화면 참고용이며 코드·문서·전략·계좌 자료를 공개 저장소에 복사하지 않는다. 실행 엔진을 앱에 이식하거나 현재 관측 규격과 호환된다고 가정하지 않는다.
+- SECURITY/RUN 범위를 구분하고, 여러 독립 실행을 합해 계좌 NAV/손익을 만들지 않는다. 미연결 자산군·계좌는 미연결 상태로 유지한다.

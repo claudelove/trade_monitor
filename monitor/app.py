@@ -27,7 +27,7 @@ async def lifespan(app):
     yield
 
 
-app = FastAPI(title='Catalyst | Event Research', version='0.1.0', lifespan=lifespan)
+app = FastAPI(title='Catalyst | Markets & Operations', version='0.1.0', lifespan=lifespan)
 app.add_middleware(AccessGate)
 WEB = Path(__file__).resolve().parent.parent / 'web'
 app.mount('/assets', StaticFiles(directory=WEB), name='assets')
