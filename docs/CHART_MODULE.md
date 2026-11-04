@@ -1,3 +1,5 @@
+> Current baseline (2026-11-05): imported native Lightweight Charts 5.2.1 renderer (charts/native-chart.js) with locally bundled vendor/license/attribution and an SVG non-canvas compatibility renderer (charts/svg-chart.js). charts/terminal-chart.js selects the renderer. Native controls, MA5/20/60, OHLCV, price/volume panes, viewport retention and opt-in LINK follow the upstream UI. Older SVG-only control descriptions below are historical. See docs/UI_SYNC.md and third_party/.
+
 # 공통 인터랙티브 차트
 
 [공식 Bloomberg Charts 소개](https://professional.bloomberg.com/products/bloomberg-terminal/charts/)와 사용자가 제공한 가이드의 가격/비교 차트 작업 방식을 참고했다. 데이터·축·상태·조작을 공통 모듈로 구현했으며 Bloomberg의 데이터/엔진/모든 지표 기능을 제공하지 않는다.

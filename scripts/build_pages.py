@@ -12,6 +12,12 @@ from monitor.event_types import EVENT_TYPES, decorate
 
 def build(output):
     output = Path(output)
+    if output.resolve() == ROOT.resolve() or output.is_symlink():
+        raise ValueError('Unsafe output directory')
+    if output.exists() and any(output.iterdir()):
+        if not (output/'.nojekyll').is_file():
+            raise ValueError('Refusing to replace a directory not marked as a generated Pages build')
+        shutil.rmtree(output)
     assets = output / 'assets'
     data = assets / 'data'
     data.mkdir(parents=True, exist_ok=True)
@@ -25,9 +31,10 @@ def build(output):
             target.parent.mkdir(parents=True,exist_ok=True)
             shutil.copyfile(source,target)
     html = (ROOT/'web/index.html').read_text()
-    html = html.replace('<html lang="ko">','<html lang="ko" data-hosting="pages">')
+    html = html.replace('<html lang="en">','<html lang="en" data-hosting="pages">')
     html = html.replace('href="/"','href="./"').replace('="/assets/','="./assets/')
     (output/'index.html').write_text(html)
+    shutil.copytree(ROOT/'third_party',output/'third_party',dirs_exist_ok=True)
     live = json.loads((ROOT/'fixtures/bootstrap-live.json').read_text())
     if live.get('schema_version') != 1 or live.get('mode') != 'live':
         raise ValueError('Unsupported public snapshot')

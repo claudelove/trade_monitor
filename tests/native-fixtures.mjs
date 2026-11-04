@@ -9,3 +9,4 @@ export function nativeRun(id='synthetic-run',strategy='synthetic-strategy'){
  decisions:[],market:[{timestamp,symbol:'SYNTHETIC',open:10,high:12,low:9,close:11,volume:100,tradable:true}]};
 }
 export function nativeAccount(){const run=nativeRun();return {id:'synthetic-account',name:'SYNTHETIC ACCOUNT',mode:'historical_paper',status:'completed_with_errors',updated_at:'2026-11-04T06:00:01+00:00',as_of:run.curve[0].timestamp,summary:{nav:1002,net_pnl:2,daily_pnl:2,total_return:.002,max_reconciliation_residual:0},curve:run.curve,strategies:[{strategy_id:run.strategy_id,run_id:run.id,state:'ERROR',allocated_capital:1000,nav:1002,pnl:2,daily_pnl:2,contribution_pp:.2}],runs:{[run.id]:run}}}
+

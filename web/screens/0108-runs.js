@@ -1,4 +1,10 @@
 import * as native from '../native-report.js';
-import {runsView} from '../runtime-ui.js';
-import {bindActions,field,listen} from '../ui/dom.js';
-export default {id:'runs',number:'0108',command:'ORD',desk:'strategy',title:'실행 원장',subtitle:'원본 주문·체결·판단·평가 이력을 조회합니다.',render:ctx=>ctx.state.nativeReport?native.runView(ctx.nativeRun):runsView(ctx.state.runtime,ctx.state.selectedRunId),mount(root,ctx){const off=[bindActions(root,ctx.actions)],select=field(root,'runtime-run');if(select)off.push(listen(select,'change',()=>ctx.actions.selectStrategy(select.value)));return ()=>off.forEach(f=>f())}};
+import {esc,listen} from '../ui/dom.js';
+export default {scope:'strategy',id:'runs',number:'0108',command:'ORD',desk:'strategy',title:'Strategy Order & Fill Journal',subtitle:'Stored strategy orders, fills and decisions / timestamps are execution-bar labels.',
+ render(ctx,pane){const run=ctx.nativeRun;if(!run)return '<div class="empty">No stored strategy run.</div>';
+ const query=(pane.query||'').toLowerCase(),status=pane.status||'all';
+ const orders=run.orders.filter(o=>(status==='all'||o.status===status)&&[o.symbol,o.client_id,o.reason,o.decision_reason].join(' ').toLowerCase().includes(query));
+ const ids=new Set(orders.map(o=>o.client_id));const fills=run.fills.filter(f=>ids.has(f.client_id));
+ return `<div class="toolbar"><input data-order-query aria-label="Order search" placeholder="Symbol / client order ID / reason" value="${esc(pane.query||'')}"><select data-order-status aria-label="ORDER STATE"><option value="all">ALL</option>${[...new Set(run.orders.map(o=>o.status))].map(s=>`<option ${s===status?'selected':''}>${esc(s)}</option>`).join('')}</select><span>${orders.length} / ${run.orders.length} ORDERS</span></div>`+native.runView({...run,orders,fills})},
+ mount(root,ctx,pane){return listen(root,'change',e=>{if(e.target.matches('[data-order-query]'))pane.query=e.target.value;if(e.target.matches('[data-order-status]'))pane.status=e.target.value;ctx.actions.render()})}
+};

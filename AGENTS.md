@@ -85,3 +85,9 @@
 
 - 파일 열기/닫기·예제·데모·수동 수집·배치 관리·다운로드 버튼을 다시 추가하지 않는다. 네 작업공간과 기능 소화면, 검색/선택, 창 최대화·닫기, 차트 조회만 기본으로 둔다.
 - 운영 목표는 비공개 웹사이트다. 공개 Pages는 미리보기이며 개인 자료를 넣지 않는다. 인증/엔진 읽기 API 연결은 다음 인계 항목이며 이미 구현됐다고 보고하지 않는다. docs/HANDOFF.md 최상단 체크포인트를 먼저 따른다.
+
+## UI-only import — latest user authorization (2026-11-05)
+
+- User explicitly requested the private integrated UI be copied unchanged into public trade_monitor/work. docs/UI_SYNC.md and UI_UPSTREAM.json are the new UI baseline: six English desks, native financial chart engine and terminal font. Earlier four-desk/font/button restrictions do not override this later snapshot request.
+- Publish only reviewed UI assets/licenses and synthetic tests; no engine, strategy source/registry/configuration, operational data or private Git history. No private repository writes.
+- Pages preview must reject all server operations before fetch and must never connect to a private host. Empty accounts/registries, public market only, unavailable canonical clocks. Keep upstream byte parity checks for untouched files and document reviewed local patches.

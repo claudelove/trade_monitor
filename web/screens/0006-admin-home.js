@@ -1,0 +1,1 @@
+export default {id:'admin-home',number:'0006',command:'ADMIN',desk:'admin',kind:'workspace',title:'Administration',nav:true,navOrder:6,navLabel:'Administration',render:()=>'<div data-workspace-host></div>',mount:(root,ctx)=>ctx.actions.mountWorkspace(root.querySelector('[data-workspace-host]'))};

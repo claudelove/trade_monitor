@@ -1,3 +1,5 @@
+> Current baseline (2026-11-05): the user requested the integrated UI snapshot. Six desks and 36 numbered modules now replace the earlier four-desk UI below. Use docs/UI_SYNC.md and web/screens/ metadata for current numbering. The source/patch manifest is UI_UPSTREAM.json. The historical module contract below applies where compatible; new source paths are web/views/, web/analytics/, web/pane-context.js and web/engine-client.js. There is no strategy-ui.js compatibility dispatcher in the current product.
+
 # 번호별 화면 모듈 개발
 
 화면 번호·명령·메뉴·창 목록·기본 배치·렌더링·연결 해제를 하나의 등록 계약으로 관리한다. app.js에 화면별 switch/뷰 목록/명령 목록을 추가하지 않는다. 기존 공개 UI의 데이터 계약과 비공개 엔진 소유권은 유지한다.

@@ -4,9 +4,8 @@
   "version": "0.1.0",
   "description": "Buildless dashboard; Node is only needed for DOM tests",
   "scripts": {
-    "test:ui": "node tests/frontend.mjs && node tests/workspace.mjs && node tests/strategy-analysis.mjs && node tests/chart-registry.mjs",
-    "pretest:ui": ".venv/bin/python tests/ui_fixtures.py",
-    "pretest:pages": ".venv/bin/python tests/pages_fixtures.py",
+    "test:ui": "node tests/chart-registry.mjs && node tests/workspace.mjs && node tests/strategy-analysis.mjs && node tests/engine-client.mjs && node tests/controller.mjs && node tests/pane-isolation.mjs && node tests/operations.mjs",
+    "pretest:pages": "python scripts/build_pages.py",
     "test:pages": "node tests/pages.mjs"
   },
   "devDependencies": {

@@ -1,0 +1,285 @@
+{
+  "revision": "7f3130426056f7215f303738ead80eec7b9b8af7",
+  "scope": "Frontend UI assets and third-party licenses only; no engine, strategy registry/source, private configurations, runtime data or Git history.",
+  "files": [
+    {
+      "path": "analytics/statistics.js",
+      "sha256": "b798e43accc9a5f50d2d2a43928cbae13f5fe770799f9825253037f7cc7e9c63"
+    },
+    {
+      "path": "app.js",
+      "sha256": "e465e69679f8803c3caf77024ec6ae5adef5364bbef929b3eebf072d318b8644"
+    },
+    {
+      "path": "assets.json",
+      "sha256": "13ca793cc488ce3cd7d5329040b51021e36013dab341839d7af077d96181d751"
+    },
+    {
+      "path": "charts/chart.css",
+      "sha256": "72189015fa9e532c1e2e970a0c57392e454ee91ca3978d318ad986514e119919"
+    },
+    {
+      "path": "charts/host.js",
+      "sha256": "0a66cee0a08d5a1f58a145e38c3da3b8fc97e4692ea179f58159bc7998b5ad69"
+    },
+    {
+      "path": "charts/model.js",
+      "sha256": "eee166daebd58378f7d58d2e43a2ba232d571073f024fef92b9f7065a90c034e"
+    },
+    {
+      "path": "charts/native-chart.js",
+      "sha256": "4218df7c728fee714bc8e8c3a8330ab7047775ccfaf8a0899ba099578b4f1141"
+    },
+    {
+      "path": "charts/native-series.js",
+      "sha256": "834f7a8a3c279946f3c42e28458c2c32c11daead70ed75b9dbc2acb3cf816625"
+    },
+    {
+      "path": "charts/svg-chart.js",
+      "sha256": "11a3b58e5bcfe909688c4c8ffa543c71bfa656ee2483a2581377a422970e1f57"
+    },
+    {
+      "path": "charts/terminal-chart.js",
+      "sha256": "385bb0971dff857b915e6e074b1a7caafeda748a1948f134c0bacc7a7e0e82a0"
+    },
+    {
+      "path": "charts/vendor/lightweight-charts.js",
+      "sha256": "1bb1ee79f9d4dd17261b53d930f7a8995748276f80e7ba0e24412b5068062f5f"
+    },
+    {
+      "path": "engine-client.js",
+      "sha256": "e6f928163a64fe1caa806769e0f6b6fe07919e3cb22774cc6a89fca718cac9ba"
+    },
+    {
+      "path": "index.html",
+      "sha256": "54322f4df33fe5b6f0bcf9438bc0990894a7e05f440406b93aec4ba555d54ab7"
+    },
+    {
+      "path": "market-ui.js",
+      "sha256": "ed638efc256026fd20e36d07937f467d3b45991ba3ebe80dccb960cc41e070ad"
+    },
+    {
+      "path": "native-report.js",
+      "sha256": "1f8c073dd2289508be643a5052ecb7679f9e8a9a6e8a5d20700052cb1a72d363"
+    },
+    {
+      "path": "pane-context.js",
+      "sha256": "e9566148e9f7d7f78a9f2659e29e9e74ad46ad6fe4b1a13f623099c44fd8657a"
+    },
+    {
+      "path": "screen-registry.js",
+      "sha256": "ec5f4a939a51b02cc8a12b4cad465f70ede5a67ce1b098a7cd898b838c8c257e"
+    },
+    {
+      "path": "screens/0001-overview.js",
+      "sha256": "5136edd3d1eccf3c541f1a5cc1988a8b6cd60d65e866c0982803e561d6395e2f"
+    },
+    {
+      "path": "screens/0002-market-home.js",
+      "sha256": "b321dd27b9952abc5ae2315179a872f2dfa34dba1ba8570909d5a976a3a3b84d"
+    },
+    {
+      "path": "screens/0003-backtest-home.js",
+      "sha256": "7f19031a206d84a858ebadf0123baedabecdef090f46d70f43d8ca5c280d0b2b"
+    },
+    {
+      "path": "screens/0004-analysis-home.js",
+      "sha256": "e061a4e57103521ffd1be17c7635fb2fb440a38b4df6ed2c923cff443d3fabae"
+    },
+    {
+      "path": "screens/0005-execution-home.js",
+      "sha256": "7c10d7537fdc2dd2945aa2f301f5265bca1a30ba9b95b74053363c0fc2cc1c6d"
+    },
+    {
+      "path": "screens/0006-admin-home.js",
+      "sha256": "8c48c693db88c3021b41102f10fa4db5b9819e2ff73384d574ad43d66bacd637"
+    },
+    {
+      "path": "screens/0101-performance.js",
+      "sha256": "3c54ca42b08c7142503666a8e47c36559b0bb2963b3a6cce105b94d237385980"
+    },
+    {
+      "path": "screens/0102-holdings.js",
+      "sha256": "200264c9894345499ede0dee9b6122dd07a29ad19982a511b782af8cb149d63f"
+    },
+    {
+      "path": "screens/0103-risk.js",
+      "sha256": "f231874adbd494d7d6ad0476c3f1773b9926c03df37538bb3ffe0625c94face7"
+    },
+    {
+      "path": "screens/0104-execution.js",
+      "sha256": "66ca9c28087c642571d61fa65a9d39e63f766a0776f47a64b6b57fb0be495992"
+    },
+    {
+      "path": "screens/0105-attribution.js",
+      "sha256": "36c2d85d2b2f3a18d2921bd1f62596a44c2b4c6409194ccaba9581cac6ff2b1b"
+    },
+    {
+      "path": "screens/0108-runs.js",
+      "sha256": "f16973ad4564d2e6fad5c4a7b0c5137330a5ad1bd44a2270048347a6dd452ad7"
+    },
+    {
+      "path": "screens/0110-account.js",
+      "sha256": "73924ada5075b940c62407fc8c3ad9acb2e12674ee2fb0fe7fe67260f2934dc5"
+    },
+    {
+      "path": "screens/0201-market.js",
+      "sha256": "de67299e42a50f964381eba794ab3c88060ba4bc462408db70885240b1dc83b8"
+    },
+    {
+      "path": "screens/0202-security.js",
+      "sha256": "8de270c3b005010720395d425ebd97598b44bc7bd6116352c7387126485266b0"
+    },
+    {
+      "path": "screens/0203-news.js",
+      "sha256": "d8fa697321bc6e45d6d0bba7175f5bf7e4704f81aad020a8b9edce9dae2a3686"
+    },
+    {
+      "path": "screens/0204-monitor.js",
+      "sha256": "84b26e7a45af121997b10c12ed98370132e5597be66a7d444fc022be169aff28"
+    },
+    {
+      "path": "screens/0206-watchlist.js",
+      "sha256": "bc22df610f4ade35f664e6f3aff3e89bae300fa01ce09852771ac008b6c69919"
+    },
+    {
+      "path": "screens/0290-event-detail.js",
+      "sha256": "b603948689d21f64929009d1b60707fc86bc60dc5eed15009fa9d983bf4911c2"
+    },
+    {
+      "path": "screens/0301-backtest-execution.js",
+      "sha256": "eec2e2f6c7ceb21992e51d4b974e31e2837c21ced343a3a7119b3a8143d16f34"
+    },
+    {
+      "path": "screens/0302-backtest-results.js",
+      "sha256": "8277928556f6d1fa376df33d93afb7127c21f36a20fe616730cf00f11e9ebfb7"
+    },
+    {
+      "path": "screens/0303-strategies.js",
+      "sha256": "4ef6486c0bb4e2a6136c0035dc9f4949d7a2762a714ad5ab5a754f44e6916d1a"
+    },
+    {
+      "path": "screens/0304-strategy-lab.js",
+      "sha256": "154843fbcd2ca3d846bd612dd02d86d2ee2f20fe36739cadf883cd8795432e72"
+    },
+    {
+      "path": "screens/0305-python-registry.js",
+      "sha256": "39e4205223dc8cc54f92682d265307e10ddb4e09e447e2b1b17e1febf82722b6"
+    },
+    {
+      "path": "screens/0401-correlation.js",
+      "sha256": "26e1edeb8f12340b05485a15251ae75b371c68370a724d6b31d245d5c9af483c"
+    },
+    {
+      "path": "screens/0402-diagnostics.js",
+      "sha256": "4a6876f3e609127b2b876d6547e252897e3132a86655365c9a10d0faa88035e7"
+    },
+    {
+      "path": "screens/0403-sources.js",
+      "sha256": "ffdf5ccc9ee28ec7d0cb7bc384d70d7e9ab06e7faa433bf84d1c60011f1580fa"
+    },
+    {
+      "path": "screens/0404-journal.js",
+      "sha256": "7d7eb344d4480cd4f4f4869a06708d556795f42fd98440bdc429a517d17e2248"
+    },
+    {
+      "path": "screens/0405-orderbook.js",
+      "sha256": "d5c76f4d4422f9c6a1438f4ad9128bb93021468a1f68341ae2ecb7c3eee843db"
+    },
+    {
+      "path": "screens/0406-readiness.js",
+      "sha256": "9697eac119b164fff1f1ed4f5abe59132f085d6f5e33d1e2db45b52476bcce60"
+    },
+    {
+      "path": "screens/0410-statistical-lab.js",
+      "sha256": "61460b97019224321f2c7b447f9206cd80cc03b95358286e2d519188b865fc56"
+    },
+    {
+      "path": "screens/0501-order-monitor.js",
+      "sha256": "f3709f656dcc53583dbcba89a187dc6f7e871fc745e142dad20ce76859c6daa5"
+    },
+    {
+      "path": "screens/0502-fill-tape.js",
+      "sha256": "cefc6744862d83e5a3b70de54dc5ec800e6ad6d1b61872df044405e1734ba4c0"
+    },
+    {
+      "path": "screens/0503-event-oms.js",
+      "sha256": "73a8ddec10f3ec8e0254568796c5519151d64c36f60bb8103bfebc2de0aaba30"
+    },
+    {
+      "path": "screens/0601-access.js",
+      "sha256": "3dec9b5259e977385182b65e388b0031b13479c5ada2fdb2c78dd9f0f4eeb160"
+    },
+    {
+      "path": "screens/0602-database.js",
+      "sha256": "957070bd71822185fecec2d476e294bab7f2c8839e8719506a0c8fa10eb63faf"
+    },
+    {
+      "path": "screens/catalog.js",
+      "sha256": "16c01111498167cbaedfc1688e28330821e5507bac2f0936d0e19fd7f3339710"
+    },
+    {
+      "path": "screens.js",
+      "sha256": "278a4c9b224451fa04d0fe0e7a0bf9d52f2f746299a82987876017cc22b4d507"
+    },
+    {
+      "path": "strategy-analysis.js",
+      "sha256": "f3448513d03824d2b18996722fea6f03bab25c1fa6830b7ae7b3753f0fcc9e76"
+    },
+    {
+      "path": "style.css",
+      "sha256": "66c51a1e3049cb8c3737763408e938d798102f15814a2c717324ddbc09360db2"
+    },
+    {
+      "path": "terminal-ui.js",
+      "sha256": "c0470f3b58ff68a0760eb4cd9c97ac64f721c6cb3fa421aed8ee1c950dba9b39"
+    },
+    {
+      "path": "ui/dom.js",
+      "sha256": "7413a9563f2735e46ff30da9a3a6334159150da9ad553fa604ca4ffcb3f9f773"
+    },
+    {
+      "path": "ui/fonts/ibm-plex-mono-latin-400-normal.woff2",
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+    },
+    {
+      "path": "ui/fonts/ibm-plex-mono-latin-600-normal.woff2",
+      "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83"
+    },
+    {
+      "path": "ui/panels.css",
+      "sha256": "d0e35e073d82f4aee807b9d2b06b51767d71871723c6a65e007b848cf71139f5"
+    },
+    {
+      "path": "ui/shell.css",
+      "sha256": "eb06be81e0aa120d965633d13f7aa1695f7aaa5da304612f810734df6c008943"
+    },
+    {
+      "path": "ui/strategy-common.js",
+      "sha256": "e4c02abfc1c0fe178e709609977293389c4addd0afdb03cff2725ff0e2787f4b"
+    },
+    {
+      "path": "ui/tokens.css",
+      "sha256": "22dad7e9524d2fb6b98bb5e0e64eb75544af8e6fd309672a56d8a890dba50ffb"
+    },
+    {
+      "path": "views/execution.js",
+      "sha256": "faddd998086f6e6818ca400015e43ab927711115b7cc06d548cfc815a1c45eee"
+    },
+    {
+      "path": "views/performance.js",
+      "sha256": "cd831fc98bd9e1c0498bdd2d95a6fe8b05e4f557022af9b3bc0367128390e314"
+    },
+    {
+      "path": "window-workspace.js",
+      "sha256": "d5cd220646f4f7dee5a16deb594a2146c30cbec56998890e031bcfa5e2457572"
+    }
+  ],
+  "repository": "claudelove/krx_hedgefund",
+  "source_path": "src/krx_system/monitoring/web",
+  "local_patches": [
+    "app.js: public preview status labels only",
+    "engine-client.js: public preview read/write boundary",
+    "screens/catalog.js: generated using public repository script"
+  ]
+}

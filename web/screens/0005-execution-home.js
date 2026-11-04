@@ -1,0 +1,1 @@
+export default {id:'execution-home',number:'0005',command:'TRADING',desk:'execution',kind:'workspace',title:'Execution',nav:true,navOrder:5,navLabel:'Execution',render:()=>'<div data-workspace-host></div>',mount:(root,ctx)=>ctx.actions.mountWorkspace(root.querySelector('[data-workspace-host]'))};

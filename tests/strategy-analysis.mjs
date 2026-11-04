@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import * as a from '../web/strategy-analysis.js';
-import * as ui from '../web/strategy-ui.js';
-import {analysisExample} from '../web/analysis-example.js';
+import {performanceView} from '../web/screens/0101-performance.js';
+import {holdingsView} from '../web/screens/0102-holdings.js';
+import {riskView} from '../web/screens/0103-risk.js';
+import {executionView} from '../web/screens/0104-execution.js';
+import {attributionView} from '../web/screens/0105-attribution.js';
+import {correlationView} from '../web/screens/0401-correlation.js';
+import {diagnosticsView} from '../web/screens/0402-diagnostics.js';
+const views={performance:performanceView,holdings:holdingsView,risk:riskView,execution:executionView,attribution:attributionView,correlation:correlationView,diagnostics:diagnosticsView};
+const ui={...views,riskView,holdingsView,executionView,view:(kind,ctx)=>views[kind](ctx)};
+import {analysisExample} from './analysis-example.mjs';
 import {parseNativeReport} from '../web/native-report.js';
 const close=(x,y)=>assert.ok(Math.abs(x-y)<1e-10,`${x} != ${y}`);
 const t=i=>new Date(Date.UTC(2026,0,i+1)).toISOString();
@@ -26,5 +34,6 @@ const result=a.analyze(ctx2);assert.equal(ctx2.entry.run.id,report.runs[1].id);a
 for(const kind of ['performance','holdings','risk','execution','attribution','correlation','diagnostics'])assert.ok(ui.view(kind,ctx2).includes('panel'));
 assert.match(ui.riskView(ctx2),/max_gross/);
 assert.equal(JSON.stringify(report),snapshot,'diagnostics must not mutate engine results');
-const noChildren=structuredClone(report);noChildren.runs=[];const noCtx=a.context(noChildren,{runs:[]},report.account.strategies[1].run_id);assert.equal(noCtx.entry.row.strategy_id,report.account.strategies[1].strategy_id);assert.match(ui.holdingsView(noCtx),/미보고/);assert.match(ui.executionView(noCtx),/미보고/);
+const noChildren=structuredClone(report);noChildren.runs=[];const noCtx=a.context(noChildren,{runs:[]},report.account.strategies[1].run_id);assert.equal(noCtx.entry.row.strategy_id,report.account.strategies[1].strategy_id);assert.match(ui.holdingsView(noCtx),/N\/A/);assert.match(ui.executionView(noCtx),/N\/A/);
 console.log('Strategy diagnostics passed: initial losses, nonannualized volatility, signed futures exposure, missing marks/multipliers, partial execution and identity errors, exact-interval correlation, account scope and immutable reports.');
+

@@ -1,100 +1,150 @@
 import {screens} from './screens.js';
 import {ChartLinkBus} from './charts/model.js';
-import * as strategyAnalysis from './strategy-analysis.js';
-import {analysisExample} from './analysis-example.js';
+import * as analysis from './strategy-analysis.js';
 import {WindowWorkspace} from './window-workspace.js';
-import * as nativeUI from './native-report.js';
+import * as native from './native-report.js';
 import * as terminal from './terminal-ui.js';
-import {validateBundle} from './runtime-contract.js';
-const STATIC_HOSTING=document.documentElement.dataset.hosting==='pages';
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+import {api,operation,EngineClient} from './engine-client.js';
+import {paneContext,selectionBar,bindSelection} from './pane-context.js';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
-const write=(key,v)=>{try{localStorage.setItem(key,JSON.stringify(v))}catch{}};
-let state={mode:'live',page:'overview',desk:'strategy',marketSource:'public',portfolios:[],selectedPortfolioId:null,symbol:'005930',priceRange:'60',newsSearch:'',data:null,search:'',category:'all',priority:'all',watch:read('catalyst-watch',[]),widgets:read('catalyst-widgets',[{id:'stats',show:true},{id:'events',show:true},{id:'context',show:true}]),runtime:{strategies:[],runs:[],transport:'unconnected'},runtimeImported:false,runtimeContract:null,selectedRunId:null,nativeReport:null};
-const chartBus=new ChartLinkBus();
-let pageDispose=()=>{},dialogDispose=()=>{},configurationDispose=()=>{},dialogRequest=0;
-const pagePanes=new Map();
-const desks=Object.fromEntries(['strategy','market','backtest','analysis'].map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,content:paneContent,bind:bindPane,symbols:()=>terminal.securities(displayMarket())})]));
-let desktop=desks.strategy;
-function nativeRun(){return state.nativeReport?.runs.find(r=>r.id===state.selectedRunId)||(!state.selectedRunId?state.nativeReport?.runs[0]:null)||null}
-function strategyContext(){return strategyAnalysis.context(state.nativeReport,state.runtime,state.selectedRunId)}
-function displayMarket(){return state.marketSource==='run'?nativeUI.marketData(nativeRun()):state.data}
-function switchDesk(profile){state.desk=profile;state.page=screens.home(profile).id;render()}
-function openTool(id,parameters=null){const screen=screens.get(id);if(screen.kind==='workspace'){switchDesk(screen.desk);return}if(screen.kind==='dialog'){openDialog(screen.id,parameters||{});return}state.desk=screen.desk;if(screen.panel===false){selectPage(screen.id);return}state.page=screens.home(screen.desk).id;render();desktop.open(screen.id,parameters)}
-async function closeReport(){state.nativeReport=null;state.portfolios=[];state.selectedPortfolioId=null;state.marketSource='public';state.runtimeImported=false;state.selectedRunId=null;state.runtime={strategies:[],runs:[],transport:'unconnected'};for(const desk of Object.values(desks))for(const pane of desk.panes){delete pane.chartStates;delete pane.symbol}pagePanes.clear();closeDialog();render();try{await load()}catch(error){toast(error.message)}}
-function acceptNative(value){const report=nativeUI.parseNativeReport(value),id=(report.account?'account:':'run:')+(report.account?.id||report.runs[0].id);const previous=state.portfolios.findIndex(p=>p.id===id),record={id,report};if(previous>=0)state.portfolios[previous]=record;else state.portfolios.push(record);state.nativeReport=report;state.selectedPortfolioId=id;state.selectedRunId=null;state.runtimeImported=true;state.desk=state.desk==='backtest'?'backtest':'strategy';state.page=screens.home(state.desk).id}
-function showAnalysisExample(){acceptNative(analysisExample());render();toast('합성 분석 예시입니다. 실제 전략/백테스트 성과가 아닙니다.')}
-
-function toast(text){$('#toast').textContent=text;$('#toast').classList.add('visible');setTimeout(()=>$('#toast').classList.remove('visible'),3500)}
-async function api(path,body){if(STATIC_HOSTING)return (await import('./static-api.js')).api(path,body);const response=await fetch(path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});if(!response.ok){let detail;try{detail=(await response.json()).detail}catch{}throw Error(typeof detail==='string'?detail:`요청 실패 (${response.status})`)}return response.json()}
-let loadSequence=0;
-async function load(){const sequence=++loadSequence,mode=state.mode;const [data,runtime,contract]=await Promise.all([api('/api/snapshot?mode='+mode),state.runtimeImported?Promise.resolve(state.runtime):api('/api/runtime/state').catch(()=>({strategies:[],runs:[],transport:'unconnected'})),api('/api/runtime/contract').catch(()=>null)]);if(sequence!==loadSequence)return;state.data=data;if(!state.runtimeImported)state.runtime=runtime;state.runtimeContract=contract;render()}
-
-function selectPage(page){const screen=screens.get(page);state.desk=screen.desk;state.page=page;render();window.scrollTo({top:0,behavior:'smooth'})}
+const emptyMarket=()=>({prices:{},events:[],news:[],sources:[],symbols:[],event_types:{disclosure:{name:'Disclosures'}},as_of:null});
+const state={mode:'persisted',page:'overview',desk:'strategy',marketSource:'stored',symbol:'',data:emptyMarket(),
+  runtime:{runs:[],strategies:[]},nativeReport:null,selectedRunId:null,choices:[],selectedPortfolio:null,
+  watch:[],search:'',category:'all',priority:'all',widgets:[{id:'events',show:true}],pollError:null,marketError:null,loading:false,role:null};
+const client=new EngineClient(),chartBus=new ChartLinkBus(),pagePanes=new Map();
+let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,pollBusy=false;
+const deskIds=['strategy','market','backtest','analysis','execution','admin'];
+const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,
+  content:p=>{const s=screens.get(p.type),ctx=paneContext(screenContext('window'),p,s);return selectionBar(ctx,p,s)+screens.render(p.type,ctx,p)},
+  bind:(root,p)=>{const ctx=paneContext(screenContext('window'),p,screens.get(p.type)),off=bindSelection(root,ctx,p),dispose=screens.mount(p.type,root,ctx,p);return ()=>{off();dispose()}},
+  symbols:()=>terminal.securities(displayMarket())})]));
+function strategyContext(){return analysis.context(state.nativeReport,state.runtime,state.selectedRunId)}
+function nativeRun(){return strategyContext().run}
+function displayMarket(){return state.marketSource==='run'?native.marketData(nativeRun()):state.data}
+function toast(message){$('#toast').textContent=message;$('#toast').classList.add('visible');setTimeout(()=>$('#toast').classList.remove('visible'),4000)}
+function setSymbol(symbol){state.symbol=symbol}
+function screenContext(presentation='window',extra={}){return {state:{...state,data:state.desk==='market'?displayMarket():state.data},strategy:strategyContext(),nativeRun:nativeRun(),market:displayMarket(),
+  storedMarket:state.data,marketSource:state.marketSource,staticHosting:false,presentation,chartBus,actions,...extra}}
+function switchDesk(desk){state.desk=desk;state.page=screens.home(desk).id;render()}
+function openTool(id,parameters={}){
+  const screen=screens.get(id),params=typeof parameters==='string'?{symbol:parameters}:parameters||{};
+  if(screen.kind==='workspace'){switchDesk(screen.desk);return}
+  if(screen.kind==='dialog'){openDialog(id,params);return}
+  state.desk=screen.desk;
+  if(screen.panel===false){state.page=id;render();return}
+  state.page=screens.home(screen.desk).id;render();desks[screen.desk].open(id,params);
+}
+function health(){
+  const preview=document.documentElement.dataset.hosting==='pages';
+  const ctx=strategyContext(),a=ctx.account,stale=a?.status==='running'&&Date.now()-Date.parse(a.updated_at)>15000;
+  $('#connection-state').textContent=preview?'PUBLIC PREVIEW · ENGINE DISCONNECTED':state.loading?'LOADING ENGINE…':state.pollError?'API ERROR · last successful publication retained':state.marketError?'DATA ERROR · account query succeeded':stale?'STALE RUNNING SNAPSHOT':'ENGINE API · '+(a?.status||ctx.run?.summary.mode||'NO RUNS');
+  $('#connection-state').className=state.pollError||state.marketError||stale?'negative':'connection';
+  const source=state.desk==='admin'?'ADMINISTRATION / ACCESS POLICY & DATA OPERATIONS':state.desk==='market'?(state.marketSource==='run'?'RUN SOURCE BARS · '+(ctx.entry?.name||''):'CANONICAL SOURCE SAMPLE'):
+    a?`${a.name} · ${a.status} · ACCOUNT / STRATEGY LEDGER`:ctx.entry?'STRATEGY / '+ctx.entry.name:'NO STORED RUN';
+  $('#context-scope').textContent=source;
+  $('#banner').textContent=preview?'PUBLIC UI PREVIEW / PUBLIC MARKET SNAPSHOT ONLY / PRIVATE ENGINE, ACCOUNTS AND SERVER OPERATIONS DISCONNECTED':state.pollError?'QUERY ERROR: '+state.pollError+' · DISPLAYING LAST SUCCESSFUL QUERY':state.marketError&&(state.desk==='analysis'||state.desk==='market')?'SOURCE QUERY ERROR / LAST SOURCE SNAPSHOT RETAINED: '+state.marketError:
+    state.desk==='admin'?'ADMINISTRATOR POLICY / NO LIVE ORDER CONTROLS':state.desk==='market'?'INDEPENDENT SOURCE / SYMBOL PANES · STORED EVENTS OR HISTORICAL RUN BARS · NO LIVE QUOTE FEED'+(state.data.synthetic_sources_present?' · INCLUDES SYNTHETIC SOURCES':''):
+    (a?.source?.synthetic||ctx.run?.source?.synthetic?'SYNTHETIC / PAPER · SYNTHETIC RESEARCH / ':'ENGINE REPORT · ')+
+      (stale?'RUNNING PUBLICATION STALE / ':'')+'INTERNAL LEDGER / BROKER DISCONNECTED';
+}
 function render(){
- pageDispose();configurationDispose();configurationDispose=()=>{};$('#layout-controls').hidden=true;
- const ctx=strategyContext();state.selectedRunId=ctx.entry?.id||null;desktop=desks[state.desk];
- if(state.marketSource==='run'&&!nativeRun())state.marketSource='public';
- const market=displayMarket(),symbols=terminal.securities(market);if(!symbols.some(s=>s.symbol===state.symbol))state.symbol=symbols[0]?.symbol||'';
- $('#context-symbol').innerHTML=terminal.contextOptions(market,state.runtime,state.symbol,state.selectedRunId).symbols;$('#context-symbol').disabled=!symbols.length;
- $('#context-run').innerHTML=ctx.entries.map(e=>`<option value="${esc(e.id)}" ${e.id===state.selectedRunId?'selected':''}>${esc(e.name)} · ${esc(e.state||'상태 미보고')}</option>`).join('')||'<option value="">전략 미연결</option>';$('#context-run').disabled=!ctx.entries.length;
- $('#context-portfolio').innerHTML=state.portfolios.map(p=>`<option value="${esc(p.id)}" ${p.id===state.selectedPortfolioId?'selected':''}>${esc(p.report.account?.name||p.report.runs[0]?.summary.strategy||'개별 실행')} · ${p.report.account?'계좌 실행':'단일 전략'}</option>`).join('')||'<option value="">독립 관측 / 포트폴리오 미연결</option>';$('#context-portfolio').disabled=state.portfolios.length<2;
- $('#market-context').hidden=state.desk!=='market';$('#strategy-context').hidden=state.desk==='market';$('#market-source').value=state.marketSource;$('#market-source option[value="run"]').disabled=!nativeRun();
- $('#context-scope').textContent=state.desk==='market'?(state.marketSource==='run'?'선택 전략의 저장 봉 · '+(ctx.entry?.name||''):'공개 시장 스냅샷 · 종목 표본'):(ctx.account?ctx.account.status+' · 계좌/전략 장부':ctx.entry?'선택 전략 단위':'포트폴리오·전략 결과를 연결하세요');
- const current=screens.get(state.page),title=current.title,subtitle=current.subtitle||'';
- $('#page-title').textContent=title;$('#page-subtitle').textContent=subtitle;$('#crumb').textContent=title;$$('nav button').forEach(b=>b.classList.toggle('active',screens.get(b.dataset.page).desk===state.desk));for(const screen of screens.navigation())if(screen.badge){const badge=$('#'+screen.badge.id);if(badge)badge.textContent=screen.badge.value(screenContext('nav'))}
- const asof=state.desk!=='market'?(ctx.run?.curve.at(-1)?.timestamp||ctx.legacy?.as_of||ctx.account?.as_of):market.as_of;$('#asof').textContent=asof?new Date(asof).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})+' KST 데이터 기준':'전략 데이터 미연결';
- $('#banner').className='banner '+(state.mode==='live'?'live':'');$('#banner').textContent=state.desk!=='market'?(state.nativeReport?.account?.source?.synthetic||nativeRun()?.source?.synthetic?'SYNTHETIC ANALYSIS / 합성 모니터링 예시 · 실제 전략·백테스트 성과가 아닙니다.':state.nativeReport?'ENGINE REPORT / 엔진 원본 결과 · 탭 메모리 조회 · 실시간 API/브로커 미연결':'STRATEGY MONITOR / 전략 결과를 연결하세요. 시장 스냅샷으로 전략 성과를 만들지 않습니다.'):(state.marketSource==='run'?'ENGINE MARKET / 선택 전략에 저장된 봉 · 현재 시장 시세와 구분':state.mode==='demo'?'SYNTHETIC DATA / 공시·가격 모두 합성한 기능 검증용 데모입니다.':STATIC_HOSTING?'GITHUB PAGES / 공개 수집 스냅샷 · 실시간 시세 아님':'LIVE SNAPSHOT / DART·뉴스·pykrx 수집 스냅샷 · 수정 일봉');
- const context=screenContext('page');const pane=pagePanes.get(state.page)||{};pagePanes.set(state.page,pane);$('#page').innerHTML=screens.render(state.page,context,pane);pageDispose=screens.mount(state.page,$('#page'),context,pane);
+  pageDispose();pageDispose=()=>{};
+  const ctx=strategyContext();state.selectedRunId=ctx.entry?.id||null;
+  if(state.marketSource==='run'&&!ctx.run)state.marketSource='stored';
+  const market=displayMarket(),symbols=terminal.securities(market);
+  if(!symbols.some(s=>s.symbol===state.symbol))state.symbol=symbols[0]?.symbol||'';
+  const selected=$('#context-portfolio');selected.replaceChildren();
+  const groups={account:document.createElement('optgroup'),run:document.createElement('optgroup')};
+  groups.account.label='SHARED ACCOUNTS';groups.run.label='STANDALONE RESEARCH';
+  for(const row of state.choices){const option=document.createElement('option');option.value=row.key;option.textContent=row.label;groups[row.kind].append(option)}
+  for(const group of Object.values(groups))if(group.children.length)selected.append(group);
+  if(!state.choices.length){const o=document.createElement('option');o.textContent='NO STORED ACCOUNTS OR RUNS';selected.append(o)}
+  selected.value=state.selectedPortfolio||'';selected.disabled=!state.choices.length;
+  $('#context-run').innerHTML=ctx.entries.map(e=>`<option value="${esc(e.id)}" ${e.id===state.selectedRunId?'selected':''}>${esc(e.name)} · ${esc(e.state||'STATE UNREPORTED')}</option>`).join('')||'<option>NO STRATEGY</option>';
+  $('#context-run').disabled=!ctx.entries.length;
+  $('#context-symbol').innerHTML=terminal.contextOptions(market,state.runtime,state.symbol,null).symbols;
+  $('#context-symbol').disabled=!symbols.length;$('#market-source').value=state.marketSource;
+  $('#market-source option[value="run"]').disabled=!ctx.run;
+  $('#market-context').hidden=state.desk!=='market';$('#strategy-context').hidden=state.desk==='market'||state.desk==='admin';
+  const current=screens.get(state.page);$('#crumb').textContent=current.title;$('#page-title').textContent=current.title;
+  $('#page-subtitle').textContent=current.subtitle||'';
+  $$('nav button').forEach(b=>b.classList.toggle('active',screens.get(b.dataset.page).desk===state.desk));
+  const stamp=state.desk==='market'?market.as_of:ctx.account?.as_of||ctx.run?.curve.at(-1)?.timestamp;
+  $('#asof').textContent=state.desk==='admin'?'ACCESS / DATABASE OPERATIONS':stamp?new Date(stamp).toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour12:false})+' KST · CONTEXT AS OF':'NO SOURCE OBSERVATION';
+  const root=$('#page');root.innerHTML=screens.render(state.page,screenContext('page'),pagePanes.get(state.page)||{});
+  const pane=pagePanes.get(state.page)||{};pagePanes.set(state.page,pane);
+  pageDispose=screens.mount(state.page,root,screenContext('page'),pane);
+  health();
 }
-
-function download(name,rows,columns){const cell=v=>'"'+String(v??'').replace(/^[=+\-@]/,"'$&").replace(/"/g,'""')+'"';const csv='\ufeff'+[columns.map(cell).join(','),...rows.map(r=>columns.map(k=>cell(r[k])).join(','))].join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=`catalyst-${state.mode}-${name}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-async function changeMode(mode){state.mode=mode;try{await load()}catch(err){toast(err.message)}}
-$('nav').innerHTML=screens.navigation().map(screen=>`<button data-page="${screen.id}" title="${screen.number} / ${screen.command}">${esc(screen.navLabel||screen.command)}${screen.badge?` <i id="${esc(screen.badge.id)}">0</i>`:''}</button>`).join('');
-$('nav').onclick=event=>{const button=event.target.closest('[data-page]');if(button)openTool(button.dataset.page)};
-load().catch(err=>{$('#page').innerHTML='<div class="panel empty"><strong>서버에 연결할 수 없습니다</strong>Python API 서버 실행 상태를 확인한 후 새로고침하세요.</div>';toast(err.message)});
-
-async function openRuntimeFile(file){
- if(file.size>5*1024*1024)throw Error('파일은 5MB 이하여야 합니다.');
- const value=JSON.parse(await file.text());if(value&&typeof value.id==='string'&&value.summary){acceptNative(value)}else{if(!state.runtimeContract)throw Error('이전 관측 규격을 읽지 못했습니다. 새로고침 후 다시 시도하세요.');const runtime=validateBundle(value,state.runtimeContract);state.runtime=runtime;state.nativeReport=null;state.portfolios=[];state.selectedPortfolioId=null;}
- state.runtimeImported=true;state.selectedRunId=null;state.desk=state.desk==='backtest'?'backtest':'strategy';state.page=screens.home(state.desk).id;render();toast('현재 탭에서만 파일을 열었습니다. 서버에 전송하지 않았습니다.');
+async function refresh(selection=state.selectedPortfolio){
+  state.loading=true;health();
+  try{
+    const value=await client.load(selection);if(!value)return;
+    const oldSelection=state.selectedPortfolio;
+    const reportKey=value.report?.account?value.report.account.id+':'+value.report.account.updated_at:
+      value.report?.runs[0]?.id||'empty';
+    const version=reportKey+':'+(value.data?.version||'market-error')+':'+(value.marketError||'')+':'+JSON.stringify(value.choices);
+    state.pollError=null;state.marketError=value.marketError;state.loading=false;
+    if(lastVersion===version&&oldSelection===value.selected){health();return}
+    state.choices=value.choices;state.selectedPortfolio=value.selected;state.nativeReport=value.report;if(value.data)state.data=value.data;
+    if(oldSelection!==value.selected){state.selectedRunId=null;for(const desk of Object.values(desks))for(const p of desk.panes){delete p.chartStates;delete p.runId}}
+    lastVersion=version;render();
+    if(activeDialog)openDialog(activeDialog.id,activeDialog.params);
+  }catch(error){if(error.name==='AbortError')return;state.loading=false;state.pollError=error.message;health();toast(error.message)}
 }
-$('#context-symbol').onchange=event=>{state.symbol=event.target.value;render()};
-$('#context-run').onchange=event=>{state.selectedRunId=event.target.value;render()};
-$('#context-portfolio').onchange=event=>{const portfolio=state.portfolios.find(p=>p.id===event.target.value);if(portfolio){state.nativeReport=portfolio.report;state.selectedPortfolioId=portfolio.id;state.selectedRunId=null;render()}};
-$('#market-source').onchange=event=>{state.marketSource=event.target.value;render()};
-$('#command-form').onsubmit=async event=>{
- event.preventDefault();const [command,...args]=$('#command').value.trim().split(/\s+/),upper=command.toUpperCase();
- if(upper==='HELP'){$('#help-dialog').showModal();return}
- if(upper==='REFRESH'){try{await load();$('#command-status').textContent='저장된 상태를 다시 조회했습니다.'}catch(error){toast(error.message)}return}
- const screen=screens.resolve(command);if(!screen){$('#command-status').textContent='알 수 없는 명령입니다. HELP를 확인하세요.';return}
- try{const parameters=screen.parseArgs?.(args,screenContext('page'))||null;openTool(screen.id,parameters);$('#command-status').textContent=screen.number+' / '+screen.title;$('#command').value='';$('#command').blur()}catch(error){$('#command-status').textContent=error.message}
-};
-$('#help-dialog p').innerHTML=screens.list.filter(s=>s.kind!=='dialog').map(s=>`${s.number} / ${esc(s.command)} — ${esc(s.title)}`).join('<br>');
-$('#close-help').onclick=()=>$('#help-dialog').close();
-document.addEventListener('keydown',event=>{if(event.ctrlKey||event.metaKey||event.altKey||['INPUT','TEXTAREA','SELECT','BUTTON'].includes(event.target.tagName)||event.target.isContentEditable||document.querySelector('dialog[open]'))return;if(event.key==='/'){event.preventDefault();$('#command').focus()}else if(/^[1-4]$/.test(event.key))switchDesk(['strategy','market','backtest','analysis'][Number(event.key)-1])});
-
-function screenContext(presentation='window',extra={}){return {state:{...state},strategy:strategyContext(),nativeRun:nativeRun(),market:displayMarket(),marketSource:state.marketSource,staticHosting:STATIC_HOSTING,presentation,chartBus,actions,...extra}}
-function paneContent(pane){return screens.render(pane.type,screenContext('window'),pane)}
-function bindPane(root,pane){return screens.mount(pane.type,root,screenContext('window'),pane)}
-
-
-async function downloadRuntimeExample(){try{const value=await api('/api/runtime/example');const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const anchor=document.createElement('a');anchor.href=url;anchor.download='strategy-report.example.json';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(error){toast(error.message)}
+async function openDialog(id,params){
+  const request=++dialogRequest,screen=screens.get(id);
+  try{
+    const extra=screen.load?await screen.load(screenContext('dialog'),params):params;
+    if(request!==dialogRequest)return;
+    dialogDispose();const root=$('#detail-body'),ctx=screenContext('dialog',extra);
+    root.innerHTML=screens.render(id,ctx,{});dialogDispose=screens.mount(id,root,ctx,{});
+    activeDialog={id,params};if(!$('#detail').open)$('#detail').showModal();
+  }catch(error){if(request===dialogRequest)toast(error.message)}
 }
-
-
-async function openDialog(id,parameters={}){const request=++dialogRequest,screen=screens.get(id);try{const context=screenContext('dialog'),extra=screen.load?await screen.load(context,parameters):parameters;if(request!==dialogRequest)return;dialogDispose();const root=$('#detail-body'),ctx=screenContext('dialog',extra);root.innerHTML=screens.render(id,ctx,{});dialogDispose=screens.mount(id,root,ctx,{});if(!$('#detail').open)$('#detail').showModal()}catch(error){if(request===dialogRequest)toast(error.message)}}
-function closeDialog(){dialogRequest++;dialogDispose();dialogDispose=()=>{};$('#detail-body').replaceChildren();if($('#detail').open)$('#detail').close()}
-$('#detail').addEventListener('cancel',()=>closeDialog());$('#detail').addEventListener('close',()=>{if($('#detail').open)return;dialogDispose();dialogDispose=()=>{};dialogRequest++});
-const actions=Object.freeze({
- render,api,setSymbol:symbol=>{state.symbol=symbol},openScreen:openTool,
- selectStrategy:id=>{state.selectedRunId=id;render()},inspectSymbol:symbol=>{state.marketSource=nativeRun()?'run':'public';state.symbol=symbol;openTool('security',{symbol})},
- showEvent:id=>openDialog('event-detail',{eventId:id}),closeEvent:closeDialog,
- fetchEventNews:async id=>{try{const result=await api('/api/event/'+encodeURIComponent(id)+'/news',{});state.data=await api('/api/snapshot?mode=live');render();await openDialog('event-detail',{eventId:id});toast('뉴스 검색 후보 '+result.items.length+'건을 반영했습니다.')}catch(error){toast(error.message)}},
- setFilter:(key,value)=>{if(['search','category','priority'].includes(key))state[key]=value},
- toggleWatch:id=>{state.watch=state.watch.includes(id)?state.watch.filter(value=>value!==id):[...state.watch,id];write('catalyst-watch',state.watch);render()},
- exportEvents:rows=>download('events',rows,['id','company','ticker','title','date','event_type','source']),changeMode,
- updateWidgets:widgets=>{state.widgets=widgets;write('catalyst-widgets',widgets);render()},
- mountWorkspace:root=>{const desk=desks[state.desk];desk.mount(root);return ()=>desk.dispose()}
+function closeDialog(){dialogRequest++;activeDialog=null;dialogDispose();dialogDispose=()=>{};$('#detail-body').replaceChildren();if($('#detail').open)$('#detail').close()}
+const actions=Object.freeze({render,api,operation,setSymbol,openScreen:openTool,selectRun:async id=>{await refresh('run:'+id);openTool('backtest-results',{runId:id})},selectStrategy:id=>{state.selectedRunId=id;render()},
+  inspectSymbol:symbol=>{state.marketSource=nativeRun()?'run':'stored';state.symbol=symbol;openTool('security',{symbol})},
+  showEvent:id=>openDialog('event-detail',{eventId:id}),closeEvent:closeDialog,
+  setFilter:(key,value)=>{if(['search','category','priority'].includes(key))state[key]=value},
+  toggleWatch:id=>{state.watch=state.watch.includes(id)?state.watch.filter(v=>v!==id):[...state.watch,id];render()},
+  updateWidgets:widgets=>{state.widgets=widgets;render()},
+  mountWorkspace:root=>{const desk=desks[state.desk];desk.mount(root);return ()=>desk.dispose()}
 });
+$('nav').innerHTML=screens.navigation().map(s=>`<button data-page="${s.id}" title="${s.number} / ${s.command}">${esc(s.navLabel||s.title)}</button>`).join('');
+$('nav').onclick=e=>{const b=e.target.closest('[data-page]');if(b)openTool(b.dataset.page)};
+$('#context-portfolio').onchange=e=>refresh(e.target.value);
+$('#context-run').onchange=e=>{state.selectedRunId=e.target.value;render()};
+$('#context-symbol').onchange=e=>{state.symbol=e.target.value;render()};
+$('#market-source').onchange=e=>{state.marketSource=e.target.value;state.symbol='';render()};
+$('#refresh').onclick=()=>refresh();
+$('#new-strategy').onclick=()=>openTool('strategy-lab');
+$('#orders-shortcut').onclick=()=>openTool('order-monitor');
+$('#command-form').onsubmit=e=>{
+  e.preventDefault();const [command,...args]=$('#command').value.trim().split(/\s+/),upper=command.toUpperCase();
+  if(upper==='HELP'){$('#help-dialog').showModal();return}
+  if(upper==='REFRESH'){refresh();return}
+  const s=screens.resolve(command);if(!s){$('#command-status').textContent='Enter a registered screen number or function.';return}
+  try{
+    if(s.id==='security'&&args.length&&!terminal.securities(displayMarket()).some(x=>x.symbol===args[0])&&nativeRun()?.market?.some(b=>b.symbol===args[0]))state.marketSource='run';
+    const params=s.parseArgs?.(args,screenContext('page'))||{};openTool(s.id,params);
+    $('#command-status').textContent=s.number+' / '+s.title;$('#command').value='';$('#command').blur();
+  }catch(error){$('#command-status').textContent=error.message}
+};
+$('#help-dialog p').innerHTML=screens.list.map(s=>`${s.number} / ${esc(s.command)} — ${esc(s.title)}`).join('<br>');
+$('#close-help').onclick=()=>$('#help-dialog').close();
+$('#help').onclick=()=>$('#help-dialog').showModal();
+$('#detail').addEventListener('cancel',closeDialog);
+$('#detail').addEventListener('close',()=>{if(activeDialog)closeDialog()});
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey||['INPUT','TEXTAREA','SELECT','BUTTON'].includes(e.target.tagName)||e.target.isContentEditable||document.querySelector('dialog[open]'))return;
+  if(e.key==='/'){e.preventDefault();$('#command').focus()}
+  if(/^[1-6]$/.test(e.key))switchDesk(deskIds[Number(e.key)-1]);
+});
+setInterval(()=>{
+  health();if(!$('#auto-poll').checked||pollBusy||state.loading)return;
+  pollBusy=true;refresh().finally(()=>{pollBusy=false});
+},2000);
+api('/api/health').then(h=>{state.role=h.role}).catch(()=>{});
+render();refresh();

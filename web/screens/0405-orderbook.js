@@ -1,0 +1,13 @@
+import {esc,listen} from '../ui/dom.js';
+export default {id:'orderbook',number:'0405',command:'BOOK',desk:'analysis',title:'Order Book & Microstructure',repeatable:true,
+ render(ctx,pane){return `<section class="panel"><div class="panel-head"><div class="panel-title">BOOK / STORED ORDER BOOK</div></div><div class="toolbar"><input data-book-symbol aria-label="Order book symbol" placeholder="SYMBOL" value="${esc(pane.symbol||'')}"><button data-book-query class="button secondary">QUERY</button></div><div data-book-body role="status">Enter a symbol to inspect its latest stored full snapshot.</div><p class="section-note">Stored full snapshot, not an executable quote or provider heartbeat. OFI is unavailable when stream continuity is unknown.</p></section>`},
+ mount(root,ctx,pane){const body=root.querySelector('[data-book-body]');let sequence=0;
+ const query=async()=>{const request=++sequence;pane.symbol=root.querySelector('[data-book-symbol]').value.trim();if(!pane.symbol){body.textContent='Enter a symbol.';return}
+ try{const list=await ctx.actions.api('/api/data/events?'+new URLSearchParams({kind:'BOOK_SNAPSHOT',symbol:pane.symbol,limit:'1'}),{signal:ctx.signal});
+ if(ctx.signal.aborted||request!==sequence)return;if(!list.events.length){body.textContent='No stored order book.';return}
+ const detail=await ctx.actions.api('/api/data/events/'+list.events[0].event_id,{signal:ctx.signal});if(ctx.signal.aborted||request!==sequence)return;
+ const e=detail.event,p=e.payload,d=detail.derived||{};
+ body.innerHTML=`<p class="section-note">${esc(e.source)} · RECEIVED ${esc(e.received_at)} · AVAILABLE ${esc(e.available_at)} · ${esc(d.quality||'N/A')}</p><div class="table-wrap"><table><thead><tr><th>BID PX</th><th>BID QTY</th><th>ASK PX</th><th>ASK QTY</th></tr></thead><tbody>${Array.from({length:Math.max(p.bids.length,p.asks.length)},(_,i)=>`<tr><td>${esc(p.bids[i]?.[0]??'—')}</td><td>${esc(p.bids[i]?.[1]??'—')}</td><td>${esc(p.asks[i]?.[0]??'—')}</td><td>${esc(p.asks[i]?.[1]??'—')}</td></tr>`).join('')}</tbody></table></div><pre class="raw-evidence">${esc(JSON.stringify({stateless:d,stored_features:detail.stored_features,continuity:p.continuity,market_state:p.market_state},null,2))}</pre><button data-book-event="${esc(e.event_id)}" class="button secondary">RAW / LINEAGE →</button>`;
+ }catch(error){if(!ctx.signal.aborted)body.textContent='Query failed: '+error.message}};
+ const off=[listen(root.querySelector('[data-book-query]'),'click',query),listen(root,'click',e=>{const b=e.target.closest('[data-book-event]');if(b)ctx.actions.showEvent(b.dataset.bookEvent)})];if(pane.symbol)query();return ()=>{sequence++;off.forEach(f=>f())}}
+};

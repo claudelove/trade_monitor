@@ -14,5 +14,6 @@ export function analysisExample(){
   rows.push({run_id:id,strategy_id,name:names[j],state:'COMPLETED',allocated_capital:capital[j],nav:last.equity,pnl:last.net_pnl,daily_pnl:last.daily_pnl,contribution_pp:last.net_pnl/100000000*100});
  }
  const curve=timestamps.map((timestamp,i)=>({timestamp,equity:10000000+Object.values(runs).reduce((sum,run)=>sum+run.curve[i].equity,0),net_pnl:Object.values(runs).reduce((sum,run)=>sum+run.curve[i].net_pnl,0),gross_exposure:.58}));
- return {id:accountId,name:'합성 포트폴리오 / UI 예시',mode:'historical_paper',status:'completed',as_of:timestamps.at(-1),updated_at:timestamps.at(-1),initial_equity:100000000,unallocated_capital:10000000,summary:{nav:curve.at(-1).equity,net_pnl:curve.at(-1).net_pnl,daily_pnl:rows.reduce((sum,r)=>sum+r.daily_pnl,0),max_reconciliation_residual:0},curve,strategies:rows,runs,source:{synthetic:true},assumptions:['합성 모니터링 예시이며 실제 전략/체결/백테스트 성과가 아닙니다.']};
+ return {id:accountId,name:'합성 Portfolio / UI 예시',mode:'historical_paper',status:'completed',as_of:timestamps.at(-1),updated_at:timestamps.at(-1),initial_equity:100000000,unallocated_capital:10000000,summary:{nav:curve.at(-1).equity,net_pnl:curve.at(-1).net_pnl,daily_pnl:rows.reduce((sum,r)=>sum+r.daily_pnl,0),max_reconciliation_residual:0},curve,strategies:rows,runs,source:{synthetic:true},assumptions:['합성 모니터링 예시이며 실제 STRATEGY/체결/Strategy 성과가 아닙니다.']};
 }
+

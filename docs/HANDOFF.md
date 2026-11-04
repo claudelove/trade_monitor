@@ -4,6 +4,16 @@
 
 
 
+## 2026-11-05 UI-only upstream import — current direction
+
+User authorized importing the integrated private terminal UI unchanged into public trade_monitor/work. UI source is pinned to 7f3130426056f7215f303738ead80eec7b9b8af7; docs/UI_UPSTREAM.json records file hashes. Six English desks, terminal font, independent panels, native Lightweight Charts, authoring/review/analytics/execution/admin screens replace the old public UI. This explicit snapshot request supersedes earlier four-desk/system-font/no-authoring-button product instructions for the imported UI.
+
+Only frontend assets, third-party licenses/provenance and generic synthetic UI tests are included. No private engine/strategy/configuration/registry/runtime/account data or Git history is imported, and no private push is made. docs/UI_SYNC.md defines the update boundary. Public Pages uses pages-preview.js with existing public snapshot and empty accounts/runs; server operations are rejected before fetch. Non-Pages engine-client preserves the same-origin private API contract. Public Python runtime-v1 backend remains legacy and does not implement that contract.
+
+Local validation: Python 32; seven imported UI contract suites; Pages boundary/upstream byte parity/license/private-data checks; actual Chromium native canvas OHLCV against public bars, line/candle/MA, six desks, evidence dialog, no private API/POST requests, 390px responsive passed. The user-visible UI remains the upstream implementation. Only app preview labels, engine-client preview boundary and generated catalog differ; tests check parity of all other imported assets.
+
+Next: commit/push public work; confirm Actions and deployed version. Further edits should start from the pinned integrated UI and preserve the source-only publication boundary. Do not automatically copy private engine functionality. See docs/UI_SYNC.md.
+
 ## 비공개 서버 운영 전제 UI 최소화 — 2026-11-04
 
 완료: 결과 파일 열기/닫기·파일 input·형식 예시·합성 예시·데모 선택·수동 수집·위젯 구성·배치 편집/정렬/리셋·차트 SVG·CSV·빈 공시의 데모 안내 버튼을 제품 UI에서 제거했다. 네 작업공간/내부 소화면·전략/종목 선택·검색·창 최대화/닫기·OHLCV 호버는 유지한다. 배치는 자동 분할이며 추가 편집 모드는 없다. 일반 글꼴, 검정 바탕, 어두운 선택창, 주황 활성 메뉴, 작은 사각 버튼/제목줄로 정리했다. 파일/예제 소비 함수는 기존 합성 계약 테스트를 위해 내부에 남아 있지만 화면 action으로 노출하지 않는다.
