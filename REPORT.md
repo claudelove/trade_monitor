@@ -223,3 +223,5 @@ QuantConnect 실행 결과와 IBKR PortfolioAnalyst의 공개 문서를 참고�
 화면 mount는 AbortSignal/cleanup 경계를 갖고 오류가 다른 패널로 전파되지 않게 했다. 이벤트/observer/chart bus는 닫기·전환·오류에서 정리한다. 비공개 코드/전략/원천을 복사하거나 개인 데이터를 정적 산출물에 넣지 않았다. 엔진 실행/주문/직접 API 범위는 바꾸지 않았다.
 
 Python 32개 및 UI/Pages/새 차트·레지스트리 계약 검사와 실제 Chromium 검증을 수행했다. 번호 호출·선/캔들/거래량·linked cursor/range·wheel/drag/keyboard·metric 변경·SVG 저장·날짜-only precision·보고 닫기/문맥 변경·모바일을 확인하고 캡처를 검토했다. 참조/API/확장 예제는 docs/SCREEN_MODULES.md 및 docs/CHART_MODULE.md에 기록했다.
+
+배포 완료: 기능 커밋 10d576a, Actions 41780865100 test/build-pages/deploy-pages success. 공개 version.json 전체 SHA 일치, 화면 19개 및 공통 하위 모듈 총 26개 HTTP 200, 공개 runtime-state 전략/실행 0건 확인. 공개 work에만 푸시했고 배포 기록 후속 커밋은 CI 생략.
