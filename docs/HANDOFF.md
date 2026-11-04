@@ -17,7 +17,7 @@
 - 저장소 https://github.com/claudelove/trade_monitor, 작업 브랜치 work. main은 초기 커밋이며 자동 병합하지 않는다.
 - 최초 기능 5fa9d8c, 복구/Docker 기준 96b2ed6.
 - **배포 주소: https://claudelove.github.io/trade_monitor/**. 2026-11-04 최신 외부 전략 모니터 배포 HTTP 200 확인.
-- 확인된 최신 기능 배포 커밋: 7002b82aa3d6a7a3aff6c7ba0e40bc33eede018f. version.json과 일치. CI 실행 41743580578 성공. 후속 배포 기록 문서 커밋은 [skip ci]로 저장한다.
+- 확인된 최신 기능 배포 커밋: 5f6ed816c6cac9f0eadb4f9104be7a95e9040eb2. version.json과 일치. CI 실행 41747207679의 test/build-pages/deploy-pages 성공. 후속 배포 기록 문서 커밋은 [skip ci]로 저장한다.
 - 작업 도중 관리형 클라우드 실행 환경이 unavailable로 바뀌어 GitHub API로 0896489를 저장했다. 이후 환경 연결이 복구돼 로컬 draft를 stash 보존하고 원격 0896489로 fast-forward 했다.
 - 사용자가 Pages Source=GitHub Actions 및 github-pages 환경 허용 브랜치 work 설정을 완료했다. 현재 자동 Pages 배포 정상 동작.
 - repository default branch가 main이면 workflow_dispatch 수집 기능을 위해 work로 변경하거나 향후 명시적으로 워크플로를 main에 반영해야 한다. 기본 브랜치를 자동 변경했다고 가정하지 않는다.
@@ -48,7 +48,7 @@ Pages에서는 web/static-api.js가 공개 시장 JSON과 비어 있는 runtime-
 
 ## 다음 행동
 
-1. 사용자 제공 예정 전략 docs를 읽고 실행 어댑터를 맞춘다. 최신 배포는 7002b82이며 현재 관측 인프라만 연결돼 있다.
+1. 최신 종합 화면(5f6ed81)의 사용자 피드백을 반영한다. 비공개 실행 엔진 연결 시 전략/계좌 범위·단위·시각 계약을 먼저 맞춘다. 현재는 관측 인프라만 연결돼 있다.
 2. 코드 수정 시 test/build-pages/deploy-pages 및 version.json 커밋을 확인. 계정 Pages 설정은 완료돼 다시 요청할 필요 없음.
 3. 필요 시 기본 브랜치 work 설정과 Actions secret 등록 후 수동 수집 확인.
 4. 화면 피드백 → 관련 테스트 → 인계 갱신 → 커밋·푸시를 유지한다.
@@ -119,3 +119,5 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 - web/terminal-ui.js의 읽기 전용 화면 모듈과 기존 runtime 모델 사용. 20B/60B/ALL 캔들·봉 OHLCV·종목 뉴스/공시 연동. 늦게 도착한 이전 데이터 모드 요청은 무시.
 - 시장 전체 통계·타 자산군·계좌 장부/대사/합산·비공개 레퍼런스 실행 엔진 연결은 미구현이다. 레퍼런스 on_bar 문서도 읽었지만 사용자 지정 실행 책임과 차이가 있어 자동 호환/실행을 주장하지 않는다.
 - Python 32개, UI/Pages 회귀 검사 통과. 로컬 Chromium 1440px/390px에서 명령·공통 종목·20봉·뉴스·개인 결과 JSON·리스크·overview 확인, JS pageerror/문서 가로 overflow 없음. 캡처를 직접 확인했다. 개인 JSON과 캡처는 work/에만 보존하며 커밋하지 않는다.
+
+종합 터미널 배포 확인: CI 41747207679 성공, 공개 version.json=5f6ed816c6cac9f0eadb4f9104be7a95e9040eb2, 새 메뉴·terminal-ui/app 모듈 HTTP 200. 공개 runtime-state 전략/실행 0건 확인. 배포 기록 문서 커밋은 [skip ci]로 보존한다.
