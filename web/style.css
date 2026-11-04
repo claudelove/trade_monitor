@@ -305,3 +305,24 @@ th { color:#f5c16b; background:#202020; }tbody tr.selected { background:#3c2c13;
 .chart-tooltip-values { display:grid; grid-template-columns:repeat(3,minmax(65px,1fr)); gap:4px 16px; }
 .chart-tooltip-values span { color:#aaa; font-size:10px; }
 .chart-tooltip-values b { display:block; color:#f5d34e; font-size:12px; font-weight:500; }
+/* Private monitoring terminal: compact controls, no onboarding/file toolbars. */
+.page-heading { display:none; }
+.sidebar { grid-template-rows:26px 30px 29px; }
+.brand { font-size:14px; }.command-bar { padding:2px 7px; background:#18130d; }
+.command-bar input { font-size:12px; min-height:23px; }.command-bar label { font-size:10px; }
+nav button { min-height:27px; padding:3px 12px; font-size:12px; }
+header { height:27px; }.content { padding-top:4px; }
+.banner { padding:3px 8px; margin-bottom:4px; font-size:10px; }
+.terminal-context { padding:4px 0; gap:6px; }.terminal-context label { font-size:10px; }
+select,.terminal-context select,.window-context select { border:0; border-radius:0; background:#1e1e1e; color:#ffb449; min-height:23px; padding:2px 5px; font-size:11px; }
+.desktop-toolbar { padding:2px 0 4px; min-height:0; }.screen-menu { gap:2px; }
+.screen-menu .button { background:#1b1b1b; color:#c5c5c5; border:0; padding:3px 8px; min-height:24px; font-size:11px; }
+.screen-menu .button:hover { color:#ffb449; background:#292929; }
+.window-titlebar { height:24px; gap:4px; background:#252525; padding:0 4px; }
+.window-titlebar [data-pane-tool] { color:#ffb449; font-size:11px; background:transparent; max-width:calc(100% - 70px); }
+.window-number { display:none; }.window-buttons button { width:22px; min-width:22px; height:21px; font-size:14px; }
+.tool-window { border-color:#2a2a2a; padding:0; }.tool-window.focused { border-color:#69502f; }
+.panel-head { min-height:25px; padding:4px 8px; }.panel-title { font-size:11px; }
+.workspace-canvas { height:calc(100vh - 235px); }
+@media(max-width:700px){.sidebar{grid-template-rows:26px 30px 29px}.workspace-canvas{height:auto}.content{padding-top:4px}nav button{padding:3px 8px;font-size:11px}}
+@media(min-width:701px){.sidebar{height:85px}main{margin-top:85px}}

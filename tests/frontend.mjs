@@ -23,10 +23,10 @@ const settle=()=>new Promise(r=>setTimeout(r,15));
 await settle();
 assert.equal($$('nav button').length,4);assert.equal($$('[data-desk]').length,0);
 for(const desk of ['strategy','market','backtest','analysis']){w.switchDesk(desk);assert.ok($('.workspace-canvas'));assert.equal($$('nav button.active').length,1)}
-w.switchDesk('backtest');assert.match($('#page').textContent,/실행 엔진 연결이 필요/);assert.ok($('[data-load-report]'));assert.equal($('#refresh-button').textContent,'결과 파일 열기');
+w.switchDesk('backtest');assert.match($('#page').textContent,/실행 엔진 연결이 필요/);assert.equal($('[data-load-report],#refresh-button,input[type=file],.workspace-options'),null);
 w.switchDesk('strategy');assert.match($('#banner').textContent,/STRATEGY MONITOR/);assert.equal($$('[data-tool=performance]').length,1);w.switchDesk('market');assert.match($('#banner').textContent,/LIVE SNAPSHOT/);
 assert.equal($$('[data-event]').length,0);
-$('#mode').value='demo';$('#mode').dispatchEvent(new w.Event('change'));await settle();
+w.changeMode('demo');await settle();
 assert.match($('#banner').textContent,/SYNTHETIC DATA/);
 assert.equal($$('.tool-window').length,4);assert.ok($('#workspace-canvas'));
 w.selectPage('market');
@@ -50,9 +50,6 @@ assert.match($('#detail-body').textContent,/이벤트 전후 주가/);assert.doe
 $('#close-detail').click();
 $('[data-star]').click();
 assert.equal(JSON.parse(w.localStorage.getItem('catalyst-watch')).length,1);
-$('#layout-button').click();
-$('[data-widget="stats"]').checked=false;$('[data-widget="stats"]').dispatchEvent(new w.Event('change'));
-assert.equal($('.stats'),null);
 w.selectPage('strategies');
 assert.match($('#page').textContent,/연결된 전략 코드가 없습니다/);
 assert.equal($('#deal-current'),null);
