@@ -210,3 +210,5 @@ QuantConnect 실행 결과와 IBKR PortfolioAnalyst의 공개 문서를 참고�
 주황 탐색·황색 수치/성과·청록 분석·녹색/적색 방향을 더 선명하게 했다. 합성 예시는 명시적 버튼으로만 열며 실제 전략/성과가 아니다. 개인 원본/선택은 영속 저장하거나 공개 산출물에 넣지 않는다.
 
 검증: Python 32개, UI/Pages 및 분석 edge 사례. 실제 Chromium 1440px/390px에서 공유 전략/기여도/포트폴리오 전환·차트 모드·상관·마켓 출처/배치 분리·모바일/새로고침 메모리 격리 통과. 비공개 레포/엔진에 쓰기/푸시하거나 실제 서버/브로커에 접속하지 않았다.
+
+배포 완료: 기능 커밋 b4e3c84, Actions 41774974015 test/build-pages/deploy-pages success. 공개 version.json 전체 SHA 일치, 전략/마켓 메뉴와 strategy-analysis/strategy-ui/analysis-example 모듈 HTTP 200. 공개 기본 전략/실행 목록은 여전히 0건이며 합성 예시는 버튼으로만 생성한다. 공개 work에만 푸시하고 인계 기록 후속 커밋은 CI 생략.

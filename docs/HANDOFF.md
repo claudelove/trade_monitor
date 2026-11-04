@@ -23,7 +23,7 @@
 - 저장소 https://github.com/claudelove/trade_monitor, 작업 브랜치 work. main은 초기 커밋이며 자동 병합하지 않는다.
 - 최초 기능 5fa9d8c, 복구/Docker 기준 96b2ed6.
 - **배포 주소: https://claudelove.github.io/trade_monitor/**. 2026-11-04 최신 외부 전략 모니터 배포 HTTP 200 확인.
-- 확인된 최신 기능 배포 커밋: 6643906a1c3f6fbac86e97aab64d0ee3e9ea053c. version.json과 일치. CI 실행 41751488203의 test/build-pages/deploy-pages 성공. 후속 배포 기록 문서 커밋은 [skip ci]로 저장한다.
+- 확인된 최신 기능 배포 커밋: b4e3c844756f1873cbf9f206d58d8b9e67dcd7a0. version.json과 일치. CI 실행 41774974015의 test/build-pages/deploy-pages 성공. 후속 배포 기록 문서 커밋은 [skip ci]로 저장한다.
 - 작업 도중 관리형 클라우드 실행 환경이 unavailable로 바뀌어 GitHub API로 0896489를 저장했다. 이후 환경 연결이 복구돼 로컬 draft를 stash 보존하고 원격 0896489로 fast-forward 했다.
 - 사용자가 Pages Source=GitHub Actions 및 github-pages 환경 허용 브랜치 work 설정을 완료했다. 현재 자동 Pages 배포 정상 동작.
 - repository default branch가 main이면 workflow_dispatch 수집 기능을 위해 work로 변경하거나 향후 명시적으로 워크플로를 main에 반영해야 한다. 기본 브랜치를 자동 변경했다고 가정하지 않는다.
@@ -54,7 +54,7 @@ Pages에서는 web/static-api.js가 공개 시장 JSON과 비어 있는 runtime-
 
 ## 다음 행동
 
-1. 최신 다중 패널 화면(6643906)의 사용자 피드백을 반영한다. 비공개 실행 엔진 연결 시 전략/계좌 범위·단위·시각 계약을 먼저 맞춘다. 현재는 관측 인프라만 연결돼 있다.
+1. 최신 전략 중심 화면(b4e3c84)의 사용자 피드백을 반영한다. 비공개 실행 엔진 연결 시 전략/계좌 범위·단위·시각 계약을 먼저 맞춘다. 현재는 관측 인프라만 연결돼 있다.
 2. 코드 수정 시 test/build-pages/deploy-pages 및 version.json 커밋을 확인. 계정 Pages 설정은 완료돼 다시 요청할 필요 없음.
 3. 필요 시 기본 브랜치 work 설정과 Actions secret 등록 후 수동 수집 확인.
 4. 화면 피드백 → 관련 테스트 → 인계 갱신 → 커밋·푸시를 유지한다.
@@ -152,3 +152,5 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 - MARKET만 ticker/source를 표시. 공개 시장과 선택 전략 저장 봉은 명시적으로 선택. 두 workspace의 배치는 v2 별도 키로 저장, 개인 결과/선택은 저장하지 않는다.
 - 색상 주황/황색/청록/녹색/적색 대비 강화, 시스템 글꼴 유지. 합성 분석 예시는 버튼으로만 열고 배너에 표시. 실제 성과/백테스트가 아니다.
 - Python 32개, UI/Pages/분석 edge 사례 검사, Chromium의 공유 전략/기여도/포트폴리오 전환·워크스페이스/출처/배치 분리·모바일/비공개 메모리 격리 확인. 스크린샷 직접 검토. 실제 계좌/HTTP/브로커 연결은 수행하지 않았다.
+
+전략 중심 배포 확인: CI 41774974015 전체 success. 공개 version.json=b4e3c844756f1873cbf9f206d58d8b9e67dcd7a0, 포트폴리오/전략·마켓 메뉴/새 분석 JS HTTP 200. 공개 runtime-state 전략/실행 0건 유지. 검증 기록 후속 문서는 [skip ci]로 저장한다.
