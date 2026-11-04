@@ -12,7 +12,9 @@ Only frontend assets, third-party licenses/provenance and generic synthetic UI t
 
 Local validation: Python 32; seven imported UI contract suites; Pages boundary/upstream byte parity/license/private-data checks; actual Chromium native canvas OHLCV against public bars, line/candle/MA, six desks, evidence dialog, no private API/POST requests, 390px responsive passed. The user-visible UI remains the upstream implementation. Only app preview labels, engine-client preview boundary and generated catalog differ; tests check parity of all other imported assets.
 
-Next: commit/push public work; confirm Actions and deployed version. Further edits should start from the pinned integrated UI and preserve the source-only publication boundary. Do not automatically copy private engine functionality. See docs/UI_SYNC.md.
+Deployment confirmed: 5a46642fc1aba3830b760e2cd09d59595d6c4ea3; Actions 41929231779 test/build-pages/deploy-pages success. Public version.json matches; deployed preview boundary, chart/vendor/font/license bytes match local files; private runtime lists remain empty. Public work only. Documentation-only follow-up skips CI.
+
+Further edits should start from the pinned integrated UI and preserve the source-only publication boundary. Do not automatically copy private engine functionality. See docs/UI_SYNC.md.
 
 ## 비공개 서버 운영 전제 UI 최소화 — 2026-11-04
 
