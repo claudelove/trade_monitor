@@ -91,3 +91,9 @@
 - User explicitly requested the private integrated UI be copied unchanged into public trade_monitor/work. docs/UI_SYNC.md and UI_UPSTREAM.json are the new UI baseline: six English desks, native financial chart engine and terminal font. Earlier four-desk/font/button restrictions do not override this later snapshot request.
 - Publish only reviewed UI assets/licenses and synthetic tests; no engine, strategy source/registry/configuration, operational data or private Git history. No private repository writes.
 - Pages preview must reject all server operations before fetch and must never connect to a private host. Empty accounts/registries, public market only, unavailable canonical clocks. Keep upstream byte parity checks for untouched files and document reviewed local patches.
+
+## Shared visual/interaction dependency — latest user direction (2026-11-05)
+
+- The user explicitly requested common formatting and interactive actions be implemented and applied to BOTH repositories. Public trade_monitor owns packages/terminal-ui; private krx_hedgefund owns framework, screens, APIs and all trading/data logic. This supersedes prior blanket no-write-to-other-repository instructions only for shared UI integration and its validation/packaging/docs.
+- Read docs/SHARED_UI.md. Keep shared sources in the public package; consume pinned public SHA/manifest via terminal-ui.lock.json. Do not modify generated shared copies. Never mirror private framework/strategy code to update formatting. New screen numbers must not require shared component changes.
+- After shared updates: verify manifest/lock, both UI suites, chart typography/interaction and packaging. Private dependency changes must not touch engine/strategy/data policy or weaken authentication. Preserve licensed font/vendor attribution.

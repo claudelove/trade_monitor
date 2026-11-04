@@ -4,6 +4,16 @@
 
 
 
+## 2026-11-05 shared presentation/interaction dependency — latest work
+
+User now authorizes applying common UI dependency changes to BOTH repositories. Public packages/terminal-ui is the canonical style/chart/interaction source; private framework/screens/API/strategies stay private and independent. Old one-way whole-UI snapshot and blanket no-private-write instructions are superseded only within this shared-UI integration scope. Read docs/SHARED_UI.md first.
+
+Implemented: UI contract 1 / version 0.1.0, deterministic release manifest, stable import adapters, generated local shared payload, offline hash/major checks and public-commit-pinned consumer updater. Local action maps remain ui/actions.js. Screen numbers are not a dependency; window chrome callbacks, chart engines/lifecycle, typography/theme tokens and event primitives are shared. Font family/scale/tracking/line height and native chart font use the same theme. IBM Plex Mono remains the licensed default, not Bloomberg Prop.
+
+Private migration touches only adapters/chrome input wiring, shared assets/tool/lock, static/wheel packaging, UI tests and these instructions. Application app.js, API client, screen descriptors, strategy analysis, Python engine, account/risk/execution policy and strategy configurations are untouched. No private data is published. Current local development lock has no public revision yet; finish validation, publish the public package, then update the private lock to that exact full public commit before private push. Future updates use the pinned updater, not whole-UI copying.
+
+Local validation completed: public Python 37 passed; eight UI suites in each app; Pages preview boundary; updater ownership/traversal/major guards; private Python 120 discovered with HTTP enabled (110 passed, 10 optional/unconfigured skipped); private wheel asset parity and JS syntax. In actual Chromium on both local servers, one theme changed DOM glyph width/tracking and native canvas font/size; title Enter/Space, chart line/candle/zoom/reset and observer disposal passed. The existing public six-desk/OHLCV/mobile browser checks also passed. An earlier test run in the host-inherited environment encountered preinstalled MCP v1 versus the project MCP v2 extra; the isolated core environment passed without changing engine/tests. Full optional/remote integration CI remains to be checked after push.
+
 ## 2026-11-05 UI-only upstream import — current direction
 
 User authorized importing the integrated private terminal UI unchanged into public trade_monitor/work. UI source is pinned to 7f3130426056f7215f303738ead80eec7b9b8af7; docs/UI_UPSTREAM.json records file hashes. Six English desks, terminal font, independent panels, native Lightweight Charts, authoring/review/analytics/execution/admin screens replace the old public UI. This explicit snapshot request supersedes earlier four-desk/system-font/no-authoring-button product instructions for the imported UI.

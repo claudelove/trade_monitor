@@ -1,0 +1,99 @@
+/* Ordered layers: tokens → shell → panels → chart → responsive. */
+@import url("./ui/tokens.css");
+@import url("./ui/shell.css");
+@import url("./ui/panels.css");
+@import url("./charts/chart.css");
+@media(max-width:900px) {
+  .sidebar {
+    grid-template-columns:150px minmax(160px,1fr);
+    gap:0 8px
+  }
+  .connection {
+    display:none
+  }
+  .terminal-context {
+    flex-wrap:wrap
+  }
+  #strategy-context,#market-context {
+    flex-wrap:wrap
+  }
+  .terminal-context select {
+    max-width:250px
+  }
+  #context-scope {
+    display:none
+  }
+  .header-right #asof {
+    display:none
+  }
+  .command-bar [role=status] {
+    display:none
+  }
+}
+@media(max-width:700px) {
+  body {height:auto;display:block;overflow:auto}
+  main,.content,#page,[data-workspace-host] {display:block;min-height:0}
+
+  .sidebar {
+    padding:0 7px;
+    grid-template-columns:130px minmax(150px,1fr)
+  }
+  .brand {
+    font-size:calc(13px * var(--ui-type-scale,1))
+  }
+  .command-bar label {
+    display:none
+  }
+  nav button {
+    padding:4px 12px;
+    font-size:calc(11px * var(--ui-type-scale,1))
+  }
+  header {
+    flex-wrap:wrap
+  }
+  .breadcrumb {
+    font-size:calc(10px * var(--ui-type-scale,1))
+  }
+  .header-right {
+    gap:7px
+  }
+  .content {
+    padding:0 5px
+  }
+  .terminal-context select {
+    max-width:220px
+  }
+  .workspace-canvas {
+    height:auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    overflow:visible
+  }
+  .tool-window {
+    position:relative;
+    left:auto!important;
+    top:auto!important;
+    width:100%!important;
+    height:450px!important
+  }
+  .tool-window.is-maximized {
+    height:650px!important
+  }
+  .window-number {
+    display:none
+  }
+  .analysis-metrics strong {
+    font-size:calc(16px * var(--ui-type-scale,1))
+  }
+  .two-col,.three-col {
+    grid-template-columns:1fr
+  }
+  .screen-menu .button {
+    padding:2px 5px
+  }
+  .tool-window.is-maximized .interactive-chart {
+    height:300px
+  }
+}

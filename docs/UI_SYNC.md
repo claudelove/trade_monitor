@@ -1,3 +1,5 @@
+> Superseded workflow (2026-11-05): common appearance and actions now live in packages/terminal-ui and are consumed by both apps through a pinned lock. Use SHARED_UI.md. The whole-frontend snapshot below is historical provenance, not the ongoing dependency update process.
+
 # UI snapshot and repository boundary
 
 The user authorized copying the private integrated terminal's **UI only** into public `claudelove/trade_monitor`, branch `work`. The pinned source is recorded in [UI_UPSTREAM.json](UI_UPSTREAM.json), including SHA256 for every original frontend file. This is a source snapshot, not a Git-history export or a repository visibility change.

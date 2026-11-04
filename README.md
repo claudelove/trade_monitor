@@ -1,10 +1,12 @@
-# KRX Terminal — public monitoring UI
+# Terminal UI — shared presentation and interaction modules
 
 [Open the preview](https://claudelove.github.io/trade_monitor/) · [UI source and synchronization](docs/UI_SYNC.md) · [Handoff](docs/HANDOFF.md)
 
-This repository publishes the frontend of the integrated KRX terminal. The user authorized importing **UI only** from the reviewed private integration. No private strategy source, engine, operational data, configuration, credential or Git history is published.
+The public repository owns **packages/terminal-ui**, the shared typography, styles, chart rendering and UI interaction library. The private repository owns the application framework, numbered functions, API/data and strategies. Both consume the same UI contract through versioned local bundles and stable adapters. Changing a private screen number or function does not require copying the UI again.
 
-The six workspaces are Portfolio, Market, Strategy, Analytics & Data, Execution and Administration. Numbered screens are independent modules. The imported English terminal UI, independently pinned panels, native charts and locally packaged fonts match the pinned upstream source; the public preview connection is the only functional adaptation. [File hashes and source revision](docs/UI_UPSTREAM.json).
+[Shared contract and update commands](docs/SHARED_UI.md) · [Canonical package](packages/terminal-ui) · [Consumer lock](terminal-ui.lock.json)
+
+The existing six-desk frontend remains a preview host for the visual modules. It does not publish or implement the private engine. Shared changes belong in packages/terminal-ui/src/, not generated web/shared/ or private screen code. The historical whole-UI import is recorded in docs/UI_UPSTREAM.json; it is no longer the update workflow.
 
 ## Public preview
 

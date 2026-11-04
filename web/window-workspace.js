@@ -1,3 +1,4 @@
+import {bindWindowChrome} from './ui/window-actions.js';
 const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 import {screens} from './screens.js';
 export const tools=Object.fromEntries(screens.list.filter(s=>s.kind==='screen'&&s.panel!==false).map(s=>[s.id,s.number+' '+s.command+' / '+s.title]));
@@ -25,10 +26,9 @@ export class WindowWorkspace {
   for(const pane of this.panes){
    const element=document.createElement('section');element.className='tool-window';element.dataset.pane=pane.id;element.dataset.tool=pane.type;element.setAttribute('aria-label',this.tools[pane.type]);
    element.innerHTML=`<div class="window-titlebar" tabindex="0" role="group" aria-label="${escape(this.tools[pane.type])}"><span class="window-number">${escape(pane.id.replace('pane-','#'))}</span><select data-pane-tool aria-label="Panel function">${Object.entries(this.tools).map(([key,title])=>`<option value="${key}" ${key===pane.type?'selected':''}>${title}</option>`).join('')}</select><div class="window-buttons"><button data-window-action="maximize" aria-label="Maximize or restore panel">□</button><button data-window-action="close" aria-label="Close panel">×</button></div></div><div class="window-body">${this.content(pane).replace(/\bid="([^"]+)"/g,'data-field="$1"')}</div>`;
-   canvas.append(element);this.geometry(pane,element);element.addEventListener('pointerdown',()=>this.raise(pane.id));
-   element.querySelectorAll('[data-window-action]').forEach(button=>button.onclick=()=>{const action=button.dataset.windowAction;if(action==='close'){this.panes=this.panes.filter(p=>p!==pane);if(this.maximized===pane.id)this.maximized=null}else{pane.minimized=false;this.maximized=this.maximized===pane.id?null:pane.id}if(action==='close'&&!this.editing){this.tile();return}this.save();this.render();this.raise(pane.id)});
+   canvas.append(element);this.geometry(pane,element);
+   this.cleanups.push(bindWindowChrome(element,{onFocus:()=>this.raise(pane.id),onAction:action=>{if(action==='close'){this.panes=this.panes.filter(p=>p!==pane);if(this.maximized===pane.id)this.maximized=null}else{pane.minimized=false;this.maximized=this.maximized===pane.id?null:pane.id}if(action==='close'&&!this.editing){this.tile();return}this.save();this.render();this.raise(pane.id)},onToggleMaximize:()=>{this.maximized=this.maximized===pane.id?null:pane.id;this.render()}}));
    element.querySelector('[data-pane-tool]').onchange=event=>{pane.type=event.target.value;pane.symbol=null;pane.range='60';this.save();this.render()};
-   element.querySelector('.window-titlebar').ondblclick=event=>{if(!event.target.closest('button,select')){this.maximized=this.maximized===pane.id?null:pane.id;this.render()}};
 
    const off=this.bind(element.querySelector('.window-body'),pane);if(typeof off==='function')this.cleanups.push(off);
   }

@@ -11,6 +11,10 @@ from monitor.demo import generate
 from monitor.event_types import EVENT_TYPES, decorate
 
 def build(output):
+    from scripts.build_shared_ui import build as shared_manifest
+    import runpy
+    shared_manifest(check=True)
+    runpy.run_path(str(ROOT/'packages/terminal-ui/install.py'))['check'](ROOT)
     output = Path(output)
     if output.resolve() == ROOT.resolve() or output.is_symlink():
         raise ValueError('Unsafe output directory')

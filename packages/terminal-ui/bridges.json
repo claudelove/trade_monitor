@@ -1,0 +1,66 @@
+{
+  "style.css": {
+    "kind": "css",
+    "source": "style.css"
+  },
+  "ui/tokens.css": {
+    "kind": "css",
+    "source": "ui/tokens.css"
+  },
+  "ui/shell.css": {
+    "kind": "css",
+    "source": "ui/shell.css"
+  },
+  "ui/panels.css": {
+    "kind": "css",
+    "source": "ui/panels.css"
+  },
+  "charts/chart.css": {
+    "kind": "css",
+    "source": "charts/chart.css"
+  },
+  "charts/model.js": {
+    "kind": "js",
+    "source": "charts/model.js"
+  },
+  "charts/native-chart.js": {
+    "kind": "js",
+    "source": "charts/native-chart.js"
+  },
+  "charts/native-series.js": {
+    "kind": "js",
+    "source": "charts/native-series.js"
+  },
+  "charts/svg-chart.js": {
+    "kind": "js",
+    "source": "charts/svg-chart.js"
+  },
+  "charts/terminal-chart.js": {
+    "kind": "js",
+    "source": "charts/terminal-chart.js"
+  },
+  "charts/vendor/lightweight-charts.js": {
+    "kind": "js",
+    "source": "charts/vendor/lightweight-charts.js"
+  },
+  "ui/theme.js": {
+    "kind": "js",
+    "source": "ui/theme.js"
+  },
+  "ui/window-actions.js": {
+    "kind": "js",
+    "source": "ui/window-actions.js"
+  },
+  "ui/fonts/ibm-plex-mono-latin-400-normal.woff2": {
+    "kind": "copy",
+    "source": "ui/fonts/ibm-plex-mono-latin-400-normal.woff2"
+  },
+  "ui/fonts/ibm-plex-mono-latin-600-normal.woff2": {
+    "kind": "copy",
+    "source": "ui/fonts/ibm-plex-mono-latin-600-normal.woff2"
+  },
+  "ui/dom.js": {
+    "kind": "dom",
+    "source": "ui/dom.js"
+  }
+}

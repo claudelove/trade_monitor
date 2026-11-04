@@ -1,0 +1,3 @@
+import {listen} from '../shared/ui/dom.js';
+export function bindActions(root,actions){const off=listen(root,'click',event=>{const mappings={'data-select-strategy':el=>actions.selectStrategy(el.dataset.selectStrategy),'data-inspect-symbol':el=>actions.inspectSymbol(el.dataset.inspectSymbol),'data-symbol':el=>{actions.setSymbol(el.dataset.symbol);actions.openScreen('security',el.dataset.symbol)},'data-route':el=>actions.openScreen(el.dataset.route),'data-star':el=>actions.toggleWatch(el.dataset.star),'data-event':el=>actions.showEvent(el.dataset.event)};for(const [attribute,handler]of Object.entries(mappings)){const el=event.target.closest('['+attribute+']');if(el&&root.contains(el)){event.stopPropagation();handler(el);return}}});return off}
+

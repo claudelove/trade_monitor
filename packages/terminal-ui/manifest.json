@@ -1,0 +1,33 @@
+{
+  "name": "@trade-monitor/terminal-ui",
+  "version": "0.1.0",
+  "api_version": 1,
+  "files": {
+    "bridges.json": "b75f53f1e42317cab061392e0c5141020f7727d717a147dd285b620c56be47d9",
+    "install.py": "0b5d0a0253e1509db56785f66518bf61f2f5b42c8d1014cf224b1fc9f4801862",
+    "licenses/ibm-plex-mono/LICENSE": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f",
+    "licenses/ibm-plex-mono/provenance.json": "5817d2532bed3f44301c08d8a2e2f03201f7549f4ecb48a16b9c659973085790",
+    "licenses/lightweight-charts/LICENSE": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
+    "licenses/lightweight-charts/NOTICE": "f76c6afab94884448f0426e30d6e9d555ca7247894cd3484e477d2f87513036e",
+    "licenses/lightweight-charts/provenance.json": "875e151eccf44eb9ffe371cadfd58e0194b9e011511df545d5b215c281917683",
+    "package.json": "32939a18985b6792ed1f50da01815d2873654e6b6ce146a1c17030561d854b96",
+    "src/charts/chart.css": "260fa752068f714d43da68b3cd2bccd383478de30cf27a084145c50457aff03a",
+    "src/charts/model.js": "eee166daebd58378f7d58d2e43a2ba232d571073f024fef92b9f7065a90c034e",
+    "src/charts/native-chart.js": "3669b2cf1568730f20b80c85f37b645be4945a9eefca0d61067510946db37a27",
+    "src/charts/native-series.js": "834f7a8a3c279946f3c42e28458c2c32c11daead70ed75b9dbc2acb3cf816625",
+    "src/charts/svg-chart.js": "11a3b58e5bcfe909688c4c8ffa543c71bfa656ee2483a2581377a422970e1f57",
+    "src/charts/terminal-chart.js": "385bb0971dff857b915e6e074b1a7caafeda748a1948f134c0bacc7a7e0e82a0",
+    "src/charts/vendor/lightweight-charts.js": "1bb1ee79f9d4dd17261b53d930f7a8995748276f80e7ba0e24412b5068062f5f",
+    "src/index.js": "3fae624f2d1500bab72b8299e0897e9dd0fbf810d17680530903e3c8e1b9a739",
+    "src/style.css": "3b1d385146a096d1dc9deda2e4c13e333a5acf5b91e624d5177b6eaa88ea11e0",
+    "src/ui/dom.js": "9195a92cd34ddef542614a3260fe5b39cd8b2914cd9ee538d78150756d346564",
+    "src/ui/fonts/ibm-plex-mono-latin-400-normal.woff2": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
+    "src/ui/fonts/ibm-plex-mono-latin-600-normal.woff2": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83",
+    "src/ui/panels.css": "4eab7723d4a53d9eb4b1e016772971e23fb777815b4c83f745ffe9ab3ddb76f8",
+    "src/ui/shell.css": "cc37fe17d7754fef54bdb4d486247fe882df3f3d793777517ec43ff07ac9d78f",
+    "src/ui/theme.js": "71747aa812de06ffa59277f77bada58d13cd56752cb70dabf9568fd71297e775",
+    "src/ui/tokens.css": "086b3c891ec3285ab205133ff1cdb1143b693c66ccd06c2b0ad5e1e681c95b49",
+    "src/ui/window-actions.js": "91d229527d0ecb7eed55460ad8e5bba1fefbf03b35a559c75a86bb28a7fedcc3",
+    "src/version.js": "df50e534e3ba0df89850236955aebdac13e5a15a81f2d3f7b742bfb10a1a5c43"
+  }
+}

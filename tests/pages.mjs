@@ -19,6 +19,6 @@ for(const path of ['/api/access/rotate','/api/strategy-lab/run','/api/strategy-l
 assert.equal(calls.length,1,'only the public snapshot was fetched; no private service requests');
 const runtime=JSON.parse(readFileSync('dist/assets/data/runtime-state.json'));assert.deepEqual(runtime.runs,[]);assert.deepEqual(runtime.strategies,[]);
 for(const f of ['lightweight-charts/LICENSE','lightweight-charts/NOTICE','ibm-plex-mono/LICENSE'])assert.ok(existsSync('dist/third_party/'+f));
-const upstream=JSON.parse(readFileSync('docs/UI_UPSTREAM.json'));const changed=new Set(['app.js','engine-client.js','screens/catalog.js']);for(const file of upstream.files){if(changed.has(file.path))continue;assert.equal(createHash('sha256').update(readFileSync('web/'+file.path)).digest('hex'),file.sha256,'upstream UI parity '+file.path)}
+const lock=JSON.parse(readFileSync('terminal-ui.lock.json'));for(const [path,hash] of Object.entries(lock.installed))assert.equal(createHash('sha256').update(readFileSync('dist/assets/'+path)).digest('hex'),hash,'deployed shared UI '+path);
 assert.ok(!existsSync('dist/assets/analytics.js'),'retired UI assets must not survive a rebuild');
-globalThis.fetch=prior;delete globalThis.document;dom.window.close();console.log('Pages boundary passed: upstream UI parity, public market only, empty private accounts, no outgoing writes, no invented event clocks, bundled licenses and clean assets.');
+globalThis.fetch=prior;delete globalThis.document;dom.window.close();console.log('Pages boundary passed: shared UI dependency, public market only, empty private accounts, no outgoing writes, no invented event clocks, bundled licenses and clean assets.');
