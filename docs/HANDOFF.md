@@ -4,6 +4,8 @@
 
 ## 최신 사용자 결정
 
+**최신: 전략 중심 STRATEGY와 종목 중심 MARKET을 분리한다. PORTFOLIO/STRATEGY 선택이 분석 패널 전체에 공유된다. 기본은 PERF/HOLD/RISK/EXEC이며 ATTR/CORR/HEALTH를 추가한다. 더 선명한 Bloomberg 참고 색상 적용. docs/STRATEGY_MONITORING.md가 현재 화면·분석 기준이다.**
+
 **최신 구체화: 비공개 엔진 응답을 기준으로 공개 대시보드가 맞춘다. 기본 화면은 4개 분할 패널/패널별 기능 선택과 저장된 배치이며 배치 편집에서만 이동/크기 조절한다. 자유창만으로 Bloomberg 기본 UI를 설명했던 것은 정정했다. docs/NATIVE_REPORTS.md와 TERMINAL_WORKSPACES.md 참고.**
 
 **최신 역할 분리: 비공개 저장소는 데이터 관리·전략·실행·계좌 업무, 공개 trade_monitor는 모니터링 화면·조회 어댑터를 담당한다. 비공개 쪽 모니터링 작업을 읽어 이어가되 커밋·푸시는 공개 work에만 한다. docs/REPOSITORY_BOUNDARY.md 필독.**
@@ -142,3 +144,11 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 - Python 32개, UI/Pages/새 window/native 계약 검사와 Chromium 드래그·resize·최대/최소·가격 독립 선택·reload 배치 복원·계좌 파일·모바일 검사 수행. 실제 화면 캡처 확인. 합성 fixtures만 커밋.
 
 배포 확인: CI 41751488203 전체 success. 공개 version.json=6643906a1c3f6fbac86e97aab64d0ee3e9ea053c, window-workspace/native-report JS HTTP 200. 공개 runtime-state 전략/실행 0건 확인. 검증 기록 문서 커밋은 [skip ci]로 저장한다.
+
+## 전략 중심 워크스페이스 및 진단 (2026-11-04)
+
+- strategy-analysis/strategy-ui: 원본 계좌/실행을 수정하지 않고 성과·낙폭·비연율 변동성·같은 시각 종가/승수의 명목·집중도·수량 체결률·전략 동행/중복·상태를 분석한다. 계좌 NAV/PnL/기여도는 재합산하지 않는다.
+- 여러 native 파일을 탭에 열어 포트폴리오를 전환. 한 계좌의 전략 선택/기여도 행 선택이 모든 전략 패널을 갱신한다. 자식 미포함은 상세 원천 미보고. 별도 엔진 계층/API 변경은 없다.
+- MARKET만 ticker/source를 표시. 공개 시장과 선택 전략 저장 봉은 명시적으로 선택. 두 workspace의 배치는 v2 별도 키로 저장, 개인 결과/선택은 저장하지 않는다.
+- 색상 주황/황색/청록/녹색/적색 대비 강화, 시스템 글꼴 유지. 합성 분석 예시는 버튼으로만 열고 배너에 표시. 실제 성과/백테스트가 아니다.
+- Python 32개, UI/Pages/분석 edge 사례 검사, Chromium의 공유 전략/기여도/포트폴리오 전환·워크스페이스/출처/배치 분리·모바일/비공개 메모리 격리 확인. 스크린샷 직접 검토. 실제 계좌/HTTP/브로커 연결은 수행하지 않았다.

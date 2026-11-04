@@ -15,10 +15,10 @@ const single=native.parseNativeReport(nativeRun());assert.equal(single.account,n
 const badBar=nativeRun();badBar.market[0].high=1;assert.throws(()=>native.parseNativeReport(badBar));
 const malicious=nativeRun();malicious.id='<img src=x onerror=alert(1)>';assert.ok(native.runView(malicious).includes('&lt;img'));
 const dom=new JSDOM('<div id="desktop"></div>',{url:'https://example.test/'}),w=dom.window;const root=w.document.querySelector('#desktop');
-let expanded='';const config={storage:w.localStorage,content:p=>'<p>'+p.type+'</p>',bind:()=>{},symbols:()=>[{symbol:'SYNTHETIC',name:'synthetic'}],onExpand:type=>expanded=type,onImport:()=>{},onClear:()=>{}};
+let expanded='';const config={profile:'market',storage:w.localStorage,content:p=>'<p>'+p.type+'</p>',bind:()=>{},symbols:()=>[{symbol:'SYNTHETIC',name:'synthetic'}],onExpand:type=>expanded=type,onImport:()=>{},onClear:()=>{}};
 const desktop=new WindowWorkspace(config);desktop.mount(root);assert.equal(root.querySelectorAll('.tool-window').length,4);
 assert.ok(!root.querySelector('.workspace-canvas').classList.contains('editing'));
-const oldBox={...desktop.panes[0]};const chooser=root.querySelector('[data-pane-tool]');chooser.value='risk';chooser.dispatchEvent(new w.Event('change'));assert.equal(desktop.panes[0].type,'risk');assert.equal(desktop.panes[0].w,oldBox.w);
+const oldBox={...desktop.panes[0]};const chooser=root.querySelector('[data-pane-tool]');chooser.value='news';chooser.dispatchEvent(new w.Event('change'));assert.equal(desktop.panes[0].type,'news');assert.equal(desktop.panes[0].w,oldBox.w);
 desktop.open('security','SYNTHETIC');assert.equal(root.querySelectorAll('[data-tool="security"]').length,2);
 assert.equal(root.querySelectorAll('[id]').length,new Set([...root.querySelectorAll('[id]')].map(e=>e.id)).size);
 const pane=desktop.panes.at(-1),find=()=>root.querySelector('[data-pane="'+pane.id+'"]');
@@ -28,9 +28,9 @@ find().querySelector('[data-window-action="minimize"]').click();assert.ok(find()
 find().querySelector('[data-window-action="minimize"]').click();
 find().querySelector('[data-window-action="expand"]').click();assert.equal(expanded,'security');
 desktop.tile();assert.equal(desktop.panes[0].x,0);assert.equal(desktop.panes[1].x,1/3);
-assert.ok(!w.localStorage.getItem('catalyst-window-layout-v1').includes('SYNTHETIC'),'persist geometry only, not report symbols');
+assert.ok(!w.localStorage.getItem('catalyst-window-layout-v2-market').includes('SYNTHETIC'),'persist geometry only, not report symbols');
 const restored=new WindowWorkspace(config);assert.equal(restored.panes.length,5);assert.equal(restored.panes.at(-1).symbol,undefined);
 find().querySelector('[data-window-action="close"]').click();assert.equal(root.querySelectorAll('.tool-window').length,4);
 desktop.reset();assert.equal(desktop.panes.length,4);
-w.localStorage.setItem('catalyst-window-layout-v1','[{"id":"<img>","type":"security","x":0,"y":0,"w":1,"h":1}]');assert.equal(new WindowWorkspace(config).panes.length,4);
+w.localStorage.setItem('catalyst-window-layout-v2-market','[{"id":"<img>","type":"security","x":0,"y":0,"w":1,"h":1}]');assert.equal(new WindowWorkspace(config).panes.length,4);
 dom.window.close();console.log('Window/native contract checks passed: independent windows, controls/layout restore, geometry-only persistence, native account/run ownership/time validation, partial-error status and hashless DSL preserved.');
