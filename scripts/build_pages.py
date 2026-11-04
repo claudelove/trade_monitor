@@ -8,14 +8,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from monitor.demo import generate
-from monitor.strategies import STRATEGIES, decorate
+from monitor.event_types import EVENT_TYPES, decorate
 
 def build(output):
     output = Path(output)
     assets = output / 'assets'
     data = assets / 'data'
     data.mkdir(parents=True, exist_ok=True)
-    for filename in ('app.js','style.css','analytics.js','static-api.js'):
+    for filename in ('app.js','style.css','analytics.js','static-api.js','runtime-ui.js','runtime-contract.js'):
         shutil.copyfile(ROOT/'web'/filename, assets/filename)
     html = (ROOT/'web/index.html').read_text()
     html = html.replace('<html lang="ko">','<html lang="ko" data-hosting="pages">')
@@ -26,9 +26,13 @@ def build(output):
         raise ValueError('Unsupported public snapshot')
     live['events'] = [decorate(e) for e in live['events']]
     for mode, payload in [('live',live),('demo',generate())]:
-        payload['strategies'] = STRATEGIES
+        payload['event_types'] = EVENT_TYPES
+        payload['strategies'] = EVENT_TYPES
         payload['hosting'] = 'github-pages'
         (data/(mode+'.json')).write_text(json.dumps(payload,ensure_ascii=False,allow_nan=False))
+    shutil.copyfile(ROOT/'schemas/strategy-runtime-v1.json',data/'runtime-contract.json')
+    shutil.copyfile(ROOT/'schemas/strategy-runtime-example.json',data/'runtime-example.json')
+    (data/'runtime-state.json').write_text(json.dumps({'schema_version':'1.0','strategies':[],'runs':[],'execution_control':'external_runtime','execution_adapter':'not_connected','transport':'github-pages'}))
     revision = subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     (output/'version.json').write_text(json.dumps({'commit':revision,'hosting':'github-pages'}))
     (output/'.nojekyll').touch()

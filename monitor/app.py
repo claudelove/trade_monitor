@@ -5,15 +5,15 @@ import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from monitor import store
 from monitor.demo import generate
 from monitor.providers.live import collect, news
-from monitor.strategies import STRATEGIES
-from monitor.analytics import study, backtest
+from monitor.event_types import EVENT_TYPES
+from monitor import integration
 from monitor.auth import AccessGate
 
 @asynccontextmanager
@@ -62,7 +62,8 @@ async def public_health():
 @app.get('/api/snapshot')
 async def get_snapshot(mode: Literal['live','demo']='live'):
     data = snapshot(mode)
-    data['strategies'] = STRATEGIES
+    data['event_types'] = EVENT_TYPES
+    data['strategies'] = EVENT_TYPES # Legacy read-only field
     return data
 
 
@@ -72,7 +73,7 @@ async def event_detail(event_id: str, mode: Literal['live','demo']='live', bench
     event = next((e for e in data['events'] if e['id'] == event_id), None)
     if not event:
         raise HTTPException(404, '이벤트 없음')
-    return {'event': event, 'study': study(event, data['prices'], benchmark)}
+    return {'event': event}
 
 
 @app.post('/api/event/{event_id}/news')
@@ -125,18 +126,38 @@ async def refresh(args: Refresh):
         running = False
 
 
-class Backtest(BaseModel):
-    mode: Literal['live','demo'] = 'live'
-    strategy: str = 'buyback'
-    holding: int = Field(default=5, ge=1, le=60)
-    cost_bps: float = Field(default=20, ge=0, le=500)
-    min_value: float = Field(default=0, ge=0)
-    start: dt.date | None = None
-    end: dt.date | None = None
-
-
 @app.post('/api/backtest')
-async def run_backtest(args: Backtest):
-    if args.strategy not in STRATEGIES or (args.start and args.end and args.start > args.end):
-        raise HTTPException(422, '전략 또는 기간 확인 필요')
-    return backtest(snapshot(args.mode), args.strategy, args.holding, args.cost_bps, args.min_value, args.start.isoformat() if args.start else None, args.end.isoformat() if args.end else None)
+async def retired_backtest():
+    raise HTTPException(410, '내장 이벤트 전략 실행기는 종료했습니다. 외부 전략 실행 결과를 /api/runtime/bundles로 전달하세요.')
+
+
+@app.get('/api/runtime/contract')
+async def runtime_contract():
+    return integration.contract()
+
+
+@app.get('/api/runtime/state')
+async def runtime_state():
+    return integration.state()
+
+
+@app.post('/api/runtime/bundles')
+async def runtime_import(bundle: integration.Bundle):
+    if not os.environ.get('MONITOR_PASSWORD'):
+        raise HTTPException(503, 'runtime_write_requires_configured_authentication')
+    try:
+        return integration.import_bundle(bundle)
+    except integration.MissingArtifact as exc:
+        raise HTTPException(422, str(exc)) from None
+    except integration.Conflict as exc:
+        raise HTTPException(409, str(exc)) from None
+
+
+@app.get('/api/runtime/runs/{run_id}/observations')
+async def runtime_observations(run_id: str,after_sequence: int=Query(0,ge=0),limit: int=Query(100,ge=1,le=500)):
+    return {'run_id':run_id,'observations':integration.observations(run_id,after_sequence,limit)}
+
+
+@app.get('/api/runtime/example')
+async def runtime_example():
+    return FileResponse(WEB.parent/'schemas/strategy-runtime-example.json',media_type='application/json')

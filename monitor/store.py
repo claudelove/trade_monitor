@@ -18,7 +18,7 @@ def load(mode='live'):
     with connect() as c:
         row = c.execute('SELECT payload FROM snapshots WHERE mode=?', (mode,)).fetchone()
     payload = json.loads(row[0]) if row else {'mode': mode, 'events': [], 'prices': {}, 'news': [], 'sources': [], 'as_of': None}
-    from monitor.strategies import decorate
+    from monitor.event_types import decorate
     payload['events'] = [decorate(e) for e in payload['events']]
     return payload
 

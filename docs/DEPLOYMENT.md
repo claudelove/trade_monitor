@@ -1,3 +1,7 @@
+# 현재 배포 경계
+
+외부 전략 코드 모니터 규격은 [STRATEGY_INTEGRATION.md](STRATEGY_INTEGRATION.md)를 따른다. Pages는 공시/가격/뉴스 및 현재 탭의 결과 파일 조회용이다. 비공개 Python API와 전략 실행기는 Pages에서 실행되지 않는다. Pages 빌드에는 운영 전략/주문/계좌 DB를 포함하지 않으며 runtime-state.json은 빈 목록이다. 아래 문서의 내장 브라우저 백테스트 설명은 이전 프로토타입 기록이고 해당 실행 UI/API는 종료했다.
+
 # GitHub Pages로 프로토타입 보기
 
 사용자는 별도 도메인이나 GCP/Render 없이 GitHub에서만 화면을 확인하며 수정하기를 원한다. 현재 기본 배포 방식은 GitHub Pages다. Python 서버 배포 구성은 향후 확장용으로 보존한다.

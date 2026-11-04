@@ -182,3 +182,5 @@ select { background: var(--accent-fill); color: #18130c; }
 select option { background: #242424; color: var(--text); }
 input:focus-visible { outline-color: var(--accent); }
 .layout-controls input { accent-color: var(--accent-fill); }
+
+.metrics-inline strong small { font-size: 11px; color: var(--muted); font-weight: 400; }

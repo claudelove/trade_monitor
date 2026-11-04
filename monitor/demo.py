@@ -1,7 +1,7 @@
 """Deterministic synthetic fixtures. Never merged with live data."""
 import datetime as dt
 import random
-from monitor.strategies import decorate
+from monitor.event_types import decorate
 
 UNIVERSE = [('005930','삼성전자',73000),('000660','SK하이닉스',185000),('035420','NAVER',202000),('005380','현대차',240000),('105560','KB금융',85000),('068270','셀트리온',178000),('035720','카카오',42000),('069500','KODEX 200',35000)]
 

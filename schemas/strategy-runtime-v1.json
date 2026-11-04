@@ -1,0 +1,650 @@
+{
+  "schema_version": "1.0",
+  "purpose": "external_strategy_monitoring",
+  "execution_control": "external_runtime",
+  "execution_adapter": "not_connected",
+  "strategy_execution_abi": "pending_user_documentation",
+  "artifact_verification": "reported_hash_only",
+  "observation_format": "complete_run_snapshot",
+  "ownership": {
+    "external_code": [
+      "signals",
+      "risk_policy",
+      "execution",
+      "order_routing",
+      "backtesting"
+    ],
+    "dashboard": [
+      "artifact_identity",
+      "observation_history",
+      "monitoring",
+      "agent_read_api"
+    ]
+  },
+  "bundle_schema": {
+    "$defs": {
+      "Artifact": {
+        "additionalProperties": false,
+        "properties": {
+          "strategy_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "title": "Strategy Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Version",
+            "type": "string"
+          },
+          "code_ref": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Code Ref",
+            "type": "string"
+          },
+          "code_sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Code Sha256",
+            "type": "string"
+          },
+          "declared_modes": {
+            "items": {
+              "enum": [
+                "backtest",
+                "paper",
+                "live"
+              ],
+              "type": "string"
+            },
+            "maxItems": 3,
+            "title": "Declared Modes",
+            "type": "array"
+          },
+          "description": {
+            "default": "",
+            "maxLength": 4000,
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "strategy_id",
+          "name",
+          "version",
+          "code_ref",
+          "code_sha256"
+        ],
+        "title": "Artifact",
+        "type": "object"
+      },
+      "EquityPoint": {
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "equity": {
+            "title": "Equity",
+            "type": "number"
+          }
+        },
+        "required": [
+          "at",
+          "equity"
+        ],
+        "title": "EquityPoint",
+        "type": "object"
+      },
+      "Fill": {
+        "additionalProperties": false,
+        "properties": {
+          "fill_id": {
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Fill Id",
+            "type": "string"
+          },
+          "order_id": {
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Order Id",
+            "type": "string"
+          },
+          "symbol": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Symbol",
+            "type": "string"
+          },
+          "side": {
+            "enum": [
+              "buy",
+              "sell"
+            ],
+            "title": "Side",
+            "type": "string"
+          },
+          "quantity": {
+            "exclusiveMinimum": 0,
+            "title": "Quantity",
+            "type": "number"
+          },
+          "price": {
+            "minimum": 0,
+            "title": "Price",
+            "type": "number"
+          },
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fill_id",
+          "order_id",
+          "symbol",
+          "side",
+          "quantity",
+          "price",
+          "at"
+        ],
+        "title": "Fill",
+        "type": "object"
+      },
+      "Log": {
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "debug",
+              "info",
+              "warning",
+              "error"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "message": {
+            "maxLength": 4000,
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "at",
+          "level",
+          "message"
+        ],
+        "title": "Log",
+        "type": "object"
+      },
+      "Metric": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Unit"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "value"
+        ],
+        "title": "Metric",
+        "type": "object"
+      },
+      "Order": {
+        "additionalProperties": false,
+        "properties": {
+          "order_id": {
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Order Id",
+            "type": "string"
+          },
+          "symbol": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Symbol",
+            "type": "string"
+          },
+          "side": {
+            "enum": [
+              "buy",
+              "sell"
+            ],
+            "title": "Side",
+            "type": "string"
+          },
+          "order_type": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Order Type",
+            "type": "string"
+          },
+          "status": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Status",
+            "type": "string"
+          },
+          "quantity": {
+            "minimum": 0,
+            "title": "Quantity",
+            "type": "number"
+          },
+          "filled_quantity": {
+            "default": 0,
+            "minimum": 0,
+            "title": "Filled Quantity",
+            "type": "number"
+          },
+          "limit_price": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Limit Price"
+          }
+        },
+        "required": [
+          "order_id",
+          "symbol",
+          "side",
+          "order_type",
+          "status",
+          "quantity"
+        ],
+        "title": "Order",
+        "type": "object"
+      },
+      "Position": {
+        "additionalProperties": false,
+        "properties": {
+          "symbol": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Symbol",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "number"
+          },
+          "average_price": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Average Price"
+          },
+          "market_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Market Value"
+          },
+          "currency": {
+            "default": "",
+            "maxLength": 20,
+            "title": "Currency",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "quantity"
+        ],
+        "title": "Position",
+        "type": "object"
+      },
+      "Risk": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "ok",
+              "warning",
+              "breached",
+              "unknown"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Value"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Limit"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Unit"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "state"
+        ],
+        "title": "Risk",
+        "type": "object"
+      },
+      "RunSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "schema_version": {
+            "const": "1.0",
+            "default": "1.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "run_id": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "title": "Run Id",
+            "type": "string"
+          },
+          "strategy_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "title": "Strategy Id",
+            "type": "string"
+          },
+          "strategy_version": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Strategy Version",
+            "type": "string"
+          },
+          "code_sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Code Sha256",
+            "type": "string"
+          },
+          "sequence": {
+            "minimum": 1,
+            "title": "Sequence",
+            "type": "integer"
+          },
+          "mode": {
+            "enum": [
+              "backtest",
+              "paper",
+              "live"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "created",
+              "running",
+              "paused",
+              "completed",
+              "failed",
+              "stopped"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "as_of": {
+            "format": "date-time",
+            "title": "As Of",
+            "type": "string"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/$defs/Metric"
+            },
+            "maxItems": 200,
+            "title": "Metrics",
+            "type": "array"
+          },
+          "risks": {
+            "items": {
+              "$ref": "#/$defs/Risk"
+            },
+            "maxItems": 200,
+            "title": "Risks",
+            "type": "array"
+          },
+          "positions": {
+            "items": {
+              "$ref": "#/$defs/Position"
+            },
+            "maxItems": 2000,
+            "title": "Positions",
+            "type": "array"
+          },
+          "orders": {
+            "items": {
+              "$ref": "#/$defs/Order"
+            },
+            "maxItems": 5000,
+            "title": "Orders",
+            "type": "array"
+          },
+          "fills": {
+            "items": {
+              "$ref": "#/$defs/Fill"
+            },
+            "maxItems": 5000,
+            "title": "Fills",
+            "type": "array"
+          },
+          "equity": {
+            "items": {
+              "$ref": "#/$defs/EquityPoint"
+            },
+            "maxItems": 10000,
+            "title": "Equity",
+            "type": "array"
+          },
+          "logs": {
+            "items": {
+              "$ref": "#/$defs/Log"
+            },
+            "maxItems": 1000,
+            "title": "Logs",
+            "type": "array"
+          },
+          "data_snapshot_id": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Data Snapshot Id"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "run_id",
+          "strategy_id",
+          "strategy_version",
+          "code_sha256",
+          "sequence",
+          "mode",
+          "status",
+          "as_of"
+        ],
+        "title": "RunSnapshot",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "1.0",
+        "default": "1.0",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "strategies": {
+        "items": {
+          "$ref": "#/$defs/Artifact"
+        },
+        "maxItems": 500,
+        "title": "Strategies",
+        "type": "array"
+      },
+      "runs": {
+        "items": {
+          "$ref": "#/$defs/RunSnapshot"
+        },
+        "maxItems": 1000,
+        "title": "Runs",
+        "type": "array"
+      }
+    },
+    "title": "Bundle",
+    "type": "object"
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/runtime/contract"
+    },
+    {
+      "method": "GET",
+      "path": "/api/runtime/example"
+    },
+    {
+      "method": "GET",
+      "path": "/api/runtime/state"
+    },
+    {
+      "method": "POST",
+      "path": "/api/runtime/bundles"
+    },
+    {
+      "method": "GET",
+      "path": "/api/runtime/runs/{run_id}/observations"
+    }
+  ]
+}

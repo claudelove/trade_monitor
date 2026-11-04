@@ -10,7 +10,7 @@ import io
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
-from monitor.strategies import decorate
+from monitor.event_types import decorate
 
 
 def get(url):

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "strategies": [
+    {
+      "strategy_id": "example.external",
+      "name": "연동 형식 예시 (가상 보고)",
+      "version": "example-v1",
+      "code_ref": "example://not-an-executable-strategy",
+      "code_sha256": "6ba9be5282739c63327a58aa73175bf7aea0797873f0a1ed6c830f3b7077db0b",
+      "declared_modes": [
+        "backtest"
+      ],
+      "description": "JSON 관측 규격 예시이며 실행할 전략 코드가 아닙니다."
+    }
+  ],
+  "runs": [
+    {
+      "schema_version": "1.0",
+      "snapshot_id": "example-snapshot-1",
+      "run_id": "example-run-1",
+      "strategy_id": "example.external",
+      "strategy_version": "example-v1",
+      "code_sha256": "6ba9be5282739c63327a58aa73175bf7aea0797873f0a1ed6c830f3b7077db0b",
+      "sequence": 1,
+      "mode": "backtest",
+      "status": "completed",
+      "as_of": "2026-11-04T00:00:00Z",
+      "metrics": [
+        {
+          "key": "example_metric",
+          "label": "외부 코드 정의 지표 (예시)",
+          "value": 0.0,
+          "unit": "example"
+        }
+      ],
+      "risks": [
+        {
+          "key": "example_risk",
+          "label": "외부 코드 정의 리스크 (예시)",
+          "state": "unknown",
+          "value": null,
+          "limit": null,
+          "unit": null
+        }
+      ],
+      "positions": [],
+      "orders": [
+        {
+          "order_id": "example-order",
+          "symbol": "SIMULATED",
+          "side": "buy",
+          "order_type": "external-defined-type",
+          "status": "example-report-only",
+          "quantity": 1.0,
+          "filled_quantity": 1.0,
+          "limit_price": 100.0
+        }
+      ],
+      "fills": [
+        {
+          "fill_id": "example-fill",
+          "order_id": "example-order",
+          "symbol": "SIMULATED",
+          "side": "buy",
+          "quantity": 1.0,
+          "price": 100.0,
+          "at": "2026-11-04T00:00:00Z"
+        }
+      ],
+      "equity": [
+        {
+          "at": "2026-11-04T00:00:00Z",
+          "equity": 1000.0
+        }
+      ],
+      "logs": [
+        {
+          "at": "2026-11-04T00:00:00Z",
+          "level": "info",
+          "message": "가상 보고 형식 예시입니다. 코드 실행이나 주문은 하지 않았습니다."
+        }
+      ],
+      "data_snapshot_id": "example-data-only"
+    }
+  ]
+}

@@ -610,5 +610,7 @@
       ],
       "output_contract": "공급자/종목별 신선도·범위·누락·부분 성공·미지원 사유"
     }
-  ]
+  ],
+  "superseded_scope": "후속 사용자 지시: 외부 전략 코드 관측 인프라 우선. 전략/연구 정책 내장 제안은 구현 지시가 아님.",
+  "current_contract": "schemas/strategy-runtime-v1.json"
 }

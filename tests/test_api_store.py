@@ -21,10 +21,10 @@ def test_api_mode_validation_and_data_isolation(tmp_path,monkeypatch):
     assert demo['mode']=='demo' and len(demo['events'])==49
     assert call('GET','/api/snapshot?mode=invalid').status_code==422
     assert call('GET','/api/event/missing').status_code==404
-    assert call('POST','/api/backtest',json={'holding':0}).status_code==422
+    assert call('POST','/api/backtest',json={'holding':0}).status_code==410
     assert call('POST','/api/refresh',json={'start':'2026-01-01','end':'2026-01-02','tickers':['../bad']}).status_code==422
     r=call('POST','/api/backtest',json={'mode':'demo','strategy':'buyback','holding':5})
-    assert r.status_code==200 and r.json()['count']>0
+    assert r.status_code==410
     assert call('GET','/api/snapshot?mode=live').json()['prices']=={}
 
 

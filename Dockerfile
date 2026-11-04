@@ -11,6 +11,7 @@ RUN --mount=type=secret,id=proxy_ca \
 COPY monitor ./monitor
 COPY web ./web
 COPY fixtures ./fixtures
+COPY schemas ./schemas
 COPY scripts/container-entrypoint.sh /usr/local/bin/catalyst-entrypoint
 RUN mkdir /app/data && chown -R monitor:monitor /app
 RUN chmod 755 /usr/local/bin/catalyst-entrypoint
