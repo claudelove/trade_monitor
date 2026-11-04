@@ -21,7 +21,7 @@
 - 저장소 https://github.com/claudelove/trade_monitor, 작업 브랜치 work. main은 초기 커밋이며 자동 병합하지 않는다.
 - 최초 기능 5fa9d8c, 복구/Docker 기준 96b2ed6.
 - **배포 주소: https://claudelove.github.io/trade_monitor/**. 2026-11-04 최신 외부 전략 모니터 배포 HTTP 200 확인.
-- 확인된 최신 기능 배포 커밋: 5f6ed816c6cac9f0eadb4f9104be7a95e9040eb2. version.json과 일치. CI 실행 41747207679의 test/build-pages/deploy-pages 성공. 후속 배포 기록 문서 커밋은 [skip ci]로 저장한다.
+- 확인된 최신 기능 배포 커밋: 6643906a1c3f6fbac86e97aab64d0ee3e9ea053c. version.json과 일치. CI 실행 41751488203의 test/build-pages/deploy-pages 성공. 후속 배포 기록 문서 커밋은 [skip ci]로 저장한다.
 - 작업 도중 관리형 클라우드 실행 환경이 unavailable로 바뀌어 GitHub API로 0896489를 저장했다. 이후 환경 연결이 복구돼 로컬 draft를 stash 보존하고 원격 0896489로 fast-forward 했다.
 - 사용자가 Pages Source=GitHub Actions 및 github-pages 환경 허용 브랜치 work 설정을 완료했다. 현재 자동 Pages 배포 정상 동작.
 - repository default branch가 main이면 workflow_dispatch 수집 기능을 위해 work로 변경하거나 향후 명시적으로 워크플로를 main에 반영해야 한다. 기본 브랜치를 자동 변경했다고 가정하지 않는다.
@@ -52,7 +52,7 @@ Pages에서는 web/static-api.js가 공개 시장 JSON과 비어 있는 runtime-
 
 ## 다음 행동
 
-1. 최신 종합 화면(5f6ed81)의 사용자 피드백을 반영한다. 비공개 실행 엔진 연결 시 전략/계좌 범위·단위·시각 계약을 먼저 맞춘다. 현재는 관측 인프라만 연결돼 있다.
+1. 최신 다중 패널 화면(6643906)의 사용자 피드백을 반영한다. 비공개 실행 엔진 연결 시 전략/계좌 범위·단위·시각 계약을 먼저 맞춘다. 현재는 관측 인프라만 연결돼 있다.
 2. 코드 수정 시 test/build-pages/deploy-pages 및 version.json 커밋을 확인. 계정 Pages 설정은 완료돼 다시 요청할 필요 없음.
 3. 필요 시 기본 브랜치 work 설정과 Actions secret 등록 후 수동 수집 확인.
 4. 화면 피드백 → 관련 테스트 → 인계 갱신 → 커밋·푸시를 유지한다.
@@ -140,3 +140,5 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 - native-report: 비공개 엔진의 계좌/실행 JSON을 원형으로 현재 탭에 열어 계좌 NAV/손익/기여도/대사·실행 주문/체결/판단/평가·보고 한도/메타데이터 조회. 기존 v1 hash/sequence 필수 값을 강요하지 않는다. 부분 오류 완료 상태 보존, 계좌 자식 소유권/시점 검사, 실패한 파일은 이전 상태를 유지한다.
 - 원형 실행을 열면 가격 데이터도 해당 실행의 market 봉만 사용한다. 공개 시장 봉/뉴스/공시와 같은 데이터셋인 것처럼 합치지 않는다. 직접 API 연결/실주문/비공개 푸시는 하지 않았다.
 - Python 32개, UI/Pages/새 window/native 계약 검사와 Chromium 드래그·resize·최대/최소·가격 독립 선택·reload 배치 복원·계좌 파일·모바일 검사 수행. 실제 화면 캡처 확인. 합성 fixtures만 커밋.
+
+배포 확인: CI 41751488203 전체 success. 공개 version.json=6643906a1c3f6fbac86e97aab64d0ee3e9ea053c, window-workspace/native-report JS HTTP 200. 공개 runtime-state 전략/실행 0건 확인. 검증 기록 문서 커밋은 [skip ci]로 저장한다.

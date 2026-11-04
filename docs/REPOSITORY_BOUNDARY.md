@@ -23,8 +23,8 @@
 | 비공개 조회 경로 | 화면에서 사용할 범위 | 현재 공개 앱과 차이 |
 | --- | --- | --- |
 | GET /api/accounts | 계좌 실행 선택 | 공개 앱은 계좌 목록 계약 미구현 |
-| GET /api/accounts/{id} | 계좌 장부와 같은 publication의 전략 결과 | ACCOUNT는 현재 미연결; 계좌 데이터 계약 필요 |
-| GET /api/runs 및 /api/runs/{id} | 개별 실행·시장 봉·지표·주문·체결 | 현재 /api/runtime 형식과 직접 호환되지 않음 |
+| GET /api/accounts/{id} | 계좌 장부와 같은 publication의 전략 결과 | 원형 계좌 파일 조회 구현; 직접 HTTP 조회 미연결 |
+| GET /api/runs 및 /api/runs/{id} | 개별 실행·시장 봉·지표·주문·체결 | 원형 실행 파일 조회 구현; /api/runtime는 이전 호환 경로 |
 | GET /api/data/events 및 /api/data/events/{id} | 원천/정정·가용/수신 시각·품질 | 현재 공시/뉴스 스냅샷과 별도 데이터 계약 |
 
 비공개 엔진은 기존 실행 규칙을 유지한다. 대시보드는 그 결과를 읽으며 엔진을 import해 실행하거나 정책을 재계산하지 않는다. 현재 관측 v1의 해시/sequence 등 필수 값이 원천 결과에 없으면 확인된 값으로 명시적 매핑하거나 별도 버전 계약을 사용한다. 누락된 정보를 가짜 값으로 채워 검증을 통과시키지 않는다.
