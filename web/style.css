@@ -231,3 +231,29 @@ tbody tr.selected { background:#292116; }
 .risk-warning,.risk-breached { background:#321b15; }.risk-unknown { color:var(--muted); }
 @media(max-width:1050px) { .terminal-grid { grid-template-columns:1fr; grid-template-areas:'price' 'market' 'activity' 'news'; }.workspace,.connection { display:none; }.command-bar #command-status { display:none; }.terminal-context { flex-wrap:wrap; } }
 @media(max-width:700px) { .sidebar { position:relative; height:auto; grid-template-columns:1fr; grid-template-rows:32px 40px 36px; }.command-bar { padding:4px; }.command-bar label { font-size:9px; }.command-bar input { width:0; font-size:10px; }main { margin-top:0; }.terminal-context select { max-width:calc(100% - 85px); }.terminal-context #context-scope { width:100%; margin-left:0; }.coverage-grid { grid-template-columns:1fr 1fr; }.terminal-chart { height:210px; } }
+
+/* Independent terminal windows. Geometry is relative to the workspace. */
+.desktop-toolbar { display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:5px 0 9px; }
+.desktop-toolbar label { margin:0; font-size:11px; color:var(--accent); }
+.desktop-toolbar select { min-height:25px; font-size:11px; }
+.desktop-toolbar [data-workspace-status] { margin-left:auto; color:var(--muted); font-size:10px; }
+.workspace-canvas { position:relative; height:calc(100vh - 330px); min-height:550px; background:#080808; overflow:hidden; }
+.tool-window { position:absolute; min-width:0; display:flex; flex-direction:column; padding:2px; border:1px solid #2c2c2c; background:#050505; overflow:hidden; }
+.tool-window.focused { border-color:#786044; }
+.window-titlebar { display:flex; gap:8px; align-items:center; flex-shrink:0; height:27px; padding:0 5px; color:var(--accent); background:#202020; cursor:move; touch-action:none; user-select:none; }
+.window-titlebar strong { font-size:11px; font-weight:500; }
+.window-number { color:#a5a5a5; font-size:10px; }
+.window-buttons { margin-left:auto; display:flex; gap:1px; }
+.window-buttons button { min-width:24px; height:23px; padding:0; border:0; background:transparent; color:#b5b5b5; font-size:16px; }
+.window-buttons button:hover { background:#414141; color:#eee; }
+.window-body { flex:1; min-height:0; overflow:auto; padding:0; }
+.window-body .panel { margin-bottom:4px; }.window-body .table-wrap { max-height:none; }.window-body table { font-size:11px; }.window-body td { padding:5px 7px; }.window-body .terminal-chart { height:200px; }.window-body .empty { padding:18px 10px; }
+.window-context { padding:3px 6px; flex-shrink:0; background:#111; }.window-context label { display:flex; flex-direction:row; align-items:center; gap:8px; margin:0; font-size:10px; }.window-context select { min-height:22px; max-width:100%; font-size:10px; }
+.window-resize { position:absolute; bottom:0; right:0; height:15px; width:15px; cursor:nwse-resize; touch-action:none; background:linear-gradient(135deg,transparent 50%,#6b5942 50%,#6b5942 60%,transparent 60%,transparent 75%,#6b5942 75%); }
+.tool-window.is-minimized .window-body,.tool-window.is-minimized .window-context,.tool-window.is-minimized .window-resize { display:none; }
+.tool-window.is-maximized .window-resize { display:none; }
+@media(max-width:700px) { .workspace-canvas { height:auto; min-height:400px; display:flex; flex-direction:column; gap:8px; overflow:visible; }.tool-window { position:relative; left:auto!important; top:auto!important; width:100%!important; height:370px!important; }.tool-window.is-minimized { height:33px!important; }.tool-window.is-maximized { height:650px!important; }.window-resize { display:none; }.window-titlebar { cursor:default; }.desktop-toolbar [data-workspace-status] { margin-left:0; width:100%; } }
+.window-titlebar [data-pane-tool] { background:transparent; color:var(--accent); font-size:11px; min-height:23px; padding:0 2px; max-width:calc(100% - 130px); }
+.workspace-canvas:not(.editing) .window-titlebar { cursor:default; }
+.workspace-canvas:not(.editing) .window-resize { display:none; }
+[data-edit-panes][aria-pressed="true"] { background:var(--accent-fill); color:#18130c; }
