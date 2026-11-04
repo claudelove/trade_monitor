@@ -15,6 +15,8 @@
 
 검증/배포: 로컬 Python 32개 및 UI/차트·Pages 검사, 실제 Chromium 네 공간 전환·소화면·파일선택/닫기·공개 005930 첫/중간/마지막 OHLCV 원본 일치·선/캔들/확대/리셋/내보내기·저장 공시·390px 각 공간 넘침 없음 확인. 푸시 후 원격 배포 결과는 아래 기록을 기준으로 확인한다. 비공개 저장소에는 쓰기/푸시하지 않았다.
 
+배포 완료: 기능 커밋 **7c1cc4e21206651c48f76d2ceb06b7981d75ce58**, Actions **41784080301** test/build-pages/deploy-pages success. 공개 version.json SHA 일치, 신규 작업공간/화면/차트 자산 HTTP 200, 공개 runtime-state 전략/실행 0건 확인. 실제 Chromium 조작 검증은 로컬 정적 빌드에서 수행했다. 공개 URL Chromium 재검사는 환경의 인증서 신뢰 오류로 미완료이며 HTTPS Python 조회는 정상 검증했다. 배포 기록 후속 문서 커밋은 CI를 생략한다.
+
 ## 최신 사용자 결정
 
 **최신 구조 지시: 번호별 화면 모듈과 공통 인터랙티브 차트로 전면 정리했다. web/screens에 19개 모듈, registry/catalog가 메뉴·명령·창 목록/기본 배치와 수명을 관리한다. 신규 화면은 모듈 추가+catalog 재생성으로 확장한다. docs/SCREEN_MODULES.md 및 CHART_MODULE.md 필독.**
