@@ -10,6 +10,7 @@ for(const screenNumber of ['0101','9876']){
  const pane=root.firstElementChild,off=bindWindowChrome(pane,{onFocus:()=>focus++,onAction:action=>actions.push(action),onToggleMaximize:()=>max++});
  pane.dispatchEvent(new dom.window.Event('pointerdown',{bubbles:true}));pane.querySelector('[data-window-action=maximize]').click();pane.querySelector('[data-window-action=close]').click();
  pane.querySelector('.window-titlebar').dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));pane.querySelector('.window-titlebar').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+ pane.querySelector('.window-titlebar').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',repeat:true,bubbles:true}));pane.querySelector('.window-titlebar').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',isComposing:true,bubbles:true}));
  off();off();pane.querySelector('[data-window-action=close]').click();
 }
 assert.equal(focus,2);assert.deepEqual(actions,['maximize','close','maximize','close']);assert.equal(max,4);

@@ -6,7 +6,7 @@ export function bindWindowChrome(element,{onFocus=()=>{},onAction=()=>{},onToggl
   const button=event.target.closest('[data-window-action]');
   if(button&&title?.contains(button))onAction(button.dataset.windowAction,event);
  }),listen(title,'dblclick',event=>{if(!event.target.closest('button,select,input,textarea,a'))onToggleMaximize(event)}),
- listen(title,'keydown',event=>{if(event.target===title&&['Enter',' '].includes(event.key)){event.preventDefault();onToggleMaximize(event)}})];
+ listen(title,'keydown',event=>{if(event.target===title&&['Enter',' '].includes(event.key)){event.preventDefault();if(!event.repeat&&!event.isComposing)onToggleMaximize(event)}})];
  let done=false;return ()=>{if(done)return;done=true;off.forEach(dispose=>dispose())};
 }
 

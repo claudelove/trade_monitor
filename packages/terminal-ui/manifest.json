@@ -39,7 +39,7 @@
     "src/ui/shell.css": "c2ecda201786d0b6f9682cef621b092777afe7a7417bdde4ebb7915b7c4d86a9",
     "src/ui/theme.js": "71747aa812de06ffa59277f77bada58d13cd56752cb70dabf9568fd71297e775",
     "src/ui/tokens.css": "8484da055441d0d13177ad7ea0f7cd5b672ca3d055e7362156066c2e217935df",
-    "src/ui/window-actions.js": "da809dfb8df90c2b3cfb3433f2d6096fb7fcc0bd93208fe74d4a57226d1ca8b4",
+    "src/ui/window-actions.js": "6f1996757f7264a2f8ed8cbc90b3a6bdf587f68730498ab27b43a77c92440508",
     "src/version.js": "d34c765ddd054057cd56fd14affe0f95bf56958c140e5da2aa700eb41e1c3784"
   }
 }
