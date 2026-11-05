@@ -126,3 +126,7 @@
 ## Remove misleading header defaults — latest user feedback (2026-11-05)
 
 - Do not restore top-level market SYMBOL/SOURCE defaults. GP panes own their selectors; explicit symbol commands resolve existing stored/run data. Account/strategy defaults appear only with actual choices, outside Market/Admin. Preserve per-pane pinning/FOLLOW, account publication boundaries and invalid-symbol rejection. Common presentation version 0.5.1.
+
+## Terminal tables and visibility — latest user request (2026-11-05)
+
+- Common UI 0.6.0 table layer owns 14/13/12px body/header/secondary hierarchy, aligned numeric headings/cells, restrained row rules and readable red/blue on selected rows. Use shared renderTable/formatNumber/formatPercent; financial types/units and ratio-vs-points basis are explicit. Missing is —, zero is zero, identifier leading zeros/source clocks are preserved. No positional all-columns-numeric rules or per-screen tiny table fonts. Keep action callbacks and API/data/engine policy unchanged.

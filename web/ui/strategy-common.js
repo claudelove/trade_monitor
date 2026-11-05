@@ -1,11 +1,12 @@
+import {formatNumber,formatPercent,valueTone,tableMarkup} from '../shared/ui/table.js';
 
 export const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const finite=v=>typeof v==='number'&&Number.isFinite(v);
-export const num=v=>finite(v)?v.toLocaleString('en-GB',{maximumFractionDigits:2}):'N/A';
-export const pct=v=>finite(v)?(v*100).toFixed(2)+'%':'N/A';
-export const sign=v=>finite(v)?v<0?'negative':'positive':'muted';
+export const num=v=>formatNumber(v,{digits:2});
+export const pct=v=>formatPercent(v,{basis:'ratio'});
+export const sign=valueTone;
 export function panel(title,body,note=''){return `<section class="panel analysis-panel"><div class="panel-head"><div class="panel-title">${title}</div></div>${body}${note?`<div class="section-note">${note}</div>`:''}</section>`}
-export function table(headers,body){return body.length?`<div class="table-wrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${body.join('')}</tbody></table></div>`:'<div class="empty">No reported observations to analyze.</div>'}
+export function table(headers,body){return tableMarkup(headers,body,{emptyText:'No reported observations to analyze.'})}
 export function cards(items){return `<div class="analysis-metrics">${items.map(([label,value,basis])=>`<div><span>${label}</span><strong>${value}</strong><small>${basis||''}</small></div>`).join('')}</div>`}
 export function empty(title){return panel(title,'<div class="empty"><strong>SELECT A STRATEGY RESULT</strong>Choose an account/run and select the strategy in this panel.<br>Waiting for a stored engine publication.</div>','Engine observations / read only')}
 

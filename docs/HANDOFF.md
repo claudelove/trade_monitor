@@ -4,6 +4,14 @@
 
 
 
+## 2026-11-05 terminal tables / legibility — current
+
+Common UI 0.6.0 / API 1 adds a dedicated table CSS layer, typed safe renderTable, strict number/percentage formatters and compatibility tableMarkup for trusted host-rendered action rows. Data/header/secondary sizes are 14/13/12px; body UI 13px and key supporting labels 11px. Amber identifiers, light primary values, explicit right-aligned numeric headers/cells, gray column headers, restrained row rules and darker blue selection replace inconsistent table rules. Red/blue values remain legible on highlighted rows. Disclosure headlines wrap instead of clipping. No fake table controls.
+
+Host adapters cover market/disclosures, native records, strategy positions/risk/contribution/correlation, account sleeve, fills/orders, stored book and OMS. Existing actions, filtering, raw ordering and source data remain. Missing numeric values never become zero; identifiers are text; percentage basis is explicit and PP is not multiplied by 100; timestamps remain source strings. Removed positional analysis-cell alignment and tiny execution-table override. New screens can use the same renderer without a function-number dependency.
+
+Local public ten UI suites, Python 37 and Pages boundary passed. Browser verified 14/13/12px sizes, numeric heading/body alignment, selected/hover red-blue contrast >=4.5:1, complete/wrapped headlines, empty/filter restoration, sticky headings and mobile contained horizontal scroll. All 29 registered screens opened twice without duplicates/mount/page errors or writes. Consumer evidence remains in its own handoff; remote deployment verification follows push.
+
 ## 2026-11-05 remove misleading header defaults — current
 
 The top SYMBOL and NEW PANE SOURCE fields changed only defaults for newly opened panes, while existing windows stay pinned. Removed those redundant controls and their handlers/contextOptions helper/CSS. GP retains its own symbol/source selectors. Explicit GP symbol commands fall back between existing stored and selected-run bars; invalid symbols reject without opening a pane. Non-GP market panes default to the canonical snapshot independently of GP run-bar defaults; this prevents hidden source state from emptying news/overview. No new API/provider or price data is introduced.

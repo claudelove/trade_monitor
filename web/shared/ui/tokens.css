@@ -17,14 +17,23 @@ screen modules own no shell geometry. */
   --muted:#9babb3;
   --accent:#ffad27;
   --yellow:#ffd04a;
-  --positive:#ff5151;
-  --negative:#4b8cff;
+  --positive:#ff7881;
+  --negative:#83baff;
   --function-bar:#a91c2c;
   --function-bar-active:#c12536;
   --selection:#155b94;
   --field:#ffad27;
   --field-text:#101820;
   --chrome:#243740;
+  --table-font-size:14px;
+  --table-header-size:13px;
+  --table-secondary-size:12px;
+  --table-line:#29434e;
+  --table-stripe:#061d27;
+  --table-hover:#102f43;
+  --table-selected:#123c59;
+  --table-positive-selected:#ffacb0;
+  --table-negative-selected:#b3d9ff;
   --font-ui:"Bergoom","Noto Sans CJK KR","Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;
   --font-family:var(--font-ui);
   --font-code:"IBM Plex Mono",Consolas,"Liberation Mono",monospace;
@@ -46,7 +55,7 @@ body {
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font:calc(12px * var(--ui-type-scale))/var(--ui-line-height) var(--font-ui);
+  font:calc(13px * var(--ui-type-scale))/var(--ui-line-height) var(--font-ui);
   letter-spacing:var(--ui-letter-spacing);
   word-spacing:var(--ui-word-spacing);
   font-variant-numeric:tabular-nums

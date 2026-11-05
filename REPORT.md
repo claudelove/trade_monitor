@@ -1,3 +1,7 @@
+## 2026-11-05 shared terminal tables and visibility
+
+Common table layer / renderer / explicit financial formatters unify headers, numeric alignment, 14/13/12px typography, row states and missing-value display. Identifier/clock/percentage-point semantics and source values remain. Common labels/readout contrast improve, disclosure headlines wrap, and smaller/positional overrides are removed. Browser contrast/filter/sticky/mobile and 29-screen checks passed; see HANDOFF/SHARED_UI.
+
 ## 2026-11-05 header cleanup
 
 Removed redundant global SYMBOL/SOURCE defaults; existing panes keep their own selectors. Empty account/strategy defaults are hidden, and meaningful strategy defaults are labelled explicitly. Commands retain stored/run fallback and invalid-symbol rejection through the existing API contract. See HANDOFF for validation.

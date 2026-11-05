@@ -29,7 +29,7 @@ no fixed-header overlap at narrow widths. */
 .connection {
   grid-column:3;
   grid-row:1;
-  font-size:calc(10px * var(--ui-type-scale,1));
+  font-size:calc(11px * var(--ui-type-scale,1));
   color:var(--muted)
 }
 .command-bar {
@@ -45,7 +45,7 @@ no fixed-header overlap at narrow widths. */
 }
 .command-bar label {
   color:var(--accent);
-  font-size:calc(10px * var(--ui-type-scale,1));
+  font-size:calc(11px * var(--ui-type-scale,1));
   padding:0 8px;
   font-weight:600
 }
@@ -64,7 +64,7 @@ no fixed-header overlap at narrow widths. */
   overflow:hidden;
   text-overflow:ellipsis;
   color:var(--muted);
-  font-size:calc(10px * var(--ui-type-scale,1));
+  font-size:calc(11px * var(--ui-type-scale,1));
   white-space:nowrap
 }
 nav {
@@ -129,10 +129,10 @@ header {
   gap:10px;
   min-width:0;
   color:var(--muted);
-  font-size:calc(10px * var(--ui-type-scale,1))
+  font-size:calc(11px * var(--ui-type-scale,1))
 }
 .header-right button {
-  font-size:calc(10px * var(--ui-type-scale,1));
+  font-size:calc(11px * var(--ui-type-scale,1));
   min-height:21px;
   padding:1px 7px
 }
@@ -148,7 +148,7 @@ header {
 }
 .banner {
   flex-shrink:0;
-  font-size:calc(10px * var(--ui-type-scale,1));
+  font-size:calc(11px * var(--ui-type-scale,1));
   color:#c0c0c0;
   border-bottom:1px solid #444;
   padding:4px 3px;
@@ -173,7 +173,7 @@ header {
 }
 .terminal-context label,.field-label {
   color:var(--muted);
-  font-size:calc(9px * var(--ui-type-scale,1));
+  font-size:calc(11px * var(--ui-type-scale,1));
   font-weight:600;
   letter-spacing:.5px;
   white-space:nowrap
@@ -182,11 +182,11 @@ header {
   max-width:290px;
   color:var(--field-text);
   background:var(--field);
-  font-size:calc(10px * var(--ui-type-scale,1))
+  font-size:calc(11px * var(--ui-type-scale,1))
 }
 #context-scope {
   color:var(--muted);
-  font-size:calc(9px * var(--ui-type-scale,1));
+  font-size:calc(11px * var(--ui-type-scale,1));
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap
@@ -197,7 +197,7 @@ footer {
   justify-content:space-between;
   padding:3px 2px;
   color:#64707c;
-  font-size:calc(9px * var(--ui-type-scale,1))
+  font-size:calc(11px * var(--ui-type-scale,1))
 }
 #toast {
   position:fixed;
