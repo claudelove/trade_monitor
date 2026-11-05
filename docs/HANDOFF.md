@@ -1,3 +1,7 @@
+# Latest 2026-11-06 — DATAFLOW0411
+
+Added the public-owned numbered data request/research-review/recording UI, CODE retrospective-dataset labelling, scoped form layout, exact operation allowlist and synthetic DOM checks. See DATAFLOW.md and releases/dataflow-1.json for the separately reviewed frontend release; the common package remains 0.7.0. Protected implementation is a separate host capability, not the legacy public Python server. Pages remains disconnected and rejects reads/writes for DATAFLOW without calling a private origin. No private engine/strategy/runtime files were copied here. Validation: all 13 UI suites, 37 public Python tests and the Pages boundary passed. A disposable protected host also exercised exact result selection and saved two synthetic recording owners; no real provider request or private production deployment. The release commit is the commit introducing this entry.
+
 # 작업 인계 — Catalyst
 
 ## 2026-11-05 financial display / execution-filter audit

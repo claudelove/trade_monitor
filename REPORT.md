@@ -1,3 +1,7 @@
+## 2026-11-06 DATAFLOW UI
+
+0411 DATAFLOW adds bounded server data-request and reviewed recording-policy forms, protected capability gating and state tables. CODE identifies retrospective datasets. No backend/credentials/live trade functionality is published. See docs/DATAFLOW.md; exact screen/CSS release manifest is docs/releases/dataflow-1.json.
+
 ## 2026-11-05 market table alignment
 
 Separated ticker/security columns, centered single-line quote rows, stabilized numeric column widths and bounded excessive table expansion. Dates use matching centered heading/cells; numbers stay right aligned. Shared table metadata now honors explicit alignment and pixel widths. Source data/units/chart routing unchanged; see HANDOFF for pixel-level browser validation.

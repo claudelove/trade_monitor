@@ -24,3 +24,12 @@
 [data-code-status] { padding:7px 10px; line-height:1.4; overflow-wrap:anywhere; }
 .strategy-diagnostic { display:block; width:100%; text-align:left; white-space:normal; color:#ffb0b4; padding:6px 10px; }
 @media(max-width:900px) { .strategy-workbench { grid-template-columns:1fr; }.strategy-editor-area .terminal-code-editor,.strategy-editor-area textarea.source-editor { height:360px; }.strategy-versions select { max-width:220px; } }
+
+/* DATAFLOW is an application form; shared typography/colors stay upstream. */
+.dataflow-controls { min-width:0; margin:8px; border:1px solid var(--border); }
+.dataflow-controls .management-form label { min-width:0; max-width:100%; }
+.dataflow-controls select { max-width:100%; }
+.dataflow-review > label { display:block; margin:8px; }
+.dataflow-review textarea { display:block; box-sizing:border-box; width:100%; min-height:80px; margin-top:5px; padding:7px; resize:vertical; border:1px solid var(--border); background:var(--panel); color:var(--text); }
+.dataflow-review > button { margin:0 8px 8px; }
+[data-flow-status] { padding:7px 8px; }

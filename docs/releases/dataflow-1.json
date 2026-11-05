@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "release": "dataflow-1",
+  "capability": "data-pipeline-1",
+  "files": {
+    "web/screens/0411-data-pipeline.js": "9ff509972e63ec6c6122c2dc482a56175352a775c065edf1995e566acbd15ffb",
+    "web/screens/0304-strategy-lab.js": "475c2f142a0c7de7c3b167d2f38d1edb029b9ceffd1f5d549e682a874bd7075f",
+    "web/workbench.css": "147af4f5ecfc38b136eebee2a461810d26601425fe10a440f84b22a6dafbb260"
+  },
+  "host_adapter": "engine-client keeps the three exact data-operation routes on a protected same origin; Pages blocks all operations"
+}
