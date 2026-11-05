@@ -4,6 +4,14 @@
 
 
 
+## 2026-11-05 remove misleading header defaults — current
+
+The top SYMBOL and NEW PANE SOURCE fields changed only defaults for newly opened panes, while existing windows stay pinned. Removed those redundant controls and their handlers/contextOptions helper/CSS. GP retains its own symbol/source selectors. Explicit GP symbol commands fall back between existing stored and selected-run bars; invalid symbols reject without opening a pane. Non-GP market panes default to the canonical snapshot independently of GP run-bar defaults; this prevents hidden source state from emptying news/overview. No new API/provider or price data is introduced.
+
+Account/run and strategy-default controls are shown only with actual data choices, outside Market/Admin; empty strategy defaults are hidden. Label/tooltip clarifies new-pane defaults and opt-in FOLLOW; per-pane independence and account publication behavior remain. Shared presentation 0.5.1 / API 1.
+
+Local public UI suites/Pages boundary/Python 37 passed. Controller regressions cover run→stored→run commands without global controls, unique GP reuse and preserved pinning. Browser checks cover absence of redundant globals, hidden empty context, command/local symbol changes, invalid symbols and mobile. Consumer-specific evidence remains in its own handoff; remote deployment verification follows push.
+
 ## 2026-11-05 interaction feedback and magnetic placement — current
 
 Shared UI 0.5.0 / API 1 adds restrained 90–110ms control/focus/search/open/desk feedback and respects reduced-motion. No drag/resize coordinate transition or delayed command; publication refresh does not replay a navigation reveal. Native charts remain mounted through chrome interactions.

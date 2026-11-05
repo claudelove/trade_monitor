@@ -65,11 +65,8 @@ function render(){
   if(!state.choices.length){const o=document.createElement('option');o.value='';o.textContent='NO STORED ACCOUNTS OR RUNS';selected.append(o)}
   selected.value=state.selectedPortfolio||'';selected.disabled=!state.choices.length;
   $('#context-run').innerHTML=ctx.entries.map(e=>`<option value="${esc(e.id)}" ${e.id===state.selectedRunId?'selected':''}>${esc(e.name)} · ${esc(e.state||'STATE UNREPORTED')}</option>`).join('')||'<option>NO STRATEGY</option>';
-  $('#context-run').disabled=!ctx.entries.length;
-  $('#context-symbol').innerHTML=terminal.contextOptions(market,state.runtime,state.symbol,null).symbols;
-  $('#context-symbol').disabled=!symbols.length;$('#market-source').value=state.marketSource;
-  $('#market-source option[value="run"]').disabled=!ctx.run;
-  $('#market-context').hidden=state.desk!=='market';$('#strategy-context').hidden=state.desk==='market'||state.desk==='admin';
+  $('#context-run').disabled=!ctx.entries.length;$('#context-run').hidden=!ctx.entries.length;$('label[for=context-run]').hidden=!ctx.entries.length;
+  $('.terminal-context').hidden=['market','admin'].includes(state.desk)||!state.choices.length;
   const current=screens.get(state.page);$('#crumb').textContent=current.title;
   $$('nav button').forEach(b=>b.classList.toggle('active',screens.get(b.dataset.page).desk===state.desk));
   const stamp=state.desk==='market'?market.as_of:ctx.account?.as_of||ctx.run?.curve.at(-1)?.timestamp;
@@ -117,8 +114,6 @@ $('nav').innerHTML=screens.navigation().map(s=>`<button data-page="${s.id}" titl
 $('nav').onclick=e=>{const b=e.target.closest('[data-page]');if(b)openTool(b.dataset.page)};
 $('#context-portfolio').onchange=e=>refresh(e.target.value);
 $('#context-run').onchange=e=>{state.selectedRunId=e.target.value;render()};
-$('#context-symbol').onchange=e=>{state.symbol=e.target.value;render()};
-$('#market-source').onchange=e=>{state.marketSource=e.target.value;state.symbol='';render()};
 $('#refresh').onclick=()=>refresh();
 const functionSearch=bindFunctionSearch($('#command-form'),{
   entries:()=>screens.list.filter(s=>s.kind==='screen').map(s=>({id:s.id,number:s.number,command:s.command,title:s.title,group:screens.home(s.desk).navLabel||s.desk,aliases:[...(s.aliases||[]),...(s.legacyNumbers||[])]})),
@@ -128,7 +123,11 @@ const functionSearch=bindFunctionSearch($('#command-form'),{
     if(!selected&&upper==='REFRESH'){refresh();return true}
     const direct=selected?null:screens.resolve(command),s=selected?selection&&screens.get(selection.id):direct||selection&&screens.get(selection.id);
     if(!s)throw Error('No matching function. Enter a screen number, command or name.');
-    if(s.id==='security'&&direct&&args.length&&!terminal.securities(displayMarket()).some(x=>x.symbol===args[0])&&nativeRun()?.market?.some(b=>b.symbol===args[0])){state.marketSource='run';if(state.desk==='market')render()}
+    if(s.id==='security'&&direct&&args.length){
+      const symbol=args.join(' ').toUpperCase();
+      const source=[...new Set([state.marketSource,'stored','run'])].find(source=>terminal.securities(source==='stored'?state.data:native.marketData(nativeRun())).some(item=>item.symbol===symbol));
+      if(source&&source!==state.marketSource){state.marketSource=source;if(state.desk==='market')render()}
+    }
     const params=direct?s.parseArgs?.(args,screenContext('page'))||{}:{};
     if(direct&&s.id==='security'&&args.length)params.marketSource=state.marketSource;
     openTool(s.id,params);$('#command-status').textContent=s.number+' / '+s.command;return true;

@@ -165,7 +165,7 @@ header {
   border-bottom:1px solid var(--border);
   padding:3px 2px
 }
-#strategy-context,#market-context {
+#strategy-context {
   display:flex;
   align-items:center;
   gap:7px;

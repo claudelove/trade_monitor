@@ -15,6 +15,7 @@ assert.equal(paneContext(changed,left,screen).nativeRun.id,'a','global defaults 
 assert.equal(paneContext(changed,right,screen).nativeRun.id,'b');
 left.followSelection=true;assert.equal(paneContext(changed,left,screen).nativeRun.id,'b');
 left.followSelection=false;assert.equal(paneContext(changed,left,screen).nativeRun.id,'a');
+assert.equal(paneContext(base,{}, {id:'market',desk:'market'}).marketSource,'stored','market overview stays on canonical data even when GP defaults to run bars');assert.equal(paneContext(base,{}, {id:'news',desk:'market'}).market,stored,'news is not redirected to empty historical run bars');
 const gp={id:'security',desk:'market'},p1={},p2={};
 const m1=paneContext(base,p1,gp),m2=paneContext(changed,p2,gp);
 assert.equal(m1.state.symbol,'SYNTHETIC');assert.equal(m2.state.symbol,'OTHER');

@@ -282,6 +282,7 @@
     "screens/catalog.js: generated using public repository script",
     "app.js/index.html: persistent shared function search, reviewed UI routing and removal of redundant shortcuts/hidden placeholders; preview labels retained",
     "window-workspace.js: unique function identity, legacy duplicate migration and incremental manual-window lifecycle",
-    "screens/views: removed retired repeatable flags and disabled unavailable chart selectors"
+    "screens/views: removed retired repeatable flags and disabled unavailable chart selectors",
+    "terminal-ui.js/app.js/index.html: remove retired global market defaults; keep per-pane selectors and stored/run command fallback"
   ]
 }

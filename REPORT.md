@@ -1,3 +1,7 @@
+## 2026-11-05 header cleanup
+
+Removed redundant global SYMBOL/SOURCE defaults; existing panes keep their own selectors. Empty account/strategy defaults are hidden, and meaningful strategy defaults are labelled explicitly. Commands retain stored/run fallback and invalid-symbol rejection through the existing API contract. See HANDOFF for validation.
+
 ## 2026-11-05 feedback and magnetic alignment
 
 Common UI 0.5.0 adds short, reduced-motion-aware control/window/desk feedback and optional magnetic drag/resize with guides. SNAP is configurable and browser-local; Alt bypasses and Escape rolls back. Other panes, native chart identity, manual geometry and data/API/execution boundaries are preserved. See HANDOFF/SHARED_UI for validation and contracts.

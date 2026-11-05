@@ -4,7 +4,7 @@ The public repository owns `packages/terminal-ui`. The private repository owns a
 
 ## Ownership and delivery
 
-`@trade-monitor/terminal-ui` version 0.5.0, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
+`@trade-monitor/terminal-ui` version 0.5.1, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
 
 The public source is canonical. `web/shared/` is generated for the public preview. The private application vendors the same bytes under `src/krx_system/monitoring/web/shared/`, pinned by a **full public commit SHA**, manifest SHA256, API major and per-file hashes in `terminal-ui.lock.json`. `scripts/sync_shared_ui.py --check` is offline and rejects drift. There is no automatic production download or silent branch tracking.
 
@@ -98,3 +98,11 @@ Common CSS adds 90–110ms color/border/opacity feedback for controls, pane focu
 `snapWindowGeometry(rect,{width,height,peers,edge,threshold=10,gap=4})` is pure normalized geometry with CSS-pixel thresholds. It aligns a moved/resized pane to canvas boundaries or peer edges/4px adjacency, returning `{geometry,guides}`. `bindWindowGeometry` adds optional `snapping`, `peers` and `onGuides` callbacks. Hosts own peers/preferences/persistence; the package has no registry/storage/API access. Only the active pointer gesture snaps; Alt bypasses, keyboard arrows remain precise. Resize preserves the opposite edge/minimum size. Cancel/Escape/blur/dispose rolls back and clears guides; arrow input cannot commit during an active pointer gesture.
 
 The bottom SNAP ON/OFF control is enabled by default and saves a browser-only boolean at `krx-terminal-snap-v1`. Hosts reload it on desk mount. This presentation preference is the explicit addition to geometry/screen-only persistence; no account/run/source payload is stored. Existing panes never retile or move as a side effect. Mobile <=700px hides the inactive snap control and preserves stacked layout.
+
+## Remove redundant market defaults, 0.5.1
+
+Removed the shell-only SYMBOL and NEW PANE SOURCE controls: existing panes pin their own selections, so changing those defaults did not change a visible chart. Symbol/source selection remains inside each GP pane. Explicit GP symbol commands can resolve current, stored or selected-run data using existing APIs; invalid symbols still fail without creating a pane. No provider fetch, financial-data synthesis or backend/API change.
+
+The account/default-strategy row appears only with actual account/run choices and outside Market/Admin. Strategy defaults are explicitly labelled and explained; pane FOLLOW semantics remain intact. Empty strategy defaults are hidden. Deleted unused global selector wiring/contextOptions and obsolete shared selector CSS. Shared update is presentation-only; functional routing remains host-owned.
+
+Non-GP market panes default to the canonical snapshot independently of GP historical-run defaults, so removing the global source field does not leave news/overview on a hidden historical source. GP retains per-pane source and strategy pinning.

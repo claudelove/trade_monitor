@@ -122,3 +122,7 @@
 
 - Use restrained 90–110ms control/focus/desk/open feedback with reduced-motion support; never animate drag coordinates or replay effects for publication refreshes.
 - Optional SNAP (default on): only the user's active moving/resizing pane aligns to workspace/peer boundaries or 4px adjacency within 10 CSS px. Alt bypasses; cancellation restores geometry/clears guides. Never restore automatic tiling. Keyboard movement stays precise. The browser may additionally persist the explicit presentation boolean krx-terminal-snap-v1; no financial payload persistence. Common UI 0.5.0 owns primitives/styles, application owns peer geometry and preference.
+
+## Remove misleading header defaults — latest user feedback (2026-11-05)
+
+- Do not restore top-level market SYMBOL/SOURCE defaults. GP panes own their selectors; explicit symbol commands resolve existing stored/run data. Account/strategy defaults appear only with actual choices, outside Market/Admin. Preserve per-pane pinning/FOLLOW, account publication boundaries and invalid-symbol rejection. Common presentation version 0.5.1.

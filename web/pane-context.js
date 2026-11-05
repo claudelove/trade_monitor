@@ -10,7 +10,7 @@ export function paneContext(base,pane,screen){
   if(scoped&&!pane.followSelection&&entries.length&&!entries.some(e=>e.id===pane.runId))pane.runId=base.strategy.entry?.id;
   const strategy=scoped?context(base.state.nativeReport,base.state.runtime,pane.followSelection?base.strategy.entry?.id:pane.runId):base.strategy;
   if(screen.desk==='market'){
-    pane.marketSource??=base.marketSource;
+    pane.marketSource??=screen.id==='security'?base.marketSource:'stored';
     const market=pane.marketSource==='run'?marketData(strategy.run):base.storedMarket;
     const symbols=securities(market);
     if(!symbols.some(s=>s.symbol===pane.symbol))pane.symbol=symbols.find(s=>s.symbol===base.state.symbol)?.symbol||symbols[0]?.symbol||'';

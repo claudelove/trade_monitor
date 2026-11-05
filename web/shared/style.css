@@ -14,7 +14,7 @@
   .terminal-context {
     flex-wrap:wrap
   }
-  #strategy-context,#market-context {
+  #strategy-context {
     flex-wrap:wrap
   }
   .terminal-context select {
