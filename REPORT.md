@@ -1,3 +1,7 @@
+## 2026-11-05 open-window shortcuts
+
+Added a bottom strip per workspace listing only open screens. Shortcuts focus existing panes, synchronize active/close state and support keyboard navigation without chart remounts. Shared style release 0.4.1; application geometry/data/strategy policies unchanged. See HANDOFF for validation.
+
 ## 2026-11-05 student-guide theme and function-search repair
 
 Reviewed all guide pages/embedded images; common UI 0.4.0 provides compact red function bars, navy surfaces, amber inputs, gray controls and blue selected suggestions. Consolidated search into the permanent command form. GP is now reused rather than spawned repeatedly, old duplicate layouts consolidate, and surviving chart DOM stays mounted during window chrome actions. Removed superseded UI/placeholders/flags. Public Python/UI/Pages checks and actual Chromium route/search/layout/mobile checks passed; see HANDOFF and TERMINAL_STYLE_GUIDE. No execution/data policy change.

@@ -4,6 +4,12 @@
 
 
 
+## 2026-11-05 per-desk open-window shortcut tabs — current
+
+User requested bottom shortcuts for open screens by major category. Each desk now has a compact bottom strip containing only its currently open functions (number/command; accessible full title). Clicking raises an existing pane, including one covered by another maximized pane; it does not open duplicates or remount surviving charts. Window focus and close synchronize active/remove state. Arrow keys/Home/End navigate; mobile overflows horizontally and reveals the selected pane. One-function identity, manual geometry and screen-only persistence remain unchanged. Shared UI 0.4.1 owns styles; local workspace owns entries/focus/lifecycle.
+
+Validation: public UI suites, Pages boundary/assets and Python 37 passed; workspace regression covers active state, keyboard, maximized switching, close and desk isolation. Actual Chromium passed desk isolation, open/close/reload tab synchronization, active focus, covered/maximized pane switching, keyboard Home, retained native chart canvas and desktop/mobile no horizontal overflow. Remote deployment verification follows after push. Consumer-specific evidence remains in its own repository.
+
 ## 2026-11-05 guide-based terminal chrome / GP search fix — current
 
 User-supplied student guide: all 28 pages / 31 embedded images reviewed. Shared UI 0.4.0 / API 1 applies navy reading surface, red function bars, amber editable fields, gray controls, thin window boundaries and blue selected results. See docs/TERMINAL_STYLE_GUIDE.md; Bergoom and actual domestic HTS chart semantics remain. The manual PDF/images are not added to this repository.

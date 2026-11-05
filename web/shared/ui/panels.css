@@ -626,3 +626,11 @@ dialog>p {
 .account-sleeves { max-height:180px; }.account-sleeves td { padding:4px 8px; }
 @container(max-width:900px) { .account-totals { grid-template-columns:repeat(3,minmax(0,1fr));row-gap:6px; } }
 .account-contributions { border-bottom:1px solid #666; }.account-contributions summary { cursor:pointer; background:#333; color:#ffb000; padding:4px 7px; font-size:calc(11px * var(--ui-type-scale,1)); }
+
+/* Open windows only, scoped to the host workspace. No function-launch menu here. */
+.window-tabs { display:flex; align-items:center; gap:6px; flex-shrink:0; min-width:0; min-height:29px; padding:2px 4px; border-top:1px solid var(--border); background:var(--chrome); position:sticky; bottom:0; z-index:40; }
+.window-tabs-label { flex-shrink:0; color:var(--muted); padding:0 5px; font-size:calc(10px * var(--ui-type-scale,1)); text-transform:uppercase; }
+.window-tabs-list { display:flex; align-items:stretch; gap:2px; min-width:0; overflow-x:auto; scrollbar-width:thin; }
+.window-tabs-list button { flex-shrink:0; white-space:nowrap; min-height:23px; padding:2px 9px; font-size:calc(11px * var(--ui-type-scale,1)); }
+.window-tabs-list button[aria-pressed=true] { background:var(--selection); color:#fff; border-bottom-color:var(--accent); }
+.window-tabs-empty { color:var(--muted); font-size:calc(10px * var(--ui-type-scale,1)); }

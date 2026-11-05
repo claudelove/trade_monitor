@@ -51,6 +51,40 @@ export class WindowWorkspace {
  raise(id){
   this.focused=id;this.order=this.order.filter(key=>key!==id&&this.panes.some(p=>p.id===key));this.order.push(id);
   for(const [key,{element}]of this.views){element.style.zIndex=String(this.order.indexOf(key)+1);element.classList.toggle('focused',key===id)}
+  this.root?.querySelectorAll('[data-window-tab]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.windowTab===id)));
+ }
+ selectPane(id,focusWindow=true){
+  const pane=this.panes.find(p=>p.id===id);if(!pane)return;
+  if(this.maximized&&this.maximized!==id){this.maximized=null;this.render()}
+  this.raise(id);
+  const element=this.views.get(id)?.element;
+  if(focusWindow)element?.querySelector('.window-titlebar').focus({preventScroll:true});
+  if(this.root?.ownerDocument.defaultView.innerWidth<=700)element?.scrollIntoView?.({block:'nearest',behavior:'auto'});
+ }
+ renderTabs(){
+  if(!this.root)return;
+  let bar=this.root.querySelector('[data-window-tabs]');
+  if(!bar){
+   bar=this.root.ownerDocument.createElement('div');bar.className='window-tabs';bar.dataset.windowTabs='';bar.setAttribute('role','toolbar');
+   const label=this.registry.home(this.profile)?.navLabel||this.profile;bar.setAttribute('aria-label',label+' open screens');
+   bar.innerHTML=`<span class="window-tabs-label">${escape(label)}</span><div class="window-tabs-list"></div><span class="window-tabs-empty">No open screens</span>`;
+   bar.onclick=event=>{const button=event.target.closest('[data-window-tab]');if(button)this.selectPane(button.dataset.windowTab)};
+   bar.onkeydown=event=>{
+    const buttons=[...bar.querySelectorAll('[data-window-tab]')],index=buttons.indexOf(event.target);
+    if(index<0||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+    event.preventDefault();event.stopPropagation();
+    const next=event.key==='Home'?0:event.key==='End'?buttons.length-1:(index+(event.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;
+    buttons[next].focus();this.selectPane(buttons[next].dataset.windowTab,false);
+   };
+   this.root.append(bar);
+  }
+  const list=bar.querySelector('.window-tabs-list');
+  list.querySelectorAll('[data-window-tab]').forEach(button=>{if(!this.panes.some(p=>p.id===button.dataset.windowTab))button.remove()});
+  for(const pane of this.panes){
+   if(list.querySelector('[data-window-tab="'+pane.id+'"]'))continue;
+   const screen=this.registry.get(pane.type),button=this.root.ownerDocument.createElement('button');button.type='button';button.dataset.windowTab=pane.id;button.textContent=screen.number+' '+screen.command;button.title=screen.title;button.setAttribute('aria-label',screen.number+' '+screen.title);list.append(button);
+  }
+  bar.querySelector('.window-tabs-empty').hidden=this.panes.length>0;
  }
  geometry(pane,element){
   const maximized=this.maximized===pane.id;
@@ -88,6 +122,8 @@ export class WindowWorkspace {
    }
    this.geometry(pane,view.element);
   }
+  this.renderTabs();
+  if(!this.panes.some(p=>p.id===this.focused))this.focused=this.order.at(-1)||this.panes.at(-1)?.id||null;
   if(this.focused)this.raise(this.focused);
  }
 }

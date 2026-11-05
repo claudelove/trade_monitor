@@ -1,3 +1,3 @@
 // Generated from package metadata.
 export const apiVersion=1;
-export const version="0.4.0";
+export const version="0.4.1";

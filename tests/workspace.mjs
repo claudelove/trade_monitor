@@ -20,7 +20,13 @@ const desktop=new WindowWorkspace(config);desktop.mount(root);assert.equal(root.
 assert.equal(root.querySelector('[data-screen-picker]'),null,'search belongs to permanent app shell');
 const oldBox={...desktop.panes[0]},first=root.querySelector('.tool-window');
 desktop.open('security','SYNTHETIC');const pane=desktop.panes.at(-1),find=()=>root.querySelector('[data-pane="'+pane.id+'"]');
-const chart=find();for(let i=0;i<6;i++)desktop.open('security');
+const chart=find(),tabs=()=>root.querySelectorAll('[data-window-tab]');
+assert.equal(tabs().length,2);assert.match(root.querySelector('[data-window-tabs]').getAttribute('aria-label'),/Market/);
+const firstTab=root.querySelector('[data-window-tab="'+desktop.panes[0].id+'"]'),chartTab=root.querySelector('[data-window-tab="'+pane.id+'"]');
+firstTab.click();assert.equal(desktop.focused,desktop.panes[0].id);assert.equal(firstTab.getAttribute('aria-pressed'),'true');assert.equal(find(),chart);assert.equal(mounts,2);
+firstTab.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));assert.equal(desktop.focused,pane.id);assert.equal(w.document.activeElement,chartTab);assert.equal(chartTab.getAttribute('aria-pressed'),'true');
+find().querySelector('[data-window-action=maximize]').click();firstTab.click();assert.equal(desktop.maximized,null,'tab reveals a pane covered by another maximized pane');assert.equal(find(),chart);assert.equal(root.querySelector('.tool-window'),first);chartTab.click();
+for(let i=0;i<6;i++)desktop.open('security');
 assert.equal(root.querySelectorAll('[data-tool=security]').length,1,'repeated GP never spawns charts');assert.equal(find(),chart,'reusing a function keeps its DOM');assert.equal(mounts,2);
 assert.deepEqual(desktop.panes[0],oldBox);assert.equal(root.querySelector('.tool-window'),first);
 find().querySelector('[data-window-action=maximize]').click();assert.equal(find(),chart);assert.ok(find().classList.contains('is-maximized'));desktop.open('security');assert.ok(find().classList.contains('is-maximized'),'reopening focused GP retains maximize state');
@@ -35,9 +41,10 @@ pointer(title,'pointerdown',100,100);pointer(w.document,'pointermove',0,0);w.doc
 desktop.raise(desktop.panes[0].id);title.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(desktop.focused,pane.id);assert.ok(Number(find().style.zIndex)>Number(first.style.zIndex));title.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(find(),chart);
 assert.ok(!w.localStorage.getItem(desktop.storageKey).includes('SYNTHETIC'));
 const restored=new WindowWorkspace(config);assert.equal(restored.panes.length,2);assert.equal(restored.panes.at(-1).symbol,undefined);for(const k of ['x','y','w','h'])assert.ok(Math.abs(restored.panes.at(-1)[k]-resized[k])<1e-12);
-find().querySelector('[data-window-action=close]').click();assert.equal(root.querySelectorAll('.tool-window').length,1);assert.equal(root.querySelector('.tool-window'),first);assert.deepEqual(desktop.panes[0],oldBox);assert.equal(disposals,1,'closing disposes only that panel');
+find().querySelector('[data-window-action=close]').click();assert.equal(root.querySelectorAll('.tool-window').length,1);assert.equal(root.querySelector('.tool-window'),first);assert.deepEqual(desktop.panes[0],oldBox);assert.equal(disposals,1,'closing disposes only that panel');assert.equal(tabs().length,1);assert.ok(![...tabs()].some(button=>button.dataset.windowTab===pane.id));
 desktop.open('security','OTHER');assert.equal(mounts,3);desktop.open('security','NEXT');assert.equal(mounts,4);assert.equal(disposals,2);assert.equal(root.querySelector('.tool-window'),first);
 desktop.dispose();assert.equal(mounts,disposals);
+const otherRoot=w.document.createElement('div');w.document.body.append(otherRoot);const other=new WindowWorkspace({...config,profile:'analysis'});other.mount(otherRoot);assert.ok(!otherRoot.querySelector('[data-window-tabs]').textContent.includes('GP'),'desk shortcuts stay separate');assert.match(otherRoot.querySelector('[data-window-tabs]').getAttribute('aria-label'),/Analytics/);otherRoot.querySelector('[data-window-action=close]').click();assert.equal(otherRoot.querySelectorAll('[data-window-tab]').length,0);assert.equal(otherRoot.querySelector('.window-tabs-empty').hidden,false);other.dispose();
 w.localStorage.setItem(desktop.storageKey,JSON.stringify([{id:'pane-1',type:'security',x:.9,y:.9,w:.1,h:.1},{id:'pane-2',type:'security',x:0,y:0,w:.5,h:.5}]));
 const migrated=new WindowWorkspace(config);assert.equal(migrated.panes.length,1,'old duplicate GP layouts are consolidated');assert.equal(migrated.panes[0].x,.9);migrated.open('security');assert.equal(migrated.panes.length,1);assert.equal(JSON.parse(w.localStorage.getItem(desktop.storageKey)).length,1);
 w.localStorage.setItem(desktop.storageKey,'[{"id":"<img>","type":"security","x":0,"y":0,"w":1,"h":1}]');assert.equal(new WindowWorkspace(config).panes.length,1);
