@@ -1,5 +1,9 @@
 # 작업 인계 — Catalyst
 
+## 2026-11-05 default editable strategy skeleton — latest correction
+
+Replaced the prose GUIDE with actual prefilled Python and TOML in CODE 0304. The source exposes signal, target_weights, exit_policy, risk_policy and create_strategy; the policy includes universe/capital, all current risk caps and execution cost/IOC assumptions. Default signal returns None. Starter instrument/costs/limits are explicitly placeholders. INSERT SKELETON restores both editors with confirmation before replacing any differing code, including a loaded saved version. Nullish initialization preserves existing/explicitly empty edits across remounts. Removed unused prose-guide module/styles. No backend or execution contract change. Targeted operations DOM checks and Python syntax/manifest validation passed.
+
 ## 2026-11-05 code workspace and strategy-input event monitoring — current
 
 Strategy desk reduced to CODE 0304 and BTRESULT 0302. Python + TOML editor, inline actual-v1 guide, version save/load, exact registered-source review/backtest, own completed-result routing and memory-only unsaved edits. Retired 0301/0303/0305 descriptors are removed; legacy commands/numbers/layouts migrate to CODE. Market QUOTE adds sample coverage; EVENTMON 0203 replaces headline-only reading with news/disclosure input checks, filters and configurable event/price ages. No fake semantic signals, event returns, broad-market breadth or live readiness. See WORKSPACE_PURPOSES.md for purpose-by-function and strategy-family requirements from the user-provided primer.

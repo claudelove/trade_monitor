@@ -62,7 +62,7 @@
   "views/event-monitor.js",
   "views/execution.js",
   "views/performance.js",
-  "views/strategy-authoring-guide.js",
+  "views/strategy-skeleton.js",
   "window-workspace.js",
   "workbench.css"
 ]

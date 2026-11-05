@@ -7,7 +7,7 @@
 | Portfolio | Where are capital, PnL and risk concentrated? | Existing shared-account NAV, strategy contribution, holdings, gross/net exposure and risk views. Independent runs must not be summed into an account. |
 | Market / 0201 QUOTE | What prices and source coverage are available? | Stored sample quotes and sample-only up/down/flat counts; not market-wide breadth or real-time health. |
 | Market / 0203 EVENTMON | Can this source event be aligned to strategy inputs? | News + disclosures, occurrence/receipt/availability clocks, revision/correction, symbol, age thresholds and latest timed price checks. Missing data is explicit. No semantic signal or event-return model is inferred. TOP/NEWS remain aliases. |
-| Strategy / 0304 CODE | What exact code and policy are being reviewed? | Python/policy editor, inline guide, protected-server version save/load and exact registered-code historical execution. |
+| Strategy / 0304 CODE | What exact code and policy are being reviewed? | Python/policy editor, editable default skeleton, protected-server version save/load and exact registered-code historical execution. |
 | Backtest / 0302 BTRESULT | What happened under declared historical assumptions? | Existing stored-result analysis; completed editor jobs open their own result. It is a separate numbered module, currently accessed within the Strategy desk. |
 | Analytics / Execution / Administration | What evidence, order state and operational configuration exist? | Existing supporting functions remain; no new placeholder screens were added. |
 
@@ -26,7 +26,7 @@ Only existing source-backed measures may be displayed. Beta/factors, borrow, fun
 
 ## Authoring and execution boundary
 
-A version consists of Python source plus TOML universe/capital/risk/execution settings. The guide documents actual bar API v1, the signal/sizing/exit policy owned by Python, mandatory engine/account caps and current historical IOC/cost assumptions. It explicitly lists the unimplemented full-operation requirements: limit/TTL/amend/cancel policy, market sessions, stale-data response, fill/UNKNOWN callbacks, reconciliation, restart state, kill/flatten and hedge management. These are not invented working configuration keys.
+A version consists of Python source plus TOML universe/capital/risk/execution settings. Starter comments document actual bar API v1, the signal/sizing/exit policy owned by Python, mandatory engine/account caps and current historical IOC/cost assumptions. It explicitly lists the unimplemented full-operation requirements: limit/TTL/amend/cancel policy, market sessions, stale-data response, fill/UNKNOWN callbacks, reconciliation, restart state, kill/flatten and hedge management. These are not invented working configuration keys.
 
 The protected server accepts inert drafts using GET/POST /api/strategy-lab/code-drafts and GET /api/strategy-lab/code-drafts/{version}. Save parses Python syntax and validates the TOML; it does not import/execute/register code. The combined content hash identifies immutable versions. Existing registered-source/hash review remains necessary before Python workers may run. Full automatic operation and broker transport are not delivered by this change.
 
