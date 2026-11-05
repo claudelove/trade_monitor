@@ -1,6 +1,6 @@
 {
   "name": "@trade-monitor/terminal-ui",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "api_version": 1,
   "files": {
     "bridges.json": "b75f53f1e42317cab061392e0c5141020f7727d717a147dd285b620c56be47d9",
@@ -12,7 +12,7 @@
     "licenses/lightweight-charts/LICENSE": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
     "licenses/lightweight-charts/NOTICE": "f76c6afab94884448f0426e30d6e9d555ca7247894cd3484e477d2f87513036e",
     "licenses/lightweight-charts/provenance.json": "875e151eccf44eb9ffe371cadfd58e0194b9e011511df545d5b215c281917683",
-    "package.json": "b0db20c70aaa489896517e4afc803babf52ad8056c567b090c1b4fdc34589778",
+    "package.json": "ef3e90f3cc891cfacaa601fe8597907e878053d461ccd0a9f0b53bce1970cee2",
     "src/charts/chart.css": "1a792aff4a77cd3d476ecb710c19e072f9f5eab3c5a91cef08df5aea9526ce55",
     "src/charts/model.js": "eee166daebd58378f7d58d2e43a2ba232d571073f024fef92b9f7065a90c034e",
     "src/charts/native-chart.js": "e27aaacb57d86e5b78fbca984365677467d4b07a31c56beb2864c443b6433682",
@@ -38,10 +38,10 @@
     "src/ui/panels.css": "a3a6be617f04a621bfafd99dbb90524b72bb93429cb995b798cc7bef884bb6f5",
     "src/ui/shell.css": "75c1a50e73d1449e252fff5c2f0d764a14703e59a76bcd01afd336a25e0b45ec",
     "src/ui/table.js": "baabbe89dde1aa7afc2d9c45495cb8966f43db4f63ea5d814bc8392da7c15551",
-    "src/ui/tables.css": "b5002a293ad6f8ac82ebfd6fbd4a1ff2553f552ba48bc6e8c62d7d91c038631b",
+    "src/ui/tables.css": "5a4efd0940112ae6ca0a24ea5f5054e16c647b3f371ee39965ef8ecc0aead1e7",
     "src/ui/theme.js": "71747aa812de06ffa59277f77bada58d13cd56752cb70dabf9568fd71297e775",
     "src/ui/tokens.css": "351a5d118720867f813672f99e4d9f06354ef1ca07c0b950a5b074e94aca73c2",
     "src/ui/window-actions.js": "bfc1de892cec0fcde06a889bbb968a5b47e74b088f7cf6a2f558992195fe1b3e",
-    "src/version.js": "23b8d7be4a91657c32ff0b292cc0934941b8af80984bfebbe532356efcae6f49"
+    "src/version.js": "3e23951a9b046c2e9d7051c3b115f0373328d1eac98ba9efe0d8a0e7ad12587a"
   }
 }

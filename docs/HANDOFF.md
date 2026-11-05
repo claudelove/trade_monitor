@@ -4,6 +4,10 @@
 
 
 
+## 2026-11-05 table body column separators — current
+
+Shared UI 0.6.1 adds 1px vertical rules between body cells, aligned with existing header divisions. Last cells omit the right rule to avoid a doubled outer edge. Shared table styles apply across all desks, including dynamic rows; source data/formatters/geometry remain unchanged. Public ten UI suites, Python 37 and Pages asset checks passed. Actual Chromium confirmed 1px body dividers and no last-cell outer divider. Deployment evidence follows push.
+
 ## 2026-11-05 terminal tables / legibility — current
 
 Common UI 0.6.0 / API 1 adds a dedicated table CSS layer, typed safe renderTable, strict number/percentage formatters and compatibility tableMarkup for trusted host-rendered action rows. Data/header/secondary sizes are 14/13/12px; body UI 13px and key supporting labels 11px. Amber identifiers, light primary values, explicit right-aligned numeric headers/cells, gray column headers, restrained row rules and darker blue selection replace inconsistent table rules. Red/blue values remain legible on highlighted rows. Disclosure headlines wrap instead of clipping. No fake table controls.

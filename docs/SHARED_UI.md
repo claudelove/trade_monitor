@@ -4,7 +4,7 @@ The public repository owns `packages/terminal-ui`. The private repository owns a
 
 ## Ownership and delivery
 
-`@trade-monitor/terminal-ui` version 0.6.0, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
+`@trade-monitor/terminal-ui` version 0.6.1, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
 
 The public source is canonical. `web/shared/` is generated for the public preview. The private application vendors the same bytes under `src/krx_system/monitoring/web/shared/`, pinned by a **full public commit SHA**, manifest SHA256, API major and per-file hashes in `terminal-ui.lock.json`. `scripts/sync_shared_ui.py --check` is offline and rejects drift. There is no automatic production download or silent branch tracking.
 
@@ -116,3 +116,5 @@ Non-GP market panes default to the canonical snapshot independently of GP histor
 `tableMarkup(columns,rowHTML,options)` is a compatibility wrapper for already escaped/trusted host-rendered action rows. Prefer renderTable for new screens; never pass external raw HTML to tableMarkup. `bodyId`/keepEmpty allow existing disclosure filters to retain their live tbody even when there are no matches. Units, schemas, sorting/order and API lookup remain host-owned. No invented sorting/pagination controls or financial-calculation changes.
 
 Market, disclosure, native-report, strategy/holdings/risk/correlation, account sleeve, execution, stored book and OMS adapters adopt explicit numeric metadata/formatters while preserving source values, callbacks and partial/unavailable states. Modern browsers with :has support are the UI target.
+
+0.6.1 adds 1px body-column separators using --table-column-line (fallback #3b535f); the last cell has no right border, avoiding a doubled outer edge. Applies to all shared table bodies, including live-updated rows. No formatter, data or interaction changes.
