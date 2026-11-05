@@ -34,11 +34,8 @@
   "screens/0204-monitor.js",
   "screens/0206-watchlist.js",
   "screens/0290-event-detail.js",
-  "screens/0301-backtest-execution.js",
   "screens/0302-backtest-results.js",
-  "screens/0303-strategies.js",
   "screens/0304-strategy-lab.js",
-  "screens/0305-python-registry.js",
   "screens/0401-correlation.js",
   "screens/0402-diagnostics.js",
   "screens/0403-sources.js",
@@ -62,7 +59,10 @@
   "ui/shell.css",
   "ui/strategy-common.js",
   "ui/tokens.css",
+  "views/event-monitor.js",
   "views/execution.js",
   "views/performance.js",
-  "window-workspace.js"
+  "views/strategy-authoring-guide.js",
+  "window-workspace.js",
+  "workbench.css"
 ]

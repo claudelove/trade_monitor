@@ -1,0 +1,6 @@
+/* Application screen layout; shared typography and table tokens remain upstream. */
+.event-input-table { min-width:1326px; table-layout:fixed; }
+.event-input-table td { vertical-align:top; }
+.event-monitor-toolbar input[type=number] { width:70px; min-width:60px; }
+[data-code-guide-body] { max-height:640px; overflow:auto; }
+[data-code-guide-body] pre { white-space:pre-wrap; overflow-wrap:anywhere; }

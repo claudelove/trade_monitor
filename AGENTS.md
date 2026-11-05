@@ -134,3 +134,9 @@
 ## Market quote alignment — latest user feedback (2026-11-05)
 
 - Common UI 0.6.2 quote preset: separate ticker/name, one-line 30px rows with vertical centering, left identifiers, right numerics, centered source date/time and stable column widths. Preserve ticker identity/actions and narrow-pane horizontal scrolling. Do not revert to two-line quote identifiers or stretch every numeric column across wide windows; other tables keep their own row layout. Explicit column align overrides numeric defaults.
+
+## Strategy authoring and event-input monitoring — latest user direction (2026-11-05)
+
+- User requested removal of redundant strategy screens, browser code authoring with risk/execution guidance and source-event monitoring for strategies. See docs/WORKSPACE_PURPOSES.md. Scoped application/UI work is shared across both hosts; backend inert draft storage belongs only to the private engine. This supersedes earlier blanket prohibitions on receiving browser code text, but never enables arbitrary source execution or public private-data export.
+- Strategy desk has CODE/BTRESULT only; guide is inline. Preserve module-per-function, legacy routing/layout migration, source-version identities and reviewed registry-only execution. Unsaved code stays in pane memory; no financial/source payload localStorage.
+- Read the user-provided hedge-fund primer as background; price/event availability, multi-leg/portfolio risk and actual data support govern monitoring. Do not create dummy strategy-family screens or treat historic examples as live assumptions.

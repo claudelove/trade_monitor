@@ -10,7 +10,7 @@ export async function api(path,{signal}={}){
     throw Error(`${response.status===403?'Check the authorized source IP and host':detail||'Query failed'} (${response.status})`)}
   return response.json();
 }
-const operations=new Set(['/api/access/rotate','/api/strategy-lab/validate','/api/strategy-lab/drafts','/api/strategy-lab/run','/api/strategy-lab/run-python','/api/analysis/run','/api/paper/jobs']);
+const operations=new Set(['/api/strategy-lab/code-drafts','/api/access/rotate','/api/strategy-lab/validate','/api/strategy-lab/drafts','/api/strategy-lab/run','/api/strategy-lab/run-python','/api/analysis/run','/api/paper/jobs']);
 export async function operation(path,body,{signal}={}){
   if(isPreview())return previewOperation();
   if(!operations.has(path))throw Error('Operation is not in the terminal allowlist');

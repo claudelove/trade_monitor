@@ -15,6 +15,13 @@ const single=native.parseNativeReport(nativeRun());assert.equal(single.account,n
 const badBar=nativeRun();badBar.market[0].high=1;assert.throws(()=>native.parseNativeReport(badBar));
 const malicious=nativeRun();malicious.id='<img src=x onerror=alert(1)>';assert.ok(native.runView(malicious).includes('&lt;img'));
 const dom=new JSDOM('<div id="desktop"></div>',{url:'https://example.test/'}),w=dom.window,root=w.document.querySelector('#desktop');
+w.localStorage.setItem('krx-terminal-layout-v2-backtest',JSON.stringify([
+ {id:'pane-1',type:'python-registry',x:.1,y:.2,w:.5,h:.5},
+ {id:'pane-2',type:'strategies',x:.2,y:.2,w:.5,h:.5},
+ {id:'pane-3',type:'backtest-results',x:.3,y:.1,w:.6,h:.7}
+]));
+const authoringMigration=new WindowWorkspace({profile:'backtest',storage:w.localStorage,content:()=>'',bind:()=>()=>{}});
+assert.deepEqual(authoringMigration.panes.map(p=>p.type),['strategy-lab','backtest-results']);assert.equal(authoringMigration.panes[0].x,.1);assert.equal(authoringMigration.panes[1].w,.6);
 let mounts=0,disposals=0;const config={profile:'market',storage:w.localStorage,content:p=>'<p>'+p.type+'</p>',bind:()=>{mounts++;return ()=>disposals++}};
 const desktop=new WindowWorkspace(config);desktop.mount(root);assert.equal(root.querySelectorAll('.tool-window').length,1);
 assert.equal(root.querySelector('[data-screen-picker]'),null,'search belongs to permanent app shell');

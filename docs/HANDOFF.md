@@ -1,5 +1,12 @@
 # 작업 인계 — Catalyst
 
+## 2026-11-05 code workspace and strategy-input event monitoring — current
+
+Strategy desk reduced to CODE 0304 and BTRESULT 0302. Python + TOML editor, inline actual-v1 guide, version save/load, exact registered-source review/backtest, own completed-result routing and memory-only unsaved edits. Retired 0301/0303/0305 descriptors are removed; legacy commands/numbers/layouts migrate to CODE. Market QUOTE adds sample coverage; EVENTMON 0203 replaces headline-only reading with news/disclosure input checks, filters and configurable event/price ages. No fake semantic signals, event returns, broad-market breadth or live readiness. See WORKSPACE_PURPOSES.md for purpose-by-function and strategy-family requirements from the user-provided primer.
+
+Protected-engine integration uses inert code-draft storage; the public host does not implement or connect to a private engine. Full live policy/runtime, broker dispatch, semantic extraction and event-to-strategy consumption tracking remain unfinished. Shared library stays 0.6.2; no font/chart dependency churn. Validation: both 11-suite UI checks passed before the final layout refinements; affected operation/workspace/event checks were repeated afterward. Public Pages boundary and 37 Python tests passed. Chromium checked editor tabs/guide, legacy unique routing, no outgoing preview writes, event filtering and mobile containment. Consumer backend verification is recorded only in its own handoff. Private production deployment and live trading were not performed.
+
+
 갱신일: 2026-11-04 (KST)
 
 

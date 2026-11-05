@@ -9,13 +9,13 @@ assert.match(html,/lang="en" data-hosting="pages"/);assert.ok(!html.includes('="
 const dom=new JSDOM(html,{url:'https://example.invalid/trade_monitor/'});globalThis.document=dom.window.document;
 const prior=globalThis.fetch,calls=[];
 globalThis.fetch=async(url,options)=>{calls.push([String(url),options]);assert.ok(!options?.method,'no POST from public preview');assert.ok(String(url).endsWith('/data/live.json'));return {ok:true,json:async()=>JSON.parse(readFileSync('dist/assets/data/live.json'))}};
-assert.equal(screens.navigation().length,6);assert.equal(screens.list.length,36);
+assert.equal(screens.navigation().length,6);assert.equal(screens.list.length,33);
 const client=new EngineClient(),value=await client.load();assert.deepEqual(value.choices,[]);assert.equal(value.report,null);assert.equal(value.marketError,null);assert.equal(Object.keys(value.data.prices).length,12);assert.equal(value.data.events.length,502);
 value.data.events=[];assert.equal((await api('/api/monitor/snapshot')).events.length,502,'preview returns clones');
 const record=(await api('/api/monitor/snapshot')).events[0],detail=await api('/api/data/events/'+record.id);assert.equal(detail.event.received_at,null);assert.equal(detail.event.available_at,null);assert.equal(detail.event.payload.title,record.title);
 await assert.rejects(api('/api/access'),/Public UI preview/);await assert.rejects(api('/api/data/events?kind=BOOK_SNAPSHOT'),/Public UI preview/);
 const catalog=await api('/api/strategy-lab/catalog');assert.deepEqual(catalog.registered_python,[]);assert.deepEqual(catalog.datasets,[]);assert.equal(catalog.template,'');
-for(const path of ['/api/access/rotate','/api/strategy-lab/run','/api/strategy-lab/drafts','/api/analysis/run'])await assert.rejects(operation(path,{private:'NEVER_SEND'}),/disabled on GitHub Pages/);
+for(const path of ['/api/access/rotate','/api/strategy-lab/code-drafts','/api/strategy-lab/run','/api/strategy-lab/drafts','/api/analysis/run'])await assert.rejects(operation(path,{private:'NEVER_SEND'}),/disabled on GitHub Pages/);
 assert.equal(calls.length,1,'only the public snapshot was fetched; no private service requests');
 const runtime=JSON.parse(readFileSync('dist/assets/data/runtime-state.json'));assert.deepEqual(runtime.runs,[]);assert.deepEqual(runtime.strategies,[]);
 for(const f of ['bergoom/LICENSE.md','lightweight-charts/LICENSE','lightweight-charts/NOTICE','ibm-plex-mono/LICENSE'])assert.ok(existsSync('dist/third_party/'+f));

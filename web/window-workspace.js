@@ -15,7 +15,8 @@ export class WindowWorkspace {
    const saved=JSON.parse(storage.getItem(this.storageKey));
    if(!Array.isArray(saved)||saved.length>12)throw Error('Invalid layout');
    const ids=new Set(),types=new Set();this.panes=[];
-   for(const p of saved){
+   for(const stored of saved){
+    const p={...stored};if(profile==='backtest'&&['strategies','python-registry','backtest-execution'].includes(p.type))p.type='strategy-lab';
     if(!Object.hasOwn(this.tools,p.type)||typeof p.id!=='string'||!/^pane-\d+$/.test(p.id)||ids.has(p.id)||!['x','y','w','h'].every(k=>Number.isFinite(p[k])))throw Error('Invalid pane');
     ids.add(p.id);
     // Earlier releases persisted repeated copies of GP/PERF. Keep one function per desk.

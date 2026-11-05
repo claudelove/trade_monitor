@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {assessEvent,eventMonitor,eventTime,marketCoverage} from '../web/views/event-monitor.js';
+const now=Date.parse('2026-11-05T08:00:00Z');
+const event={id:'id',ticker:'005930',source:'SOURCE',revision:'2',occurred_at:'2026-11-05T07:40:00Z',received_at:'2026-11-05T07:41:00Z',available_at:'2026-11-05T07:42:00Z',title:'<unsafe>',correction:true};
+const prices={'005930':[{timestamp:'2026-11-05T07:50:00Z',close:100}]};
+assert.equal(eventTime('2026-11-05'),null);
+assert.deepEqual(assessEvent(event,prices,{now}).issues,[]);
+assert.equal(assessEvent(event,prices,{now}).latency,60);
+assert.ok(assessEvent({...event,available_at:null},prices,{now}).issues.includes('MISSING CLOCKS'));
+assert.ok(assessEvent({...event,available_at:'2026-11-05T09:00:00Z'},prices,{now}).issues.includes('FUTURE CLOCK'));
+assert.ok(assessEvent({...event,received_at:'2026-11-05T07:45:00Z'},prices,{now}).issues.includes('CLOCK ORDER'));
+assert.ok(assessEvent(event,{'005930':[{date:'2026-11-05'}]},{now}).issues.includes('PRICE TIME UNKNOWN'));
+assert.ok(assessEvent(event,prices,{now,eventMinutes:1}).issues.includes('STALE EVENT'));
+assert.ok(assessEvent(event,{'005930':[{timestamp:'2026-11-05T07:41:00Z'}]},{now}).issues.includes('NO POST-EVENT BAR'));
+const data={news:[event],events:[],prices};
+const html=eventMonitor(data,{now});assert.ok(html.includes('&lt;unsafe&gt;'));assert.ok(html.includes('CORRECTION'));assert.ok(html.includes('not trading approval'));assert.ok(eventMonitor(data,{now,gaps:true}).includes('No source events match'));
+assert.ok(marketCoverage(data).includes('1 price series'));assert.ok(marketCoverage(data).includes('no market-wide breadth'));
+console.log('Event monitoring: causal clocks, source gaps, configurable age, price linkage, safe text and bounded-sample labels passed.');
