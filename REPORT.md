@@ -1,10 +1,8 @@
 ## 2026-11-05 shared visual library
 
-Public packages/terminal-ui 0.1.0 / API 1 now owns typography/CSS/chart engines/DOM/window actions. Existing public/private frameworks use generated compatibility adapters; function numbers, engine clients, screen descriptors and financial policies are independent. Private app.js, APIs, screen modules, strategies and Python engine are unchanged.
+Public packages/terminal-ui 0.1.0 / API 1 owns typography, CSS, chart rendering and generic DOM/window actions. The public demo consumes it through a manifest-verified local bundle. Application functions, API/data and financial policies remain outside the library.
 
-Public b9f883ad4021ff5e5e2b3055ece6ff754d9b77cd passed Actions 41933965746 and deployed; public JS/CSS/version bytes verified. Local public Python 37 passed, eight UI suites in each app passed, actual Chromium showed common font/scale/tracking affecting DOM metrics and native canvas in both apps. Private isolated core discovered 120 tests with HTTP active: 110 passed, 10 optional/unconfigured skipped. Wheel/static package parity and syntax passed. Host-inherited MCP v1 was incompatible with the project's v2 extra; isolated core validation used no engine modifications.
-
-Private consumer successfully downloaded and verified that exact public commit; local commit 53439bf is reviewable and source-only. Automatic approval review rejected private-main push because the prior explicit no-private-push instruction was not superseded by explicit remote-push permission. No private remote writes occurred. Private integration CI awaits user permission to push; local work is preserved in /workspace/krx_hedgefund and next steps are recorded in docs/HANDOFF.md.
+Public commit b9f883ad4021ff5e5e2b3055ece6ff754d9b77cd passed public Actions 41933965746 and deployed. Public Python 37 tests, UI contracts, actual-browser typography/chart checks, preview privacy boundary and installed asset hashes passed. The user's direct reply resolved the prepared consumer update's authorization question. Consumer-specific commit/test records belong in its own handoff and are deliberately omitted from this public report.
 
 ## 2026-11-05 UI-only upstream import — current direction
 
