@@ -1,5 +1,14 @@
 # 작업 인계 — Catalyst
 
+## 2026-11-05 financial display / execution-filter audit
+
+Reviewed all 26 user-facing functions in the deployed public preview and a separate synthetic protected host. Fixed source-decimal book prices (0405) and OMS limit prices (0503) displaying as missing because the generic shared number formatter intentionally rejects strings. New ui/exact-decimal.js is a schema-specific display adapter: exact string grouping/scientific expansion, no floating-price conversion, no identifier coercion, no input mutation. The canonical API decimal contract stays unchanged. Numeric cells retain semantic alignment.
+
+Execution 0501 adds the actual `unfilled` order state to its filter. FILLS 0502 has no order-state selector and ignores stale order-state filters; fill records do not carry an order status. No invented filled field, order mutation or live connection was introduced. Shared package/font/chart bytes are unchanged; numbered screen/view sources are canonical here and are consumed as reviewed copies by the protected host.
+
+Validation: public Python 37 pass, all 12 UI suites pass, Pages no-private-request/no-write/no-invented-clock boundary pass. Browser on an isolated synthetic host verified price values rather than dashes, unknown continuity/session preserved and raw evidence opening. Source-only UI fixes and synthetic tests are published; private engine/strategy/account artifacts are not. No production private deployment or brokerage order occurred.
+
+
 ## 2026-11-05 actual strategy workbench — current
 
 Replaced the textarea-only authoring flow with offline CodeMirror (shared UI 0.7.0 / API 1), typed bar-v1 contract and an explicitly selected runnable synthetic reference. Current-content validate/save/backtest is primary; no manual local registry step is needed for an administrator's explicit exact-version historical request. Draft save allows incomplete edits without execution. Validation has source positions and effective policy settings; incomplete hooks fail. Status/error, own result, real worker stop and recent-job recovery are connected. Source/data edits invalidate review; stale responses cannot launch a changed input. Desk transitions preserve editor text/undo/selection in pane memory. See STRATEGY_WORKBENCH.md.

@@ -4,7 +4,7 @@ Strategy CODE 0304 now uses a bundled code editor and the current version's vali
 
 [Open the preview](https://claudelove.github.io/trade_monitor/) · [UI source and synchronization](docs/UI_SYNC.md) · [Handoff](docs/HANDOFF.md)
 
-The public repository owns **packages/terminal-ui**, the shared typography, styles, chart rendering and UI interaction library. The private repository owns the application framework, numbered functions, API/data and strategies. Both consume the same UI contract through versioned local bundles and stable adapters. Changing a private screen number or function does not require copying the UI again.
+The public repository owns **packages/terminal-ui**, the shared typography, styles, chart rendering and UI interaction library. The public repository also owns numbered frontend screen/view sources. The private repository owns protected application adapters, API/data/state, trading logic and strategies, and serves reviewed frontend copies. Both consume the same UI contract through versioned local bundles and stable adapters. Changing a private screen number or function does not require copying the UI again.
 
 [Shared contract and update commands](docs/SHARED_UI.md) · [Canonical package](packages/terminal-ui) · [Consumer lock](terminal-ui.lock.json)
 
