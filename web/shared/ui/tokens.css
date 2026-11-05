@@ -1,3 +1,7 @@
+@font-face {font-family:"Bergoom";font-style:normal;font-weight:400;font-display:swap;src:url("./fonts/Bergoom-Regular.woff2") format("woff2")}
+@font-face {font-family:"Bergoom";font-style:normal;font-weight:600;font-display:swap;src:url("./fonts/Bergoom-Semibold.woff2") format("woff2")}
+@font-face {font-family:"Bergoom";font-style:normal;font-weight:700;font-display:swap;src:url("./fonts/Bergoom-Bold.woff2") format("woff2")}
+@font-face {font-family:"Bergoom";font-style:italic;font-weight:400;font-display:swap;src:url("./fonts/Bergoom-Italic.woff2") format("woff2")}
 @font-face {font-family:"IBM Plex Mono";font-style:normal;font-weight:400;font-display:swap;src:url("./fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2")}
 @font-face {font-family:"IBM Plex Mono";font-style:normal;font-weight:600;font-display:swap;src:url("./fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2")}
 /* Terminal design system. One rule layer;
@@ -15,13 +19,14 @@ screen modules own no shell geometry. */
   --yellow:#ffe000;
   --positive:#ff5151;
   --negative:#4b8cff;
-  --font-ui:"IBM Plex Mono",Consolas,"Liberation Mono","Lucida Console","Courier New",monospace;
+  --font-ui:"Bergoom","Noto Sans CJK KR","Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;
   --font-family:var(--font-ui);
+  --font-code:"IBM Plex Mono",Consolas,"Liberation Mono",monospace;
   --ui-type-scale:1;
   --ui-letter-spacing:0px;
   --ui-word-spacing:0px;
   --ui-line-height:1.35;
-  --chart-font-size:11px;
+  --chart-font-size:12px;
   font-synthesis:none
 }
 * {
@@ -98,3 +103,6 @@ input[type=checkbox] {
   min-height:0;
   margin:0
 }
+
+/* Source code keeps its indentation even when terminal labels use proportional type. */
+pre,code,textarea.source-editor {font-family:var(--font-code);line-height:1.45}

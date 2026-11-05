@@ -99,3 +99,8 @@
 - After shared updates: verify manifest/lock, both UI suites, chart typography/interaction and packaging. Private dependency changes must not touch engine/strategy/data policy or weaken authentication. Preserve licensed font/vendor attribution.
 
 - The user explicitly approved the prepared, scoped UI consumer update after its ownership boundary was explained. The earlier approval question is resolved for this integration and its validation records. Keep consumer-specific commit/CI evidence in the consumer repository; do not publish private identifiers or operational details here. Unrelated engine changes and private source/data export remain outside this scope.
+
+## Font/presentation update — 2026-11-05
+
+- The user selected OFL Bergoom as the Bloomberg-inspired alternative. Shared UI 0.2.0 defaults to its unmodified self-hosted files; do not call it Bloomberg Prop. Keep source-code blocks monospaced and preserve upstream copyright/OFL text in source, site and consumer wheel.
+- HTS ribbons compare loaded observations, not inferred sessions. Price-axis rounding is display precision, not a trading tick rule. Preserve source clocks/missing volume, trailing MA gaps, keyboard input cleanup and resize viewport/volume proportions.

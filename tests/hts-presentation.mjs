@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {ChartModel} from '../web/shared/charts/model.js';
+import {observationChange,sourceClock,visibleEndIndex,axisPrecision} from '../web/shared/charts/quote-data.js';
+const input=[{timestamp:'2026-11-01',open:100,high:102,low:99,close:100,volume:0},{timestamp:'2026-11-02',open:100,high:112,low:99,close:110,volume:123},{timestamp:'2026-11-03',open:110,high:110,low:100,close:105}];
+const before=JSON.stringify(input),m=new ChartModel([{id:'price',type:'candle',unit:'KRW',data:input}]),s=m.series[0];
+assert.deepEqual(observationChange(s,m.timeline[0]),{delta:null,percent:null,previous:null});assert.deepEqual(observationChange(s,m.timeline[1]),{delta:10,percent:.1,previous:100});assert.equal(observationChange(s,m.timeline[2]).delta,-5);assert.equal(observationChange(s,0).percent,null);assert.match(sourceClock(m,m.timeline[0]),/2026-11-01.*exact time unavailable/);assert.equal(axisPrecision(s),0);assert.equal(axisPrecision({...s,displayPrecision:2}),2);assert.equal(JSON.stringify(input),before);assert.equal(s.points[0].volume,0);assert.equal(s.points[2].volume,undefined);
+const line=new ChartModel([{id:'x',type:'line',unit:'KRW',data:[{timestamp:'2026-11-01T00:00:00Z',value:0},{timestamp:'2026-11-01T00:00:10Z',value:1}]}]);assert.equal(observationChange(line.series[0],line.timeline[1]).percent,null,'zero baseline is not an infinite return');assert.match(sourceClock(line,line.timeline[1]),/09:00:10 KST/);assert.equal(visibleEndIndex(m.timeline,m.timeline[1]/1000),1);
+const css=readFileSync('packages/terminal-ui/src/ui/tokens.css','utf8');assert.match(css,/--font-ui:"Bergoom"/);assert.match(css,/textarea\.source-editor/);
+for(const face of ['Regular','Semibold','Bold','Italic'])assert.ok(readFileSync('web/shared/ui/fonts/Bergoom-'+face+'.woff2').length>10000);
+assert.match(readFileSync('web/shared/licenses/bergoom/LICENSE.txt','utf8'),/SIL OPEN FONT LICENSE/);
+console.log('HTS presentation: exact prior-observation deltas, no invented session return/clock/volume, zero baseline, immutable source and bundled Bergoom licensing passed.');

@@ -1,0 +1,34 @@
+{
+  "repository": "https://github.com/dchest/bergoom",
+  "revision": "e5553246134ee34a3880e801c8d4c92f316a1ffd",
+  "license": "OFL-1.1",
+  "author": "Dmitry Chestnykh; based on Source Sans 3 by Paul D. Hunt/Adobe",
+  "purpose": "Open-source Bloomberg-inspired alternative; not Bloomberg Prop or a Bloomberg licensed font",
+  "files": [
+    {
+      "path": "Bergoom-Bold.woff2",
+      "bytes": 157832,
+      "sha256": "c132d15a9b8fa2d9c84de7a3063720361eb6c8e8c4685e12ea81281f7a35b833"
+    },
+    {
+      "path": "Bergoom-Italic.woff2",
+      "bytes": 125200,
+      "sha256": "77ccede85544611f8f6fd3bf48594e1b453a003dbdf55f06ea1161cab60aee51"
+    },
+    {
+      "path": "Bergoom-Regular.woff2",
+      "bytes": 156552,
+      "sha256": "748811b72a4e3c12801b82aadc1f0548bd58486add1e1fa160abc186d8579530"
+    },
+    {
+      "path": "Bergoom-Semibold.woff2",
+      "bytes": 157324,
+      "sha256": "28df55eeeb127961292775c8b812a520ff9397cbef8e917877443fae73487cac"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 4554,
+      "sha256": "e3bb218777385eb01bfd95aa4eba28eeb4ab6f351053b1aedf2916820a392e66"
+    }
+  ]
+}

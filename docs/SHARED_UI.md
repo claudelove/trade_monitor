@@ -4,7 +4,7 @@ The public repository owns `packages/terminal-ui`. The private repository owns a
 
 ## Ownership and delivery
 
-`@trade-monitor/terminal-ui` version 0.1.0, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
+`@trade-monitor/terminal-ui` version 0.2.0, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
 
 The public source is canonical. `web/shared/` is generated for the public preview. The private application vendors the same bytes under `src/krx_system/monitoring/web/shared/`, pinned by a **full public commit SHA**, manifest SHA256, API major and per-file hashes in `terminal-ui.lock.json`. `scripts/sync_shared_ui.py --check` is offline and rejects drift. There is no automatic production download or silent branch tracking.
 
@@ -45,7 +45,7 @@ For local development only, `--source /path/to/public/packages/terminal-ui` acce
 
 ## Typography and chart consistency
 
-Default is the licensed IBM Plex Mono substitute; it is **not Bloomberg Prop**. Font glyph widths come from the selected font. Character spacing changes tracking; no horizontal canvas/CSS distortion is applied.
+Default is **Bergoom**, the OFL-licensed Bloomberg-inspired font from dchest/bergoom, pinned to upstream commit e5553246134ee34a3880e801c8d4c92f316a1ffd. Regular/Semibold/Bold/Italic are self-hosted unmodified. It is **not Bloomberg Prop**. IBM Plex Mono remains the code-editor/preformatted fallback; Korean glyphs use the local sans-serif fallbacks. Font glyph widths come from the selected font. Character spacing changes tracking; no horizontal canvas/CSS distortion is applied.
 
 ```js
 import {setTheme} from './ui/theme.js';
@@ -65,6 +65,12 @@ CSS equivalents are `--font-ui`, `--ui-type-scale`, `--ui-letter-spacing`, `--ui
 
 ## Packaging and licenses
 
-Charts/fonts stay local, with TradingView attribution and original third-party licenses. The source package carries their LICENSE/NOTICE/provenance; private existing packaged licenses remain the same versions. Private wheel/static asset packaging includes shared modules/styles/fonts. CI verifies bundle/adapters against the lock without network. Public preview still blocks all server operations and never queries a private host.
+Charts/fonts stay local, with TradingView attribution and original third-party licenses. The source package carries their LICENSE/NOTICE/provenance. Redistribution notices are also generated into shared/licenses/ as text and included in consumer wheels; the public site serves these copies and third_party/. Private wheel/static asset packaging includes shared modules/styles/fonts. CI verifies bundle/adapters against the lock without network. Public preview still blocks all server operations and never queries a private host.
 
 Current validation includes application-independent screen-number contracts, typed/atomic theme updates, listener disposal, updater ownership/traversal/major-version guards, both applications' existing UI tests, real-browser typography + chart interaction, and private wheel asset parity.
+
+## HTS presentation, 0.2.0
+
+Native price charts use red/blue candles, a separate adjustable volume pane, right-axis source values, quiet horizontal grid, LAST SOURCE / Δ BAR ribbon, and default trailing MA 5/20/60 with cursor values. Δ BAR compares the prior loaded observation; it is not an inferred day/session return. Missing/short MA inputs remain N/A. No bar, volume, session clock or market feed is fabricated. An integer OHLC series uses integer axis/cursor labels; displayPrecision may override presentation only, never exchange tick rules.
+
+The canvas focus target supports Left/Right inspection, +/- zoom, Home earliest, End latest, Escape clear. Cursor LINK clears on missing timestamps. Pan/zoom retention, visible-range preservation on resize and the user volume-pane proportion are maintained. Chart height measures actual toolbar/ribbon/legend height. CANDLE/LINE, Latest and opt-in LINK stay in the stable API-v1 component. state.studies=[] disables the default MAs; options.defaultStudies can choose among 5/20/60.

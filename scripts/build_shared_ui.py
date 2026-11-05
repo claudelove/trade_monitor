@@ -13,6 +13,13 @@ def build(check=False):
     if check:
         if not version_path.is_file() or version_path.read_text()!=version_text:raise ValueError('Shared UI version stale: python scripts/build_shared_ui.py')
     else:version_path.write_text(version_text)
+    for legal in (PACKAGE/'licenses').rglob('*'):
+        if legal.is_file() and legal.name in {'LICENSE','LICENSE.md','NOTICE'}:
+            relative=legal.relative_to(PACKAGE/'licenses');dest=PACKAGE/'src/licenses'/relative.parent/(relative.stem+'.txt' if relative.suffix else relative.name+'.txt')
+            if check:
+                if not dest.is_file() or dest.read_bytes()!=legal.read_bytes():raise ValueError('Shared dependency license stale')
+            else:
+                dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(legal.read_bytes())
     paths=[PACKAGE/'package.json',PACKAGE/'bridges.json',PACKAGE/'install.py',*(PACKAGE/'src').rglob('*'),*(PACKAGE/'licenses').rglob('*')]
     files={}
     for p in sorted(paths):

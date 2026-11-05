@@ -4,6 +4,14 @@
 
 
 
+## 2026-11-05 Bergoom and HTS chart presentation — current release work
+
+The user selected dchest/bergoom as the open-source Bloomberg-inspired substitute. Common library 0.2.0 / API 1 now defaults to bundled Bergoom Regular/Semibold/Bold/Italic, with original OFL/copyright notices and pinned public provenance. Font files are unmodified. This is not Bloomberg Prop or Neue Haas Grotesk. Monospaced source editors retain IBM Plex Mono.
+
+Native charts add a last-loaded-value/prior-observation change ribbon, default trailing MA5/20/60 and cursor values, red/blue OHLC/volume, keyboard Left/Right/Home/End/+/−/Escape, exact-time LINK clearing, integer source-price axis formatting, retained visible range on resize and adjustable volume proportion. No source data/session clocks/volume are invented; Δ BAR is not a daily return. Changes are confined to common modules/resources and license packaging; application feature screens, engine API and financial policy remain outside the change.
+
+Local validation: existing UI suites plus HTS presentation guards, public Python 37 and actual Chromium custom-font glyph detection, real public OHLCV, MA inputs, keyboard/chart controls and mobile. Both local consumers use the module; publish the tested package, update the consumer pin and check remote CI before reporting complete rollout. Consumer-specific commits and CI evidence belong only in that repository.
+
 ## 2026-11-05 shared presentation/interaction dependency — current direction
 
 Public packages/terminal-ui owns the common typography, styles, chart engines and input/lifecycle primitives. Consumer applications own their framework, numbered functions, APIs and financial policies. Use docs/SHARED_UI.md and terminal-ui.lock.json; update the pinned UI package rather than copying complete applications.

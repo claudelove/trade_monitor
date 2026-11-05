@@ -52,12 +52,12 @@
   stroke-dasharray:2 4
 }
 .candle-up {
-  fill:#6dbea7;
-  stroke:#6dbea7
+  fill:var(--positive);
+  stroke:var(--positive)
 }
 .candle-down {
-  fill:#db808d;
-  stroke:#db808d
+  fill:var(--negative);
+  stroke:var(--negative)
 }
 .chart-cursor-line {
   stroke:#b9c9d9;
@@ -168,3 +168,10 @@
 .hts-chart-status a { color:#aaa; text-decoration:underline; }
 .quote-context { display:flex; gap:12px; flex-wrap:wrap; padding:4px 7px; font-size:calc(10px * var(--ui-type-scale,1)); color:#aaa; background:#161616; }
 .quote-context b { color:#ffe000; }
+/* Source-first HTS quote ribbon. It is a loaded observation, never a live-feed claim. */
+.hts-source-quote { display:flex; flex-wrap:wrap; align-items:baseline; gap:5px 12px; padding:5px 8px 3px; background:var(--panel); border-bottom:1px solid #292929; font-size:calc(12px * var(--ui-type-scale)); }
+.hts-source-quote strong { font-size:calc(22px * var(--ui-type-scale)); font-weight:600; line-height:1.1; font-variant-numeric:tabular-nums; }
+.quote-source-label { font-size:calc(10px * var(--ui-type-scale)); color:var(--muted); }
+.hts-study-values { display:flex; flex-wrap:wrap; align-items:center; gap:4px 16px; padding:3px 8px; background:var(--panel); font-size:calc(11px * var(--ui-type-scale)); font-variant-numeric:tabular-nums; }
+.hts-study-values:empty { display:none; }.hts-study-values b { font-weight:600; }
+.financial-chart-canvas:focus-visible { outline:1px solid var(--accent); outline-offset:-1px; }

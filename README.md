@@ -31,6 +31,6 @@ The pre-existing Python collector/runtime-v1 backend remains in this repository 
 
 Add a numbered file under `web/screens/`, assign its workspace, and regenerate `python scripts/sync_screens.py`. [Screen contract](docs/SCREEN_MODULES.md).
 
-Charts use locally bundled **TradingView Lightweight Charts 5.2.1** and retain TradingView attribution; **IBM Plex Mono 5.3.0** is a redistributable terminal-style font, not Bloomberg's proprietary font. All licenses, notices and provenance are in [third_party](third_party/) and are copied into the site build. [Chart notes](docs/CHART_MODULE.md).
+Charts use locally bundled **TradingView Lightweight Charts 5.2.1** and retain TradingView attribution; **Bergoom** is the self-hosted, OFL-licensed Bloomberg-inspired default; it is not Bloomberg Prop. IBM Plex Mono remains for source-code blocks. All licenses, notices and provenance are in [third_party](third_party/) and are copied into the site build. [Chart notes](docs/CHART_MODULE.md).
 
 `work` deploys after GitHub Actions checks. No private host or paid cloud resource is created by this UI import. Never put private account/strategy data, `.env`, SQLite, credentials or artifacts in this repository or Pages. [Deployment](docs/DEPLOYMENT.md).

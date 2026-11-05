@@ -28,7 +28,7 @@ def build(output):
     from scripts.sync_screens import sync
     sync(check=True)
     for source in (ROOT/'web').rglob('*'):
-        if source.is_file() and source.suffix in {'.js','.css','.svg','.woff2'}:
+        if source.is_file() and source.suffix in {'.js','.css','.svg','.woff2','.txt'}:
             if source.is_symlink() or any(part.startswith('.') for part in source.relative_to(ROOT/'web').parts):
                 raise ValueError('Public assets must be regular, non-hidden files')
             target=assets/source.relative_to(ROOT/'web')

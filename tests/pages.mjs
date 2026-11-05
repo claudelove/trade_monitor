@@ -18,7 +18,7 @@ const catalog=await api('/api/strategy-lab/catalog');assert.deepEqual(catalog.re
 for(const path of ['/api/access/rotate','/api/strategy-lab/run','/api/strategy-lab/drafts','/api/analysis/run'])await assert.rejects(operation(path,{private:'NEVER_SEND'}),/disabled on GitHub Pages/);
 assert.equal(calls.length,1,'only the public snapshot was fetched; no private service requests');
 const runtime=JSON.parse(readFileSync('dist/assets/data/runtime-state.json'));assert.deepEqual(runtime.runs,[]);assert.deepEqual(runtime.strategies,[]);
-for(const f of ['lightweight-charts/LICENSE','lightweight-charts/NOTICE','ibm-plex-mono/LICENSE'])assert.ok(existsSync('dist/third_party/'+f));
+for(const f of ['bergoom/LICENSE.md','lightweight-charts/LICENSE','lightweight-charts/NOTICE','ibm-plex-mono/LICENSE'])assert.ok(existsSync('dist/third_party/'+f));
 const lock=JSON.parse(readFileSync('terminal-ui.lock.json'));for(const [path,hash] of Object.entries(lock.installed))assert.equal(createHash('sha256').update(readFileSync('dist/assets/'+path)).digest('hex'),hash,'deployed shared UI '+path);
 assert.ok(!existsSync('dist/assets/analytics.js'),'retired UI assets must not survive a rebuild');
 globalThis.fetch=prior;delete globalThis.document;dom.window.close();console.log('Pages boundary passed: shared UI dependency, public market only, empty private accounts, no outgoing writes, no invented event clocks, bundled licenses and clean assets.');

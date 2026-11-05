@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Buildless dashboard; Node is only needed for DOM tests",
   "scripts": {
-    "test:ui": "node tests/chart-registry.mjs && node tests/workspace.mjs && node tests/strategy-analysis.mjs && node tests/engine-client.mjs && node tests/controller.mjs && node tests/pane-isolation.mjs && node tests/operations.mjs && node tests/shared-ui.mjs",
+    "test:ui": "node tests/chart-registry.mjs && node tests/workspace.mjs && node tests/strategy-analysis.mjs && node tests/engine-client.mjs && node tests/controller.mjs && node tests/pane-isolation.mjs && node tests/operations.mjs && node tests/shared-ui.mjs && node tests/hts-presentation.mjs",
     "pretest:pages": "python scripts/build_pages.py",
     "test:pages": "node tests/pages.mjs",
     "pretest:ui": "python scripts/build_shared_ui.py --check && python scripts/sync_shared_ui.py --check"
