@@ -15,7 +15,7 @@ const state={mode:'persisted',page:'overview',desk:'strategy',marketSource:'stor
 const client=new EngineClient(),chartBus=new ChartLinkBus(),pagePanes=new Map();
 let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,pollBusy=false;
 const deskIds=['strategy','market','backtest','analysis','execution','admin'];
-const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,
+const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,onOpenScreen:id=>openTool(id),
   content:p=>{const s=screens.get(p.type),ctx=paneContext(screenContext('window'),p,s);return selectionBar(ctx,p,s)+screens.render(p.type,ctx,p)},
   bind:(root,p)=>{const ctx=paneContext(screenContext('window'),p,screens.get(p.type)),off=bindSelection(root,ctx,p),dispose=screens.mount(p.type,root,ctx,p);return ()=>{off();dispose()}},
   symbols:()=>terminal.securities(displayMarket())})]));

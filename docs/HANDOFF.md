@@ -4,6 +4,12 @@
 
 
 
+## 2026-11-05 manual windows and screen search — current
+
+User requested removal of automatic layout and the full numbered toolbar. Common UI 0.3.0 / API 1 provides normalized pointer/keyboard move/resize gestures, bounds, cancellation and disposal. Public application preserves existing pane geometry on add/close, opens new panes with a small overlap, saves geometry per desk, and keeps maximize/restore/close. Titles show their function identity; the old function dropdown and workspace reset button are removed. SCREENS / Search lists registered screens across desks with number/command/title/alias/desk filtering, keyboard selection, Escape and focus return. It uses existing application routing, not new business APIs. Mobile remains stacked.
+
+Validation: public Python 37 tests, nine UI suites, Pages boundary/asset checks passed. Actual Chromium verified drag, real native-chart resize without remount, maximize/restore, geometry reload, close without reflow, cross-desk search routing, no-match/Escape and mobile no horizontal overflow. Public snapshot/private-operation boundaries remain unchanged. Commit/deployment verification follows below once pushed.
+
 ## 2026-11-05 Bergoom and HTS chart presentation — released
 
 Common UI 0.2.0 / API 1 defaults to self-hosted Bergoom Regular/Semibold/Bold/Italic, the user-selected OFL Bloomberg-inspired alternative. Original font bytes, source provenance and copyright/OFL notices are preserved. This is not Bloomberg Prop or Neue Haas. Code editors retain IBM Plex Mono.

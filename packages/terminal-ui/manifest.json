@@ -1,6 +1,6 @@
 {
   "name": "@trade-monitor/terminal-ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "api_version": 1,
   "files": {
     "bridges.json": "b75f53f1e42317cab061392e0c5141020f7727d717a147dd285b620c56be47d9",
@@ -12,7 +12,7 @@
     "licenses/lightweight-charts/LICENSE": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
     "licenses/lightweight-charts/NOTICE": "f76c6afab94884448f0426e30d6e9d555ca7247894cd3484e477d2f87513036e",
     "licenses/lightweight-charts/provenance.json": "875e151eccf44eb9ffe371cadfd58e0194b9e011511df545d5b215c281917683",
-    "package.json": "d099ced7dcfac553f2fe71d5fe7c0f2054ecb6987a56b7bff38d547a192928d3",
+    "package.json": "19fecad35f80afbae18b5ed66549c05953eb40841fe4a36cebdbd6d387da3dcd",
     "src/charts/chart.css": "30b93ddc3741eeebf468d216fc85afb581f7aa83c3e442d8366ef2a7d21bdcd7",
     "src/charts/model.js": "eee166daebd58378f7d58d2e43a2ba232d571073f024fef92b9f7065a90c034e",
     "src/charts/native-chart.js": "e27aaacb57d86e5b78fbca984365677467d4b07a31c56beb2864c443b6433682",
@@ -21,7 +21,7 @@
     "src/charts/svg-chart.js": "11a3b58e5bcfe909688c4c8ffa543c71bfa656ee2483a2581377a422970e1f57",
     "src/charts/terminal-chart.js": "385bb0971dff857b915e6e074b1a7caafeda748a1948f134c0bacc7a7e0e82a0",
     "src/charts/vendor/lightweight-charts.js": "1bb1ee79f9d4dd17261b53d930f7a8995748276f80e7ba0e24412b5068062f5f",
-    "src/index.js": "3fae624f2d1500bab72b8299e0897e9dd0fbf810d17680530903e3c8e1b9a739",
+    "src/index.js": "7707962c46b0413684767b2f22bcecdb927a22cc3c5591a3415601557541eaa5",
     "src/licenses/bergoom/LICENSE.txt": "e3bb218777385eb01bfd95aa4eba28eeb4ab6f351053b1aedf2916820a392e66",
     "src/licenses/ibm-plex-mono/LICENSE.txt": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f",
     "src/licenses/lightweight-charts/LICENSE.txt": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
@@ -34,11 +34,11 @@
     "src/ui/fonts/Bergoom-Semibold.woff2": "28df55eeeb127961292775c8b812a520ff9397cbef8e917877443fae73487cac",
     "src/ui/fonts/ibm-plex-mono-latin-400-normal.woff2": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
     "src/ui/fonts/ibm-plex-mono-latin-600-normal.woff2": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83",
-    "src/ui/panels.css": "4eab7723d4a53d9eb4b1e016772971e23fb777815b4c83f745ffe9ab3ddb76f8",
+    "src/ui/panels.css": "04f6ee42080ca5bd5711a5894809e28418c4c57971dc303a514ba6b063e0b547",
     "src/ui/shell.css": "cc37fe17d7754fef54bdb4d486247fe882df3f3d793777517ec43ff07ac9d78f",
     "src/ui/theme.js": "71747aa812de06ffa59277f77bada58d13cd56752cb70dabf9568fd71297e775",
     "src/ui/tokens.css": "a64b22addc32d6bd454cf17ad1ea4e33671bc36ad70e35d5a6abad00be9269c2",
-    "src/ui/window-actions.js": "91d229527d0ecb7eed55460ad8e5bba1fefbf03b35a559c75a86bb28a7fedcc3",
-    "src/version.js": "ac366780c180e6f36da4e812cf411884e02e35896ed01af9c8e7b195117254cf"
+    "src/ui/window-actions.js": "da809dfb8df90c2b3cfb3433f2d6096fb7fcc0bd93208fe74d4a57226d1ca8b4",
+    "src/version.js": "d5dfa782178596f5612d2047de404643167cf311370b458722b54a2c3ad06f6e"
   }
 }

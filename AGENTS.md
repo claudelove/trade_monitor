@@ -104,3 +104,7 @@
 
 - The user selected OFL Bergoom as the Bloomberg-inspired alternative. Shared UI 0.2.0 defaults to its unmodified self-hosted files; do not call it Bloomberg Prop. Keep source-code blocks monospaced and preserve upstream copyright/OFL text in source, site and consumer wheel.
 - HTS ribbons compare loaded observations, not inferred sessions. Price-axis rounding is display precision, not a trading tick rule. Preserve source clocks/missing volume, trailing MA gaps, keyboard input cleanup and resize viewport/volume proportions.
+
+## Manual windows — latest user direction (2026-11-05)
+
+- Remove automatic tiling on opening/closing; users move/resize panes directly. Preserve existing geometry and per-desk browser layout storage. No full screen-number toolbar: use separate registry-driven screen list/search and existing application routing. Shared gesture code belongs to terminal-ui; application layout/search adapters remain local. Mobile keeps readable stacked panes.

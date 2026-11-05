@@ -1,3 +1,7 @@
+## 2026-11-05 manual window layout
+
+Removed automatic tiling and numbered function toolbar. Users move/resize independent windows; existing geometry is retained on add/close and restored per desk. Separate registry-backed screen list/search routes by number, command or title across desks. Shared UI 0.3.0 / API 1 owns reusable pointer/keyboard gestures. Public UI/Python/Pages checks and real Chromium layout/chart-resize/search/mobile checks passed. No market/private-data or execution changes.
+
 ## 2026-11-05 Bergoom and HTS chart presentation — released
 
 Common UI 0.2.0 / API 1 defaults to self-hosted Bergoom Regular/Semibold/Bold/Italic, the user-selected OFL Bloomberg-inspired alternative. Original font bytes, source provenance and copyright/OFL notices are preserved. This is not Bloomberg Prop or Neue Haas. Code editors retain IBM Plex Mono.
