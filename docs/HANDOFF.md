@@ -6,7 +6,7 @@
 
 ## 2026-11-05 table body column separators — current
 
-Shared UI 0.6.1 adds 1px vertical rules between body cells, aligned with existing header divisions. Last cells omit the right rule to avoid a doubled outer edge. Shared table styles apply across all desks, including dynamic rows; source data/formatters/geometry remain unchanged. Public ten UI suites, Python 37 and Pages asset checks passed. Actual Chromium confirmed 1px body dividers and no last-cell outer divider. Deployment evidence follows push.
+Shared UI 0.6.1 adds 1px vertical rules between body cells, aligned with existing header divisions. Last cells omit the right rule to avoid a doubled outer edge. Shared table styles apply across all desks, including dynamic rows; source data/formatters/geometry remain unchanged. Public ten UI suites, Python 37 and Pages asset checks passed. Actual Chromium confirmed 1px body dividers and no last-cell outer divider. Release fd2210cb9926c82789c7ef0de78bd21e23db2c27 passed [Actions 41985623356](https://github.com/claudelove/trade_monitor/actions/runs/41985623356) and deployed; live shared table CSS and version match.
 
 ## 2026-11-05 terminal tables / legibility — current
 
