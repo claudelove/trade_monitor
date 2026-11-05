@@ -10,7 +10,7 @@ The top SYMBOL and NEW PANE SOURCE fields changed only defaults for newly opened
 
 Account/run and strategy-default controls are shown only with actual data choices, outside Market/Admin; empty strategy defaults are hidden. Label/tooltip clarifies new-pane defaults and opt-in FOLLOW; per-pane independence and account publication behavior remain. Shared presentation 0.5.1 / API 1.
 
-Local public UI suites/Pages boundary/Python 37 passed. Controller regressions cover run→stored→run commands without global controls, unique GP reuse and preserved pinning. Browser checks cover absence of redundant globals, hidden empty context, command/local symbol changes, invalid symbols and mobile. Consumer-specific evidence remains in its own handoff; remote deployment verification follows push.
+Local public UI suites/Pages boundary/Python 37 passed. Controller regressions cover run→stored→run commands without global controls, unique GP reuse and preserved pinning. Browser checks cover absence of redundant globals, hidden empty context, command/local symbol changes, invalid symbols and mobile. Consumer-specific evidence remains in its own handoff; Common release 4b9556f7f98186ae938cec44d549ffc0365b433f passed Actions 41976356288; final frontend c368e8cc0343e1460b41ae39e0687f3f4b837b5c passed [Actions 41976568152](https://github.com/claudelove/trade_monitor/actions/runs/41976568152) and deployed. Live HTML has no global market selectors; app/pane context/terminal views/shared CSS/version bytes match.
 
 ## 2026-11-05 interaction feedback and magnetic placement — current
 
