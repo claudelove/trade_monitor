@@ -7,9 +7,15 @@
     "test:ui": "node tests/chart-registry.mjs && node tests/workspace.mjs && node tests/strategy-analysis.mjs && node tests/engine-client.mjs && node tests/controller.mjs && node tests/pane-isolation.mjs && node tests/operations.mjs && node tests/shared-ui.mjs && node tests/hts-presentation.mjs && node tests/table-presentation.mjs && node tests/event-monitor.mjs",
     "pretest:pages": "python scripts/build_pages.py",
     "test:pages": "node tests/pages.mjs",
-    "pretest:ui": "python scripts/build_shared_ui.py --check && python scripts/sync_shared_ui.py --check"
+    "pretest:ui": "python scripts/build_shared_ui.py --check && python scripts/sync_shared_ui.py --check",
+    "build:editor": "node scripts/build_editor.mjs"
   },
   "devDependencies": {
+    "@codemirror/autocomplete": "^6.20.4",
+    "@codemirror/lang-python": "^6.2.1",
+    "@codemirror/legacy-modes": "^6.5.5",
+    "codemirror": "^6.0.2",
+    "esbuild": "^0.25.12",
     "jsdom": "^27.0.0"
   },
   "type": "module"

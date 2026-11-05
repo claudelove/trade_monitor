@@ -10,10 +10,10 @@ export async function api(path,{signal}={}){
     throw Error(`${response.status===403?'Check the authorized source IP and host':detail||'Query failed'} (${response.status})`)}
   return response.json();
 }
-const operations=new Set(['/api/strategy-lab/code-drafts','/api/access/rotate','/api/strategy-lab/validate','/api/strategy-lab/drafts','/api/strategy-lab/run','/api/strategy-lab/run-python','/api/analysis/run','/api/paper/jobs']);
+const operations=new Set(['/api/strategy-lab/code-validate','/api/strategy-lab/backtest','/api/strategy-lab/code-drafts','/api/access/rotate','/api/strategy-lab/validate','/api/strategy-lab/drafts','/api/strategy-lab/run','/api/strategy-lab/run-python','/api/analysis/run','/api/paper/jobs']);
 export async function operation(path,body,{signal}={}){
   if(isPreview())return previewOperation();
-  if(!operations.has(path))throw Error('Operation is not in the terminal allowlist');
+  if(!operations.has(path)&&!/^\/api\/paper\/jobs\/[a-f0-9]{32}\/stop$/.test(path))throw Error('Operation is not in the terminal allowlist');
   const response=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal,cache:'no-store',credentials:'same-origin',redirect:'error'});
   const value=await response.json();if(!response.ok)throw Error(value.error||'Operation failed');return value;
 }

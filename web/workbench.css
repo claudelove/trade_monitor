@@ -2,3 +2,25 @@
 .event-input-table { min-width:1326px; table-layout:fixed; }
 .event-input-table td { vertical-align:top; }
 .event-monitor-toolbar input[type=number] { width:70px; min-width:60px; }
+
+.strategy-toolbar,.strategy-versions,.strategy-tabs { display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:5px 8px; }
+.strategy-toolbar b { color:var(--accent,#ffad27); margin-right:8px; }
+.strategy-versions { background:#102731; }
+.strategy-versions label { display:flex; align-items:center; gap:6px; }
+.strategy-versions select { max-width:280px; }
+.strategy-workbench { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:1px; background:#29434e; }
+.strategy-editor-area,.strategy-run-panel { min-width:0; background:var(--bg,#00151e); }
+.strategy-editor-area .terminal-code-editor,.strategy-editor-area textarea.source-editor { height:clamp(280px,calc(100dvh - 330px),650px); }
+.strategy-tabs { background:#1e3540; }
+.strategy-tabs [data-code-position] { margin-left:auto; color:#91a5af; font-family:var(--font-code); }
+.strategy-run-panel { padding:0 8px 8px; }
+.strategy-run-panel > label { display:block; margin:9px 0; }
+.strategy-run-panel select { display:block; width:100%; margin-top:4px; }
+.strategy-run-panel [data-code-run] { width:100%; padding:8px; color:#111; background:#ffad27; font-weight:600; }
+.strategy-run-panel .review-check { display:flex; gap:6px; align-items:flex-start; line-height:1.4; }
+.strategy-run-panel .review-check input { flex:none; margin-top:3px; }
+[data-code-job] { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.5; font-family:var(--font-code); font-size:12px; padding:8px 0; }
+[data-code-effective] { max-height:260px; overflow:auto; font-size:12px; }
+[data-code-status] { padding:7px 10px; line-height:1.4; overflow-wrap:anywhere; }
+.strategy-diagnostic { display:block; width:100%; text-align:left; white-space:normal; color:#ffb0b4; padding:6px 10px; }
+@media(max-width:900px) { .strategy-workbench { grid-template-columns:1fr; }.strategy-editor-area .terminal-code-editor,.strategy-editor-area textarea.source-editor { height:360px; }.strategy-versions select { max-width:220px; } }

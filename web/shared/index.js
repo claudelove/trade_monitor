@@ -6,3 +6,4 @@ export {setTheme,readTypography,watchTypography,THEME_EVENT} from './ui/theme.js
 export {apiVersion,version} from './version.js';
 export {bindFunctionSearch} from './ui/function-search.js';
 export {formatNumber,formatPercent,valueTone,tableMarkup,renderTable} from './ui/table.js';
+export {attachCodeEditor} from './ui/code-editor.js';

@@ -1,18 +1,19 @@
 {
   "name": "@trade-monitor/terminal-ui",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "api_version": 1,
   "files": {
     "bridges.json": "b75f53f1e42317cab061392e0c5141020f7727d717a147dd285b620c56be47d9",
     "install.py": "0b5d0a0253e1509db56785f66518bf61f2f5b42c8d1014cf224b1fc9f4801862",
     "licenses/bergoom/LICENSE.md": "e3bb218777385eb01bfd95aa4eba28eeb4ab6f351053b1aedf2916820a392e66",
     "licenses/bergoom/provenance.json": "32ee67ada4346e1597f112f166c911816d97f2605199384b2bddfe1a2e834bfe",
+    "licenses/codemirror/LICENSE": "a00a979c0570158f84029f715ac688f9edb3389589fb547d861321969f7c4837",
     "licenses/ibm-plex-mono/LICENSE": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f",
     "licenses/ibm-plex-mono/provenance.json": "5817d2532bed3f44301c08d8a2e2f03201f7549f4ecb48a16b9c659973085790",
     "licenses/lightweight-charts/LICENSE": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
     "licenses/lightweight-charts/NOTICE": "f76c6afab94884448f0426e30d6e9d555ca7247894cd3484e477d2f87513036e",
     "licenses/lightweight-charts/provenance.json": "875e151eccf44eb9ffe371cadfd58e0194b9e011511df545d5b215c281917683",
-    "package.json": "5c9b1d9bfd64e7429bb8b955843e4fc3471a9710b2d3e21696ad0bccde31cbb1",
+    "package.json": "5c11f3902863aae2944faac63c98c723b3213c448026fef7a7e69349ccf5b106",
     "src/charts/chart.css": "1a792aff4a77cd3d476ecb710c19e072f9f5eab3c5a91cef08df5aea9526ce55",
     "src/charts/model.js": "eee166daebd58378f7d58d2e43a2ba232d571073f024fef92b9f7065a90c034e",
     "src/charts/native-chart.js": "e27aaacb57d86e5b78fbca984365677467d4b07a31c56beb2864c443b6433682",
@@ -21,12 +22,14 @@
     "src/charts/svg-chart.js": "11a3b58e5bcfe909688c4c8ffa543c71bfa656ee2483a2581377a422970e1f57",
     "src/charts/terminal-chart.js": "385bb0971dff857b915e6e074b1a7caafeda748a1948f134c0bacc7a7e0e82a0",
     "src/charts/vendor/lightweight-charts.js": "1bb1ee79f9d4dd17261b53d930f7a8995748276f80e7ba0e24412b5068062f5f",
-    "src/index.js": "dcb3e29b0ab6d9e29c5e6b00ab62c756200a41e19c3220e45c242b13af3df180",
+    "src/index.js": "af1ef91be83d86a2b52566704b48d48b031ade40352a045480d62733e83589df",
     "src/licenses/bergoom/LICENSE.txt": "e3bb218777385eb01bfd95aa4eba28eeb4ab6f351053b1aedf2916820a392e66",
+    "src/licenses/codemirror/LICENSE.txt": "a00a979c0570158f84029f715ac688f9edb3389589fb547d861321969f7c4837",
     "src/licenses/ibm-plex-mono/LICENSE.txt": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f",
     "src/licenses/lightweight-charts/LICENSE.txt": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
     "src/licenses/lightweight-charts/NOTICE.txt": "f76c6afab94884448f0426e30d6e9d555ca7247894cd3484e477d2f87513036e",
     "src/style.css": "4aba58c16ce1f78df82e939c1f499b01afe77a2f815ff9a6f7ea51e250da50fa",
+    "src/ui/code-editor.js": "ed1b1f54188e2597218ae8e259fcecf7daa44c238d4ab100af12413f05bd0926",
     "src/ui/dom.js": "9195a92cd34ddef542614a3260fe5b39cd8b2914cd9ee538d78150756d346564",
     "src/ui/fonts/Bergoom-Bold.woff2": "c132d15a9b8fa2d9c84de7a3063720361eb6c8e8c4685e12ea81281f7a35b833",
     "src/ui/fonts/Bergoom-Italic.woff2": "77ccede85544611f8f6fd3bf48594e1b453a003dbdf55f06ea1161cab60aee51",
@@ -42,6 +45,6 @@
     "src/ui/theme.js": "71747aa812de06ffa59277f77bada58d13cd56752cb70dabf9568fd71297e775",
     "src/ui/tokens.css": "351a5d118720867f813672f99e4d9f06354ef1ca07c0b950a5b074e94aca73c2",
     "src/ui/window-actions.js": "bfc1de892cec0fcde06a889bbb968a5b47e74b088f7cf6a2f558992195fe1b3e",
-    "src/version.js": "8dc67b6fa1f49cd9bbe70622071c4c23aaa871edb380be2dd954f20f88619825"
+    "src/version.js": "529834fd298cac82c0f018d6c269766b73a30b7b588efbe55f49b64646f60739"
   }
 }

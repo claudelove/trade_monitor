@@ -15,10 +15,11 @@ value.data.events=[];assert.equal((await api('/api/monitor/snapshot')).events.le
 const record=(await api('/api/monitor/snapshot')).events[0],detail=await api('/api/data/events/'+record.id);assert.equal(detail.event.received_at,null);assert.equal(detail.event.available_at,null);assert.equal(detail.event.payload.title,record.title);
 await assert.rejects(api('/api/access'),/Public UI preview/);await assert.rejects(api('/api/data/events?kind=BOOK_SNAPSHOT'),/Public UI preview/);
 const catalog=await api('/api/strategy-lab/catalog');assert.deepEqual(catalog.registered_python,[]);assert.deepEqual(catalog.datasets,[]);assert.equal(catalog.template,'');
-for(const path of ['/api/access/rotate','/api/strategy-lab/code-drafts','/api/strategy-lab/run','/api/strategy-lab/drafts','/api/analysis/run'])await assert.rejects(operation(path,{private:'NEVER_SEND'}),/disabled on GitHub Pages/);
+for(const path of ['/api/access/rotate','/api/strategy-lab/code-drafts','/api/strategy-lab/code-validate','/api/strategy-lab/backtest','/api/paper/jobs/'+ 'a'.repeat(32)+'/stop','/api/strategy-lab/run','/api/strategy-lab/drafts','/api/analysis/run'])await assert.rejects(operation(path,{private:'NEVER_SEND'}),/disabled on GitHub Pages/);
 assert.equal(calls.length,1,'only the public snapshot was fetched; no private service requests');
 const runtime=JSON.parse(readFileSync('dist/assets/data/runtime-state.json'));assert.deepEqual(runtime.runs,[]);assert.deepEqual(runtime.strategies,[]);
 for(const f of ['bergoom/LICENSE.md','lightweight-charts/LICENSE','lightweight-charts/NOTICE','ibm-plex-mono/LICENSE'])assert.ok(existsSync('dist/third_party/'+f));
+assert.ok(existsSync('dist/assets/shared/licenses/codemirror/LICENSE.txt'),'editor dependency licenses ship with the UI bundle');
 const lock=JSON.parse(readFileSync('terminal-ui.lock.json'));for(const [path,hash] of Object.entries(lock.installed))assert.equal(createHash('sha256').update(readFileSync('dist/assets/'+path)).digest('hex'),hash,'deployed shared UI '+path);
 assert.ok(!existsSync('dist/assets/analytics.js'),'retired UI assets must not survive a rebuild');
 globalThis.fetch=prior;delete globalThis.document;dom.window.close();console.log('Pages boundary passed: shared UI dependency, public market only, empty private accounts, no outgoing writes, no invented event clocks, bundled licenses and clean assets.');

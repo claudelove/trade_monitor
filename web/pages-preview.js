@@ -15,7 +15,7 @@ export async function previewRead(path,{signal}={}){
   const data=await market(),id=decodeURIComponent(p.slice('/api/data/events/'.length)),record=[...data.events,...data.news].find(e=>String(e.id)===id);if(!record)throw Error('Event not in the public snapshot.');
   return {event:{kind:data.events.includes(record)?'DISCLOSURE':'NEWS',source:record.source||record.publisher,source_event_id:record.id,symbol:record.ticker,occurred_at:null,received_at:null,available_at:null,time_quality:'PUBLIC_SNAPSHOT / AVAILABILITY CLOCKS UNAVAILABLE',revision:null,payload:{...record}},projection:'Public snapshot record; not a canonical engine event or revision journal.'};
  }
- if(p==='/api/strategy-lab/code-drafts')return [];
+ if(p==='/api/strategy-lab/code-drafts'||p==='/api/strategy-lab/jobs')return [];
  if(p==='/api/strategy-lab/catalog')return {datasets:[],registered_python:[],template:'',registry_error:previewMessage};
  if(p==='/api/paper/profiles'||p==='/api/analysis/tools')return [];
  throw Error(previewMessage);

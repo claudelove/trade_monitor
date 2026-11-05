@@ -1,5 +1,11 @@
 # 작업 인계 — Catalyst
 
+## 2026-11-05 actual strategy workbench — current
+
+Replaced the textarea-only authoring flow with offline CodeMirror (shared UI 0.7.0 / API 1), typed bar-v1 contract and an explicitly selected runnable synthetic reference. Current-content validate/save/backtest is primary; no manual local registry step is needed for an administrator's explicit exact-version historical request. Draft save allows incomplete edits without execution. Validation has source positions and effective policy settings; incomplete hooks fail. Status/error, own result, real worker stop and recent-job recovery are connected. Source/data edits invalidate review; stale responses cannot launch a changed input. Desk transitions preserve editor text/undo/selection in pane memory. See STRATEGY_WORKBENCH.md.
+
+Both 11-suite UI checks and public Pages boundary passed. Actual Chromium against a disposable synthetic protected server confirmed editor highlighting/gutter/inline diagnostics, reviewed saved-version worker execution with orders/fills/result provenance, load/reload recovery and mobile containment. Additional Chromium verified editor undo across desk changes and actual worker stop without a success result. Related DOM tests cover stale-response rejection and automatic validate/save/run sequencing. No private production deployment or live trading occurred.
+
 ## 2026-11-05 default editable strategy skeleton — latest correction
 
 Replaced the prose GUIDE with actual prefilled Python and TOML in CODE 0304. The source exposes signal, target_weights, exit_policy, risk_policy and create_strategy; the policy includes universe/capital, all current risk caps and execution cost/IOC assumptions. Default signal returns None. Starter instrument/costs/limits are explicitly placeholders. INSERT SKELETON restores both editors with confirmation before replacing any differing code, including a loaded saved version. Nullish initialization preserves existing/explicitly empty edits across remounts. Removed unused prose-guide module/styles. No backend or execution contract change. Targeted operations DOM checks and Python syntax/manifest validation passed.

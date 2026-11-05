@@ -1,5 +1,9 @@
 # Shared terminal presentation and interaction contract
 
+## 0.7.0 / API 1 — offline code editor
+
+Shared attachCodeEditor wraps bundled CodeMirror for language highlighting, gutter/folding, indentation, search/replace, undo, diagnostics, keyboard callbacks and memory-only editor-state restoration. It owns no engine/API routes. Public build source is packages/terminal-ui/editor/editor.js; npm run build:editor regenerates the bundle and all editor dependency licenses. Screen-owned actions stay in CODE 0304.
+
 The public repository owns `packages/terminal-ui`. The private repository owns application framework, numbered functions, API/data/state, strategy and execution logic. This explicit 2026-11-05 user direction authorizes **UI dependency integration in both repositories**; it does not authorize private engine/strategy publication or unrelated private changes.
 
 ## Ownership and delivery

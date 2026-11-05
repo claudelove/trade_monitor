@@ -1,3 +1,5 @@
+> Current authoring behavior: see [STRATEGY_WORKBENCH.md](STRATEGY_WORKBENCH.md). Web-reviewed immutable versions can run historical workers directly; the earlier registry-only restriction below is superseded for the explicit administrator-reviewed backtest endpoint. Live trading remains disconnected.
+
 # Workspace roles and incremental screen development
 
 ## Roles

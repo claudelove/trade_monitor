@@ -1,5 +1,7 @@
 # Terminal UI — shared presentation and interaction modules
 
+Strategy CODE 0304 now uses a bundled code editor and the current version's validate/save/backtest/status/stop/result workflow. See [the workbench contract](docs/STRATEGY_WORKBENCH.md). Public Pages is UI-only; actual operations require the protected engine. Live broker transport remains disconnected.
+
 [Open the preview](https://claudelove.github.io/trade_monitor/) · [UI source and synchronization](docs/UI_SYNC.md) · [Handoff](docs/HANDOFF.md)
 
 The public repository owns **packages/terminal-ui**, the shared typography, styles, chart rendering and UI interaction library. The private repository owns the application framework, numbered functions, API/data and strategies. Both consume the same UI contract through versioned local bundles and stable adapters. Changing a private screen number or function does not require copying the UI again.
