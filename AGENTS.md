@@ -113,3 +113,7 @@
 
 - Shared UI 0.4.0 follows the supplied student-guide chrome: dark navy, red function bars, amber input, gray controls/thin boundaries, blue selection; Bergoom remains. Keep domestic HTS red/blue pricing.
 - One permanent command/SCREENS search; typing never opens panes. Repeated commands reuse one function per desk and legacy duplicate layouts consolidate. Surviving chart DOM must not remount for chrome/reselection/add/close. Do not restore removed duplicate shortcuts/HELP directory/hidden placeholders/widget state or repeatable/reset/minimize paths. Preserve app-owned routing, data/context lifecycle and geometry-only storage.
+
+## Open-window shortcuts — latest user request (2026-11-05)
+
+- Each desk has a bottom strip of currently open functions only. Preserve focus/close/maximize synchronization, keyboard navigation, desktop/mobile behavior and surviving chart DOM. These requested shortcuts are distinct from the retired all-functions toolbar; do not expand them into launch/menu/layout-management controls. Common styles are terminal-ui 0.4.1; application owns pane identities and selection.
