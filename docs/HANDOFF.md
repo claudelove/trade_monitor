@@ -4,13 +4,13 @@
 
 
 
-## 2026-11-05 Bergoom and HTS chart presentation — current release work
+## 2026-11-05 Bergoom and HTS chart presentation — released
 
-The user selected dchest/bergoom as the open-source Bloomberg-inspired substitute. Common library 0.2.0 / API 1 now defaults to bundled Bergoom Regular/Semibold/Bold/Italic, with original OFL/copyright notices and pinned public provenance. Font files are unmodified. This is not Bloomberg Prop or Neue Haas Grotesk. Monospaced source editors retain IBM Plex Mono.
+Common UI 0.2.0 / API 1 defaults to self-hosted Bergoom Regular/Semibold/Bold/Italic, the user-selected OFL Bloomberg-inspired alternative. Original font bytes, source provenance and copyright/OFL notices are preserved. This is not Bloomberg Prop or Neue Haas. Code editors retain IBM Plex Mono.
 
-Native charts add a last-loaded-value/prior-observation change ribbon, default trailing MA5/20/60 and cursor values, red/blue OHLC/volume, keyboard Left/Right/Home/End/+/−/Escape, exact-time LINK clearing, integer source-price axis formatting, retained visible range on resize and adjustable volume proportion. No source data/session clocks/volume are invented; Δ BAR is not a daily return. Changes are confined to common modules/resources and license packaging; application feature screens, engine API and financial policy remain outside the change.
+The module provides LAST SOURCE / prior-observation Δ BAR, trailing MA5/20/60 values, red/blue OHLC/volume, keyboard inspection/zoom/Home/End/Escape, missing-time LINK clearing, display-only integer-price precision and resize viewport/volume retention. Source values and clock precision are preserved. Application screen numbers, APIs and financial logic remain outside this visual module.
 
-Local validation: existing UI suites plus HTS presentation guards, public Python 37 and actual Chromium custom-font glyph detection, real public OHLCV, MA inputs, keyboard/chart controls and mobile. Both local consumers use the module; publish the tested package, update the consumer pin and check remote CI before reporting complete rollout. Consumer-specific commits and CI evidence belong only in that repository.
+Public release 217feb40f8f917ef27fb91c6ac34713dd9bed6c1 passed public Actions 41943056266 and deployed. Deployed font, CSS, chart helpers and OFL text match local bytes. Public Python 37, nine UI suites, actual Chromium Bergoom glyph identification, source OHLCV and native chart/keyboard/mobile checks passed. Consumer-specific commits and integration evidence are kept only in the consumer repository's handoff. Use docs/SHARED_UI.md to update the pinned dependency.
 
 ## 2026-11-05 shared presentation/interaction dependency — current direction
 
