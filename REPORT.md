@@ -1,3 +1,7 @@
+## 2026-11-05 student-guide theme and function-search repair
+
+Reviewed all guide pages/embedded images; common UI 0.4.0 provides compact red function bars, navy surfaces, amber inputs, gray controls and blue selected suggestions. Consolidated search into the permanent command form. GP is now reused rather than spawned repeatedly, old duplicate layouts consolidate, and surviving chart DOM stays mounted during window chrome actions. Removed superseded UI/placeholders/flags. Public Python/UI/Pages checks and actual Chromium route/search/layout/mobile checks passed; see HANDOFF and TERMINAL_STYLE_GUIDE. No execution/data policy change.
+
 ## 2026-11-05 manual window layout
 
 Removed automatic tiling and numbered function toolbar. Users move/resize independent windows; existing geometry is retained on add/close and restored per desk. Separate registry-backed screen list/search routes by number, command or title across desks. Shared UI 0.3.0 / API 1 owns reusable pointer/keyboard gestures. Public UI/Python/Pages checks and real Chromium layout/chart-resize/search/mobile checks passed. No market/private-data or execution changes.

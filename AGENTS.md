@@ -108,3 +108,8 @@
 ## Manual windows — latest user direction (2026-11-05)
 
 - Remove automatic tiling on opening/closing; users move/resize panes directly. Preserve existing geometry and per-desk browser layout storage. No full screen-number toolbar: use separate registry-driven screen list/search and existing application routing. Shared gesture code belongs to terminal-ui; application layout/search adapters remain local. Mobile keeps readable stacked panes.
+
+## Guide-based chrome and unique functions — latest user direction (2026-11-05)
+
+- Shared UI 0.4.0 follows the supplied student-guide chrome: dark navy, red function bars, amber input, gray controls/thin boundaries, blue selection; Bergoom remains. Keep domestic HTS red/blue pricing.
+- One permanent command/SCREENS search; typing never opens panes. Repeated commands reuse one function per desk and legacy duplicate layouts consolidate. Surviving chart DOM must not remount for chrome/reselection/add/close. Do not restore removed duplicate shortcuts/HELP directory/hidden placeholders/widget state or repeatable/reset/minimize paths. Preserve app-owned routing, data/context lifecycle and geometry-only storage.

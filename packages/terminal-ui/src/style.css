@@ -26,7 +26,7 @@
   .header-right #asof {
     display:none
   }
-  .command-bar [role=status] {
+  .command-bar > [role=status] {
     display:none
   }
 }
@@ -81,17 +81,11 @@
   .tool-window.is-maximized {
     height:650px!important
   }
-  .window-number {
-    display:none
-  }
   .analysis-metrics strong {
     font-size:calc(16px * var(--ui-type-scale,1))
   }
   .two-col,.three-col {
     grid-template-columns:1fr
-  }
-  .screen-menu .button {
-    padding:2px 5px
   }
   .tool-window.is-maximized .interactive-chart {
     height:300px

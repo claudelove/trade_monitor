@@ -1,5 +1,5 @@
 import {esc,listen} from '../ui/dom.js';
-export default {id:'orderbook',number:'0405',command:'BOOK',desk:'analysis',title:'Order Book & Microstructure',repeatable:true,
+export default {id:'orderbook',number:'0405',command:'BOOK',desk:'analysis',title:'Order Book & Microstructure',
  render(ctx,pane){return `<section class="panel"><div class="panel-head"><div class="panel-title">BOOK / STORED ORDER BOOK</div></div><div class="toolbar"><input data-book-symbol aria-label="Order book symbol" placeholder="SYMBOL" value="${esc(pane.symbol||'')}"><button data-book-query class="button secondary">QUERY</button></div><div data-book-body role="status">Enter a symbol to inspect its latest stored full snapshot.</div><p class="section-note">Stored full snapshot, not an executable quote or provider heartbeat. OFI is unavailable when stream continuity is unknown.</p></section>`},
  mount(root,ctx,pane){const body=root.querySelector('[data-book-body]');let sequence=0;
  const query=async()=>{const request=++sequence;pane.symbol=root.querySelector('[data-book-symbol]').value.trim();if(!pane.symbol){body.textContent='Enter a symbol.';return}

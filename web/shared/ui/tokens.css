@@ -8,17 +8,23 @@
 screen modules own no shell geometry. */
 :root {
   color-scheme:dark;
-  --bg:#000000;
-  --panel:#000000;
-  --surface:#303030;
-  --raised:#4b4b4b;
-  --border:#606060;
-  --text:#e7e7e7;
-  --muted:#aaaaaa;
-  --accent:#ffb000;
-  --yellow:#ffe000;
+  --bg:#00151e;
+  --panel:#00151e;
+  --surface:#35434a;
+  --raised:#4b5c65;
+  --border:#52656e;
+  --text:#e1e6e8;
+  --muted:#9babb3;
+  --accent:#ffad27;
+  --yellow:#ffd04a;
   --positive:#ff5151;
   --negative:#4b8cff;
+  --function-bar:#a91c2c;
+  --function-bar-active:#c12536;
+  --selection:#155b94;
+  --field:#ffad27;
+  --field-text:#101820;
+  --chrome:#243740;
   --font-ui:"Bergoom","Noto Sans CJK KR","Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;
   --font-family:var(--font-ui);
   --font-code:"IBM Plex Mono",Consolas,"Liberation Mono",monospace;
@@ -80,15 +86,15 @@ button,select,input {
   background:var(--surface);
   color:var(--text);
   min-width:0;
-  min-height:24px;
-  padding:3px 7px
+  min-height:22px;
+  padding:2px 6px
 }
 button:hover {
   background:var(--raised);
   color:#fff
 }
 input::placeholder {
-  color:#6d7884
+  color:#a4b1b9
 }
 select {
   padding-right:3px
@@ -106,3 +112,9 @@ input[type=checkbox] {
 
 /* Source code keeps its indentation even when terminal labels use proportional type. */
 pre,code,textarea.source-editor {font-family:var(--font-code);line-height:1.45}
+
+/* Editable fields are amber; command/code input keeps its own dark reading surface. */
+input:not([type=checkbox]):not([type=radio]),select { background:var(--field); color:var(--field-text); border-color:#b17d30; }
+input:not([type=checkbox]):not([type=radio])::placeholder { color:#4c4028; }
+button { border-color:#819099 #23313a #23313a #819099; }
+button[aria-pressed=true] { background:var(--selection); color:#fff; }

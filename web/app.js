@@ -1,3 +1,4 @@
+import {bindFunctionSearch} from './shared/ui/function-search.js';
 import {screens} from './screens.js';
 import {ChartLinkBus} from './charts/model.js';
 import * as analysis from './strategy-analysis.js';
@@ -11,14 +12,13 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const emptyMarket=()=>({prices:{},events:[],news:[],sources:[],symbols:[],event_types:{disclosure:{name:'Disclosures'}},as_of:null});
 const state={mode:'persisted',page:'overview',desk:'strategy',marketSource:'stored',symbol:'',data:emptyMarket(),
   runtime:{runs:[],strategies:[]},nativeReport:null,selectedRunId:null,choices:[],selectedPortfolio:null,
-  watch:[],search:'',category:'all',priority:'all',widgets:[{id:'events',show:true}],pollError:null,marketError:null,loading:false,role:null};
+  watch:[],search:'',category:'all',priority:'all',pollError:null,marketError:null,loading:false,role:null};
 const client=new EngineClient(),chartBus=new ChartLinkBus(),pagePanes=new Map();
 let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,pollBusy=false;
 const deskIds=['strategy','market','backtest','analysis','execution','admin'];
-const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,onOpenScreen:id=>openTool(id),
+const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,
   content:p=>{const s=screens.get(p.type),ctx=paneContext(screenContext('window'),p,s);return selectionBar(ctx,p,s)+screens.render(p.type,ctx,p)},
-  bind:(root,p)=>{const ctx=paneContext(screenContext('window'),p,screens.get(p.type)),off=bindSelection(root,ctx,p),dispose=screens.mount(p.type,root,ctx,p);return ()=>{off();dispose()}},
-  symbols:()=>terminal.securities(displayMarket())})]));
+  bind:(root,p)=>{const ctx=paneContext(screenContext('window'),p,screens.get(p.type)),off=bindSelection(root,ctx,p),dispose=screens.mount(p.type,root,ctx,p);return ()=>{off();dispose()}}})]));
 function strategyContext(){return analysis.context(state.nativeReport,state.runtime,state.selectedRunId)}
 function nativeRun(){return strategyContext().run}
 function displayMarket(){return state.marketSource==='run'?native.marketData(nativeRun()):state.data}
@@ -31,9 +31,12 @@ function openTool(id,parameters={}){
   const screen=screens.get(id),params=typeof parameters==='string'?{symbol:parameters}:parameters||{};
   if(screen.kind==='workspace'){switchDesk(screen.desk);return}
   if(screen.kind==='dialog'){openDialog(id,params);return}
+  const sameWorkspace=state.desk===screen.desk&&state.page===screens.home(screen.desk).id&&desks[screen.desk].root?.isConnected;
   state.desk=screen.desk;
   if(screen.panel===false){state.page=id;render();return}
-  state.page=screens.home(screen.desk).id;render();desks[screen.desk].open(id,params);
+  state.page=screens.home(screen.desk).id;
+  if(!sameWorkspace)render();
+  desks[screen.desk].open(id,params);
 }
 function health(){
   const preview=document.documentElement.dataset.hosting==='pages';
@@ -59,7 +62,7 @@ function render(){
   groups.account.label='SHARED ACCOUNTS';groups.run.label='STANDALONE RESEARCH';
   for(const row of state.choices){const option=document.createElement('option');option.value=row.key;option.textContent=row.label;groups[row.kind].append(option)}
   for(const group of Object.values(groups))if(group.children.length)selected.append(group);
-  if(!state.choices.length){const o=document.createElement('option');o.textContent='NO STORED ACCOUNTS OR RUNS';selected.append(o)}
+  if(!state.choices.length){const o=document.createElement('option');o.value='';o.textContent='NO STORED ACCOUNTS OR RUNS';selected.append(o)}
   selected.value=state.selectedPortfolio||'';selected.disabled=!state.choices.length;
   $('#context-run').innerHTML=ctx.entries.map(e=>`<option value="${esc(e.id)}" ${e.id===state.selectedRunId?'selected':''}>${esc(e.name)} · ${esc(e.state||'STATE UNREPORTED')}</option>`).join('')||'<option>NO STRATEGY</option>';
   $('#context-run').disabled=!ctx.entries.length;
@@ -67,8 +70,7 @@ function render(){
   $('#context-symbol').disabled=!symbols.length;$('#market-source').value=state.marketSource;
   $('#market-source option[value="run"]').disabled=!ctx.run;
   $('#market-context').hidden=state.desk!=='market';$('#strategy-context').hidden=state.desk==='market'||state.desk==='admin';
-  const current=screens.get(state.page);$('#crumb').textContent=current.title;$('#page-title').textContent=current.title;
-  $('#page-subtitle').textContent=current.subtitle||'';
+  const current=screens.get(state.page);$('#crumb').textContent=current.title;
   $$('nav button').forEach(b=>b.classList.toggle('active',screens.get(b.dataset.page).desk===state.desk));
   const stamp=state.desk==='market'?market.as_of:ctx.account?.as_of||ctx.run?.curve.at(-1)?.timestamp;
   $('#asof').textContent=state.desk==='admin'?'ACCESS / DATABASE OPERATIONS':stamp?new Date(stamp).toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour12:false})+' KST · CONTEXT AS OF':'NO SOURCE OBSERVATION';
@@ -109,7 +111,6 @@ const actions=Object.freeze({render,api,operation,setSymbol,openScreen:openTool,
   showEvent:id=>openDialog('event-detail',{eventId:id}),closeEvent:closeDialog,
   setFilter:(key,value)=>{if(['search','category','priority'].includes(key))state[key]=value},
   toggleWatch:id=>{state.watch=state.watch.includes(id)?state.watch.filter(v=>v!==id):[...state.watch,id];render()},
-  updateWidgets:widgets=>{state.widgets=widgets;render()},
   mountWorkspace:root=>{const desk=desks[state.desk];desk.mount(root);return ()=>desk.dispose()}
 });
 $('nav').innerHTML=screens.navigation().map(s=>`<button data-page="${s.id}" title="${s.number} / ${s.command}">${esc(s.navLabel||s.title)}</button>`).join('');
@@ -119,27 +120,26 @@ $('#context-run').onchange=e=>{state.selectedRunId=e.target.value;render()};
 $('#context-symbol').onchange=e=>{state.symbol=e.target.value;render()};
 $('#market-source').onchange=e=>{state.marketSource=e.target.value;state.symbol='';render()};
 $('#refresh').onclick=()=>refresh();
-$('#new-strategy').onclick=()=>openTool('strategy-lab');
-$('#orders-shortcut').onclick=()=>openTool('order-monitor');
-$('#command-form').onsubmit=e=>{
-  e.preventDefault();const [command,...args]=$('#command').value.trim().split(/\s+/),upper=command.toUpperCase();
-  if(upper==='HELP'){$('#help-dialog').showModal();return}
-  if(upper==='REFRESH'){refresh();return}
-  const s=screens.resolve(command);if(!s){$('#command-status').textContent='Enter a registered screen number or function.';return}
-  try{
-    if(s.id==='security'&&args.length&&!terminal.securities(displayMarket()).some(x=>x.symbol===args[0])&&nativeRun()?.market?.some(b=>b.symbol===args[0]))state.marketSource='run';
-    const params=s.parseArgs?.(args,screenContext('page'))||{};openTool(s.id,params);
-    $('#command-status').textContent=s.number+' / '+s.title;$('#command').value='';$('#command').blur();
-  }catch(error){$('#command-status').textContent=error.message}
-};
-$('#help-dialog p').innerHTML=screens.list.map(s=>`${s.number} / ${esc(s.command)} — ${esc(s.title)}`).join('<br>');
-$('#close-help').onclick=()=>$('#help-dialog').close();
-$('#help').onclick=()=>$('#help-dialog').showModal();
+const functionSearch=bindFunctionSearch($('#command-form'),{
+  entries:()=>screens.list.filter(s=>s.kind==='screen').map(s=>({id:s.id,number:s.number,command:s.command,title:s.title,group:screens.home(s.desk).navLabel||s.desk,aliases:[...(s.aliases||[]),...(s.legacyNumbers||[])]})),
+  onSubmit:(text,selection,{selected})=>{
+    const [command='',...args]=text.split(/\s+/),upper=command.toUpperCase();
+    if(!selected&&upper==='HELP'){functionSearch.open(true);return false}
+    if(!selected&&upper==='REFRESH'){refresh();return true}
+    const direct=selected?null:screens.resolve(command),s=selected?selection&&screens.get(selection.id):direct||selection&&screens.get(selection.id);
+    if(!s)throw Error('No matching function. Enter a screen number, command or name.');
+    if(s.id==='security'&&direct&&args.length&&!terminal.securities(displayMarket()).some(x=>x.symbol===args[0])&&nativeRun()?.market?.some(b=>b.symbol===args[0])){state.marketSource='run';if(state.desk==='market')render()}
+    const params=direct?s.parseArgs?.(args,screenContext('page'))||{}:{};
+    if(direct&&s.id==='security'&&args.length)params.marketSource=state.marketSource;
+    openTool(s.id,params);$('#command-status').textContent=s.number+' / '+s.command;return true;
+  },
+  onError:message=>{$('#command-status').textContent=message;$('#command-status').title=message;toast(message)}
+});
 $('#detail').addEventListener('cancel',closeDialog);
 $('#detail').addEventListener('close',()=>{if(activeDialog)closeDialog()});
 document.addEventListener('keydown',e=>{
   if(e.ctrlKey||e.metaKey||e.altKey||['INPUT','TEXTAREA','SELECT','BUTTON'].includes(e.target.tagName)||e.target.isContentEditable||document.querySelector('dialog[open]'))return;
-  if(e.key==='/'){e.preventDefault();$('#command').focus()}
+  if(e.key==='/'){e.preventDefault();functionSearch.open()}
   if(/^[1-6]$/.test(e.key))switchDesk(deskIds[Number(e.key)-1]);
 });
 setInterval(()=>{

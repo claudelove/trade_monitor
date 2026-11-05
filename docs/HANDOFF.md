@@ -4,6 +4,16 @@
 
 
 
+## 2026-11-05 guide-based terminal chrome / GP search fix — current
+
+User-supplied student guide: all 28 pages / 31 embedded images reviewed. Shared UI 0.4.0 / API 1 applies navy reading surface, red function bars, amber editable fields, gray controls, thin window boundaries and blue selected results. See docs/TERMINAL_STYLE_GUIDE.md; Bergoom and actual domestic HTS chart semantics remain. The manual PDF/images are not added to this repository.
+
+GP previously had repeatable:true and every execution created another chart; old layouts could restore multiple copies together. One function per desk now reuses/raises its existing pane; legacy duplicates consolidate without retiling. Incremental window chrome preserves surviving chart DOM on reuse/add/close/maximize. Explicit symbol/source changes remount only the affected pane.
+
+One persistent shell command/SCREENS directory replaces per-desk search and the static HELP dialog. Number/command/name/desk/alias/legacy-number search, exact-match ranking, explicit choice precedence, Escape/Tab/focus dismissal, IME/held-Enter guards and unknown queries are covered. Removed duplicate header shortcuts, hidden heading/layout placeholders, unused widgets action/state, repeatable/reset/minimize remnants and obsolete toolbar CSS. Private source/account/API policies remain outside this visual update.
+
+Local checks: public Python 37; both nine-suite UI contracts, public Pages boundary/assets, consumer asset syntax. Actual Chromium reviewed screenshots and all 29 public numbered screen routes twice without duplicate/mount exception/network writes; repeated GP keeps its native canvas, saved duplicate layouts migrate, real drag/resize/double-click, keyboard/global search/no-match/Korean query and mobile checks passed. Consumer-specific checks/CI evidence remain in its own handoff. Remote release verification pending.
+
 ## 2026-11-05 manual windows and screen search — current
 
 User requested removal of automatic layout and the full numbered toolbar. Common UI 0.3.0 / API 1 provides normalized pointer/keyboard move/resize gestures, bounds, cancellation and disposal. Public application preserves existing pane geometry on add/close, opens new panes with a small overlap, saves geometry per desk, and keeps maximize/restore/close. Titles show their function identity; the old function dropdown and workspace reset button are removed. SCREENS / Search lists registered screens across desks with number/command/title/alias/desk filtering, keyboard selection, Escape and focus return. It uses existing application routing, not new business APIs. Mobile remains stacked.

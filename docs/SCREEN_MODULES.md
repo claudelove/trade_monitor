@@ -87,7 +87,7 @@ npm run test:pages
 
 - 필수: id, number(4자리), command, desk(strategy/market/backtest/analysis), title, render(ctx,pane).
 - 파일명은 NNNN-lowercase-screen-name.js. 번호와 파일 prefix가 일치해야 한다. ID·번호·명령·aliases·shortcut·기본 slot 중복을 검출한다.
-- 선택: aliases, subtitle, nav/navLabel/navOrder, shortcut(1–9), defaultSlot, repeatable, selector, panel(false이면 전체 화면 전용), configure(root,ctx).
+- 선택: aliases, subtitle, nav/navLabel/navOrder, shortcut(1–9), defaultSlot, selector, panel(false이면 전체 화면 전용), configure(root,ctx).
 - kind 기본 screen, workspace는 작업 공간 호스트, dialog는 다이얼로그다.
 - parseArgs(args,ctx)는 명령 인자를 pane 매개변수로 반환한다. 화면별 인자 해석을 app.js에 추가하지 않는다. dialog의 load(ctx,params)는 표시 전 데이터를 읽는다.
 - mount(root,ctx,pane)는 동기적으로 cleanup 함수를 반환한다. 렌더러는 순수 HTML 생성, mount는 이벤트·차트 연결을 담당한다. 공용 이벤트 helper는 AbortSignal 수명에 연결되고, 연결 중 오류가 발생해도 등록된 이벤트는 해제된다. 특정 패널 오류를 다른 패널의 성공으로 숨기지 않는다.
@@ -110,3 +110,5 @@ npm run test:pages
 ## 검증
 
 새 화면을 임시 레지스트리에 등록해 기존 코어 수정 없이 내부 메뉴/번호/패널 목록에 나타나는지 검사한다. mount 실패 후 이벤트 잔존, 중복 번호/명령, chart bus 정리, 원본 데이터 불변을 함께 검사한다. Python/Pages/실제 Chromium 검증과 배포 버전 확인도 유지한다.
+
+Current window contract (2026-11-05): one instance per screen type per desk; repeated commands focus the existing pane. No repeatable flag. Use the permanent command/SCREENS search instead of adding toolbar shortcuts or a separate function directory.

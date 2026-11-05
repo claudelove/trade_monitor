@@ -278,9 +278,10 @@
   "repository": "claudelove/krx_hedgefund",
   "source_path": "src/krx_system/monitoring/web",
   "local_patches": [
-    "app.js: public preview status labels and screen-search routing callback",
     "engine-client.js: public preview read/write boundary",
     "screens/catalog.js: generated using public repository script",
-    "window-workspace.js: reviewed manual layout and registry search; shared input primitives remain in terminal-ui"
+    "app.js/index.html: persistent shared function search, reviewed UI routing and removal of redundant shortcuts/hidden placeholders; preview labels retained",
+    "window-workspace.js: unique function identity, legacy duplicate migration and incremental manual-window lifecycle",
+    "screens/views: removed retired repeatable flags and disabled unavailable chart selectors"
   ]
 }

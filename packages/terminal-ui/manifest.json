@@ -1,6 +1,6 @@
 {
   "name": "@trade-monitor/terminal-ui",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "api_version": 1,
   "files": {
     "bridges.json": "b75f53f1e42317cab061392e0c5141020f7727d717a147dd285b620c56be47d9",
@@ -12,8 +12,8 @@
     "licenses/lightweight-charts/LICENSE": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
     "licenses/lightweight-charts/NOTICE": "f76c6afab94884448f0426e30d6e9d555ca7247894cd3484e477d2f87513036e",
     "licenses/lightweight-charts/provenance.json": "875e151eccf44eb9ffe371cadfd58e0194b9e011511df545d5b215c281917683",
-    "package.json": "19fecad35f80afbae18b5ed66549c05953eb40841fe4a36cebdbd6d387da3dcd",
-    "src/charts/chart.css": "30b93ddc3741eeebf468d216fc85afb581f7aa83c3e442d8366ef2a7d21bdcd7",
+    "package.json": "9059c2f8e749b63eb2864295a0bec4b8be2dd60b53e3f6ac60cf0971d541b347",
+    "src/charts/chart.css": "1a792aff4a77cd3d476ecb710c19e072f9f5eab3c5a91cef08df5aea9526ce55",
     "src/charts/model.js": "eee166daebd58378f7d58d2e43a2ba232d571073f024fef92b9f7065a90c034e",
     "src/charts/native-chart.js": "e27aaacb57d86e5b78fbca984365677467d4b07a31c56beb2864c443b6433682",
     "src/charts/native-series.js": "834f7a8a3c279946f3c42e28458c2c32c11daead70ed75b9dbc2acb3cf816625",
@@ -21,12 +21,12 @@
     "src/charts/svg-chart.js": "11a3b58e5bcfe909688c4c8ffa543c71bfa656ee2483a2581377a422970e1f57",
     "src/charts/terminal-chart.js": "385bb0971dff857b915e6e074b1a7caafeda748a1948f134c0bacc7a7e0e82a0",
     "src/charts/vendor/lightweight-charts.js": "1bb1ee79f9d4dd17261b53d930f7a8995748276f80e7ba0e24412b5068062f5f",
-    "src/index.js": "7707962c46b0413684767b2f22bcecdb927a22cc3c5591a3415601557541eaa5",
+    "src/index.js": "2e4947d322711b8a8fb0ff29f0640003dbb0bee1e501c4bf62d5612e7b4f8a94",
     "src/licenses/bergoom/LICENSE.txt": "e3bb218777385eb01bfd95aa4eba28eeb4ab6f351053b1aedf2916820a392e66",
     "src/licenses/ibm-plex-mono/LICENSE.txt": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f",
     "src/licenses/lightweight-charts/LICENSE.txt": "70c9d5382506dd184465425c08a99ad9bd6d9ac1313c252968ba0b585e5ef823",
     "src/licenses/lightweight-charts/NOTICE.txt": "f76c6afab94884448f0426e30d6e9d555ca7247894cd3484e477d2f87513036e",
-    "src/style.css": "3b1d385146a096d1dc9deda2e4c13e333a5acf5b91e624d5177b6eaa88ea11e0",
+    "src/style.css": "09e581b27481f01e1bf39074ead9eb019ec3f6a3981a27aeaeefbf696e03d03c",
     "src/ui/dom.js": "9195a92cd34ddef542614a3260fe5b39cd8b2914cd9ee538d78150756d346564",
     "src/ui/fonts/Bergoom-Bold.woff2": "c132d15a9b8fa2d9c84de7a3063720361eb6c8e8c4685e12ea81281f7a35b833",
     "src/ui/fonts/Bergoom-Italic.woff2": "77ccede85544611f8f6fd3bf48594e1b453a003dbdf55f06ea1161cab60aee51",
@@ -34,11 +34,12 @@
     "src/ui/fonts/Bergoom-Semibold.woff2": "28df55eeeb127961292775c8b812a520ff9397cbef8e917877443fae73487cac",
     "src/ui/fonts/ibm-plex-mono-latin-400-normal.woff2": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
     "src/ui/fonts/ibm-plex-mono-latin-600-normal.woff2": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83",
-    "src/ui/panels.css": "04f6ee42080ca5bd5711a5894809e28418c4c57971dc303a514ba6b063e0b547",
-    "src/ui/shell.css": "cc37fe17d7754fef54bdb4d486247fe882df3f3d793777517ec43ff07ac9d78f",
+    "src/ui/function-search.js": "0f8a2f578b660cb04f70e842b88c98a965220240369f48b6d27f2e84669ad504",
+    "src/ui/panels.css": "536231c68b8d5d45fc4a48e0717c28906a8981f792af7e7a7a81b395a73a9372",
+    "src/ui/shell.css": "c2ecda201786d0b6f9682cef621b092777afe7a7417bdde4ebb7915b7c4d86a9",
     "src/ui/theme.js": "71747aa812de06ffa59277f77bada58d13cd56752cb70dabf9568fd71297e775",
-    "src/ui/tokens.css": "a64b22addc32d6bd454cf17ad1ea4e33671bc36ad70e35d5a6abad00be9269c2",
+    "src/ui/tokens.css": "8484da055441d0d13177ad7ea0f7cd5b672ca3d055e7362156066c2e217935df",
     "src/ui/window-actions.js": "da809dfb8df90c2b3cfb3433f2d6096fb7fcc0bd93208fe74d4a57226d1ca8b4",
-    "src/version.js": "d5dfa782178596f5612d2047de404643167cf311370b458722b54a2c3ad06f6e"
+    "src/version.js": "d34c765ddd054057cd56fd14affe0f95bf56958c140e5da2aa700eb41e1c3784"
   }
 }
