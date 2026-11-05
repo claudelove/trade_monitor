@@ -1,3 +1,5 @@
+> Current UI reference: [TERMINAL_STYLE_GUIDE.md](TERMINAL_STYLE_GUIDE.md) and the top HANDOFF checkpoint supersede the historical navigation descriptions below. The current six desks use one permanent command/SCREENS directory; repeated functions reuse a pane.
+
 # 최신: 전략/마켓 워크스페이스 분리
 
 기본 운용 공간은 포트폴리오·전략 선택과 PERF/HOLD/RISK/EXEC 4패널이다. MARKET은 별도 종목 티커 중심 공간으로 분리했다. 두 공간의 배치 키는 catalyst-window-layout-v2-strategy/market이며 이전 종목 중심 v1 배치를 새 기본으로 자동 사용하지 않는다. 여러 결과 파일의 포트폴리오 전환과 공유 전략 선택을 지원하며 개인 파일/선택 context는 영속 저장하지 않는다. [현재 분석/화면 기준](STRATEGY_MONITORING.md). 아래 이전 기본 배치는 역사적 기록이다.
