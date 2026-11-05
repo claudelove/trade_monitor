@@ -1,3 +1,7 @@
+## 2026-11-05 feedback and magnetic alignment
+
+Common UI 0.5.0 adds short, reduced-motion-aware control/window/desk feedback and optional magnetic drag/resize with guides. SNAP is configurable and browser-local; Alt bypasses and Escape rolls back. Other panes, native chart identity, manual geometry and data/API/execution boundaries are preserved. See HANDOFF/SHARED_UI for validation and contracts.
+
 ## 2026-11-05 open-window shortcuts
 
 Added a bottom strip per workspace listing only open screens. Shortcuts focus existing panes, synchronize active/close state and support keyboard navigation without chart remounts. Shared style release 0.4.1; application geometry/data/strategy policies unchanged. See HANDOFF for validation.

@@ -4,6 +4,14 @@
 
 
 
+## 2026-11-05 interaction feedback and magnetic placement — current
+
+Shared UI 0.5.0 / API 1 adds restrained 90–110ms control/focus/search/open/desk feedback and respects reduced-motion. No drag/resize coordinate transition or delayed command; publication refresh does not replay a navigation reveal. Native charts remain mounted through chrome interactions.
+
+Bottom SNAP ON/OFF (default on) assists only the active drag/resize near workspace/peer edges and 4px adjacency, within 10 CSS px. A temporary dashed guide shows alignment. Alt bypasses; keyboard movement remains precise. Escape/cancel/blur/dispose restores the start geometry and clears guides. Peer windows are untouched and no automatic tiling is introduced. The presentation boolean krx-terminal-snap-v1 is browser-local and shared across desks on mount; account/source/run payload persistence remains prohibited. Mobile keeps stacked panels and hides inactive SNAP.
+
+Local checks: public nine UI suites/Pages boundary and Python 37 passed. Regressions cover pure nearest-edge/resize/minimum/immutable geometry, snapping/Alt/cancel/guide cleanup and no keyboard commit during a pointer gesture; publication refresh does not replay effects. Actual Chromium verified peer 4px alignment/guide, canvas-edge drag and resize, Escape rollback, toggle/reload, retained native canvas, reduced motion and mobile. Consumer evidence remains in its own handoff. Remote deployment verification follows push.
+
 ## 2026-11-05 per-desk open-window shortcut tabs — current
 
 User requested bottom shortcuts for open screens by major category. Each desk now has a compact bottom strip containing only its currently open functions (number/command; accessible full title). Clicking raises an existing pane, including one covered by another maximized pane; it does not open duplicates or remount surviving charts. Window focus and close synchronize active/remove state. Arrow keys/Home/End navigate; mobile overflows horizontally and reveals the selected pane. One-function identity, manual geometry and screen-only persistence remain unchanged. Shared UI 0.4.1 owns styles; local workspace owns entries/focus/lifecycle.

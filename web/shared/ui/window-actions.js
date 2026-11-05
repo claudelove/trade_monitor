@@ -11,10 +11,10 @@ export function bindWindowChrome(element,{onFocus=()=>{},onAction=()=>{},onToggl
 }
 
 // Normalized geometry is supplied/owned by the application. No registry or storage access.
-export function bindWindowGeometry(element,{bounds,getGeometry,onChange,onCommit=()=>{},enabled=()=>true}={}){
+export function bindWindowGeometry(element,{bounds,getGeometry,onChange,onCommit=()=>{},enabled=()=>true,snapping=()=>false,peers=()=>[],onGuides=()=>{}}={}){
  const doc=element.ownerDocument,view=doc.defaultView,title=element.querySelector('.window-titlebar');
  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));let active=null,done=false;
- const apply=(start,dx,dy,edge,box)=>{
+ const apply=(start,dx,dy,edge,box,magnetic=false)=>{
   const minW=Math.min(1,280/box.width),minH=Math.min(1,180/box.height);
   let {x,y,w,h}=start;
   if(!edge){x=clamp(x+dx,0,1-w);y=clamp(y+dy,0,1-h)}
@@ -24,16 +24,17 @@ export function bindWindowGeometry(element,{bounds,getGeometry,onChange,onCommit
    if(edge.includes('w')){const right=x+w;x=clamp(x+dx,0,right-Math.min(minW,w));w=right-x}
    if(edge.includes('n')){const bottom=y+h;y=clamp(y+dy,0,bottom-Math.min(minH,h));h=bottom-y}
   }
-  onChange({x,y,w,h});
+  const snapped=magnetic?snapWindowGeometry({x,y,w,h},{width:box.width,height:box.height,edge,peers:peers()}):{geometry:{x,y,w,h},guides:[]};
+  onChange(snapped.geometry);onGuides(snapped.guides);
  };
  const finish=cancel=>{
   if(!active)return;const previous=active;active=null;
   if(cancel)onChange(previous.start);else onCommit();
   try{previous.target.releasePointerCapture?.(previous.id)}catch{}
-  element.classList.remove('is-positioning');
+  element.classList.remove('is-positioning');onGuides([]);
   doc.removeEventListener('pointermove',move);doc.removeEventListener('pointerup',up);doc.removeEventListener('pointercancel',cancelPointer);doc.removeEventListener('keydown',escape);view.removeEventListener('blur',cancelBlur);
  };
- const move=e=>{if(!active||e.pointerId!==active.id)return;e.preventDefault();apply(active.start,(e.clientX-active.x)/active.box.width,(e.clientY-active.y)/active.box.height,active.edge,active.box)};
+ const move=e=>{if(!active||e.pointerId!==active.id)return;e.preventDefault();apply(active.start,(e.clientX-active.x)/active.box.width,(e.clientY-active.y)/active.box.height,active.edge,active.box,snapping()&&!e.altKey)};
  const up=e=>{if(e.pointerId===active?.id)finish(false)};
  const cancelPointer=e=>{if(e.pointerId===active?.id)finish(true)};
  const escape=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();finish(true)}};
@@ -48,9 +49,38 @@ export function bindWindowGeometry(element,{bounds,getGeometry,onChange,onCommit
  }),listen(element,'keydown',e=>{
   const handle=e.target.closest('[data-window-resize]');
   if(!enabled()||(!handle&&e.target!==title)||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+  if(active){e.preventDefault();e.stopPropagation();return}
   const box=bounds().getBoundingClientRect();if(!box.width||!box.height)return;
   e.preventDefault();e.stopPropagation();const step=e.shiftKey?20:5;
   apply(getGeometry(),(e.key==='ArrowLeft'?-step:e.key==='ArrowRight'?step:0)/box.width,(e.key==='ArrowUp'?-step:e.key==='ArrowDown'?step:0)/box.height,handle?.dataset.windowResize||'',box);onCommit();
  })];
  return ()=>{if(done)return;done=true;finish(true);off.forEach(dispose=>dispose())};
+}
+
+// Pure magnetic alignment. Pixel thresholds are converted to normalized host geometry.
+export function snapWindowGeometry(rect,{width,height,peers=[],edge='',threshold=10,gap=4}={}){
+ const result={...rect},guides=[];
+ if(![width,height].every(v=>Number.isFinite(v)&&v>0)||!['x','y','w','h'].every(k=>Number.isFinite(rect[k])))return {geometry:result,guides};
+ const tolerance=Math.max(0,Math.min(32,Number.isFinite(threshold)?threshold:10));
+ const spacing=Math.max(0,Math.min(24,Number.isFinite(gap)?gap:4));
+ const valid=(Array.isArray(peers)?peers:[]).filter(p=>['x','y','w','h'].every(k=>Number.isFinite(p[k]))&&p.w>0&&p.h>0);
+ for(const [axis,pos,size,pixels,low,high,minimum]of [['x','x','w',width,'w','e',280],['y','y','h',height,'n','s',180]]){
+  if(edge&&!edge.includes(low)&&!edge.includes(high))continue;
+  const start=result[pos],length=result[size],end=start+length,minLength=Math.min(length,minimum/pixels);
+  let best=null;
+  for(const side of [low,high]){
+   if(edge&&!edge.includes(side))continue;
+   const moving=side===low?start:end;
+   const anchors=[0,1,...valid.flatMap(p=>side===low?[p[pos],p[pos]+p[size]+spacing/pixels]:[p[pos]+p[size],p[pos]-spacing/pixels])];
+   for(const at of anchors){
+    const delta=at-moving,distance=Math.abs(delta)*pixels;
+    const nextStart=edge?(side===low?at:start):start+delta;
+    const nextLength=edge?(side===low?end-at:at-start):length;
+    if(distance>tolerance||nextStart<-1e-9||nextStart+nextLength>1+1e-9||nextLength<minLength-1e-9)continue;
+    if(!best||distance<best.distance)best={distance,at,start:Math.max(0,nextStart),length:nextLength};
+   }
+  }
+  if(best){result[pos]=best.start;result[size]=best.length;guides.push({axis,at:best.at})}
+ }
+ return {geometry:result,guides};
 }

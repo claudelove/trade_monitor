@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
-import {apiVersion,version,bindFunctionSearch,bindWindowChrome,setTheme,readTypography,watchTypography,mountScope,listen} from '../web/shared/index.js';
+import {apiVersion,version,snapWindowGeometry,bindFunctionSearch,bindWindowChrome,setTheme,readTypography,watchTypography,mountScope,listen} from '../web/shared/index.js';
+const peer={x:.1,y:.2,w:.2,h:.3},moving={x:.303,y:.206,w:.3,h:.3};
+const snapped=snapWindowGeometry(moving,{width:1000,height:600,peers:[peer]});assert.ok(Math.abs(snapped.geometry.x-.304)<1e-12);assert.equal(snapped.geometry.y,.2);assert.equal(snapped.guides.length,2);assert.equal(moving.x,.303);assert.equal(peer.w,.2);
+assert.equal(snapWindowGeometry({x:.006,y:.15,w:.3,h:.3},{width:1000,height:600}).geometry.x,0);
+assert.equal(snapWindowGeometry({x:.04,y:.15,w:.3,h:.3},{width:1000,height:600}).geometry.x,.04);
+const resizedSnap=snapWindowGeometry({x:.1,y:.2,w:.397,h:.3},{width:1000,height:600,peers:[{x:.5,y:.2,w:.3,h:.3}],edge:'e'});assert.equal(resizedSnap.geometry.x,.1);assert.ok(Math.abs(resizedSnap.geometry.w-.396)<1e-12);assert.ok(resizedSnap.guides.every(g=>g.axis==='x'));
+const tooSmall=snapWindowGeometry({x:.1,y:.2,w:.28,h:.3},{width:1000,height:600,peers:[{x:.383,y:.2,w:.1,h:.3}],edge:'e'});assert.ok(tooSmall.geometry.w>=.28);
+assert.equal(snapWindowGeometry(moving,{width:0,height:600}).guides.length,0);
 const lock=JSON.parse(readFileSync('terminal-ui.lock.json'));assert.equal(apiVersion,lock.api_version);assert.equal(version,lock.version);
 const dom=new JSDOM('<main></main>',{url:'https://example.invalid/'}),doc=dom.window.document,root=doc.querySelector('main');let focus=0,max=0,actions=[];
 // No registry, portfolio, API or screen-number dependency.

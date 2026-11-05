@@ -10,7 +10,7 @@ export class WindowWorkspace {
   Object.assign(this,{storage,content,bind,profile,registry});
   this.tools=Object.fromEntries(registry.panels(profile).map(s=>[s.id,s.number+' '+s.command+' / '+s.title]));
   this.storageKey='krx-terminal-layout-v2-'+profile;
-  this.root=null;this.focused=null;this.maximized=null;this.views=new Map();
+  this.root=null;this.focused=null;this.maximized=null;this.views=new Map();this.seen=new Set();this.snapEnabled=true;
   try{
    const saved=JSON.parse(storage.getItem(this.storageKey));
    if(!Array.isArray(saved)||saved.length>12)throw Error('Invalid layout');
@@ -27,6 +27,12 @@ export class WindowWorkspace {
   }catch{this.panes=initial(profile,registry)}
   this.serial=Math.max(0,...this.panes.map(p=>Number(p.id.slice(5))));
   this.order=this.panes.map(p=>p.id);
+  this.loadSnapPreference();
+ }
+ loadSnapPreference(){try{this.snapEnabled=this.storage.getItem('krx-terminal-snap-v1')!=='false'}catch{}}
+ showGuides(guides){
+  const layer=this.root?.querySelector('.snap-guides');if(!layer)return;layer.replaceChildren();
+  for(const guide of guides){const line=layer.ownerDocument.createElement('span');line.className='snap-guide snap-guide-'+guide.axis;line.style[guide.axis==='x'?'left':'top']=guide.at>=1-1e-9?'calc(100% - 1px)':(guide.at*100)+'%';layer.append(line)}
  }
  save(){try{this.storage.setItem(this.storageKey,JSON.stringify(this.panes.map(p=>({id:p.id,type:p.type,...geometry(p)}))))}catch{}}
  open(type,parameters=null){
@@ -67,8 +73,8 @@ export class WindowWorkspace {
   if(!bar){
    bar=this.root.ownerDocument.createElement('div');bar.className='window-tabs';bar.dataset.windowTabs='';bar.setAttribute('role','toolbar');
    const label=this.registry.home(this.profile)?.navLabel||this.profile;bar.setAttribute('aria-label',label+' open screens');
-   bar.innerHTML=`<span class="window-tabs-label">${escape(label)}</span><div class="window-tabs-list"></div><span class="window-tabs-empty">No open screens</span>`;
-   bar.onclick=event=>{const button=event.target.closest('[data-window-tab]');if(button)this.selectPane(button.dataset.windowTab)};
+   bar.innerHTML=`<span class="window-tabs-label">${escape(label)}</span><div class="window-tabs-list"></div><span class="window-tabs-empty">No open screens</span><button type="button" class="snap-toggle" data-snap-toggle title="Align moving/resizing windows to edges · hold Alt to bypass">SNAP</button>`;
+   bar.onclick=event=>{if(event.target.closest('[data-snap-toggle]')){this.snapEnabled=!this.snapEnabled;try{this.storage.setItem('krx-terminal-snap-v1',String(this.snapEnabled))}catch{}this.showGuides([]);this.renderTabs();return}const button=event.target.closest('[data-window-tab]');if(button)this.selectPane(button.dataset.windowTab)};
    bar.onkeydown=event=>{
     const buttons=[...bar.querySelectorAll('[data-window-tab]')],index=buttons.indexOf(event.target);
     if(index<0||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
@@ -85,6 +91,7 @@ export class WindowWorkspace {
    const screen=this.registry.get(pane.type),button=this.root.ownerDocument.createElement('button');button.type='button';button.dataset.windowTab=pane.id;button.textContent=screen.number+' '+screen.command;button.title=screen.title;button.setAttribute('aria-label',screen.number+' '+screen.title);list.append(button);
   }
   bar.querySelector('.window-tabs-empty').hidden=this.panes.length>0;
+  const snap=bar.querySelector('[data-snap-toggle]');snap.textContent='SNAP '+(this.snapEnabled?'ON':'OFF');snap.setAttribute('aria-pressed',String(this.snapEnabled));
  }
  geometry(pane,element){
   const maximized=this.maximized===pane.id;
@@ -94,10 +101,10 @@ export class WindowWorkspace {
  }
  removeView(id){const view=this.views.get(id);if(view){view.dispose();view.element.remove();this.views.delete(id)}}
  dispose(){for(const id of [...this.views.keys()])this.removeView(id);this.root=null}
- mount(root){this.dispose();this.root=root;this.render()}
+ mount(root){this.dispose();this.loadSnapPreference();this.root=root;this.render()}
  toggleMaximize(pane){this.maximized=this.maximized===pane.id?null:pane.id;this.render();this.raise(pane.id);this.views.get(pane.id)?.element.querySelector('.window-titlebar').focus({preventScroll:true})}
  close(pane){
-  this.removeView(pane.id);this.panes=this.panes.filter(p=>p!==pane);this.order=this.order.filter(id=>id!==pane.id);
+  this.removeView(pane.id);this.seen.delete(pane.id);this.panes=this.panes.filter(p=>p!==pane);this.order=this.order.filter(id=>id!==pane.id);
   if(this.maximized===pane.id)this.maximized=null;
   this.focused=this.order.at(-1)||null;this.save();this.render();
   this.views.get(this.focused)?.element.querySelector('.window-titlebar').focus({preventScroll:true});
@@ -107,16 +114,16 @@ export class WindowWorkspace {
   if(!this.root?.isConnected)return;
   const document=this.root.ownerDocument;
   let canvas=this.root.querySelector('.workspace-canvas');
-  if(!canvas){this.root.innerHTML='<div class="workspace-canvas" tabindex="-1" aria-label="Independent panel workspace"><div data-workspace-status class="workspace-status" role="status"></div></div>';canvas=this.root.querySelector('.workspace-canvas')}
+  if(!canvas){this.root.innerHTML='<div class="workspace-canvas" tabindex="-1" aria-label="Independent panel workspace"><div data-workspace-status class="workspace-status" role="status"></div><div class="snap-guides" aria-hidden="true"></div></div>';canvas=this.root.querySelector('.workspace-canvas')}
   canvas.querySelector('.workspace-empty')?.remove();
   if(!this.panes.length)canvas.insertAdjacentHTML('beforeend','<div class="empty workspace-empty">Use SCREENS or enter a function number in the command line.</div>');
   for(const pane of this.panes){
    let view=this.views.get(pane.id);
    if(!view){
-    const screen=this.registry.get(pane.type),element=document.createElement('section');element.className='tool-window';element.dataset.pane=pane.id;element.dataset.tool=pane.type;element.setAttribute('aria-label',this.tools[pane.type]);
+    const screen=this.registry.get(pane.type),element=document.createElement('section');element.className='tool-window';if(!this.seen.has(pane.id)){element.classList.add('window-enter');this.seen.add(pane.id)}element.dataset.pane=pane.id;element.dataset.tool=pane.type;element.setAttribute('aria-label',this.tools[pane.type]);
     element.innerHTML=`<div class="window-titlebar" tabindex="0" role="group" aria-label="${escape(this.tools[pane.type])}" title="Drag to move · arrows move · double-click or Enter maximizes"><span class="window-number">${escape(screen.number)}</span><span class="window-title">${escape(screen.command)} / ${escape(screen.title)}</span><div class="window-buttons"><button data-window-action="maximize" aria-label="Maximize panel">□</button><button data-window-action="close" aria-label="Close panel">×</button></div></div><div class="window-body">${this.content(pane).replace(/\bid="([^"]+)"/g,'data-field="$1"')}</div>${['n','s','e','w','ne','nw','se','sw'].map(edge=>`<span class="window-resize resize-${edge}" data-window-resize="${edge}" ${edge==='se'?'tabindex="0" role="group" aria-label="Resize panel with arrow keys"':''}></span>`).join('')}`;
     canvas.append(element);
-    const cleanups=[bindWindowChrome(element,{onFocus:()=>this.raise(pane.id),onAction:action=>action==='close'?this.close(pane):this.toggleMaximize(pane),onToggleMaximize:()=>this.toggleMaximize(pane)}),bindWindowGeometry(element,{bounds:()=>canvas,getGeometry:()=>geometry(pane),enabled:()=>this.maximized!==pane.id&&document.defaultView.innerWidth>700,onChange:box=>{Object.assign(pane,box);this.geometry(pane,element)},onCommit:()=>this.save()})];
+    const cleanups=[bindWindowChrome(element,{onFocus:()=>this.raise(pane.id),onAction:action=>action==='close'?this.close(pane):this.toggleMaximize(pane),onToggleMaximize:()=>this.toggleMaximize(pane)}),bindWindowGeometry(element,{bounds:()=>canvas,getGeometry:()=>geometry(pane),enabled:()=>this.maximized!==pane.id&&document.defaultView.innerWidth>700,onChange:box=>{Object.assign(pane,box);this.geometry(pane,element)},onCommit:()=>this.save(),snapping:()=>this.snapEnabled,peers:()=>this.panes.filter(p=>p!==pane).map(geometry),onGuides:guides=>this.showGuides(guides)})];
     const off=this.bind(element.querySelector('.window-body'),pane);if(typeof off==='function')cleanups.push(off);
     view={element,dispose:()=>cleanups.splice(0).forEach(off=>off())};this.views.set(pane.id,view);
    }

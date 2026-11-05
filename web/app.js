@@ -14,7 +14,7 @@ const state={mode:'persisted',page:'overview',desk:'strategy',marketSource:'stor
   runtime:{runs:[],strategies:[]},nativeReport:null,selectedRunId:null,choices:[],selectedPortfolio:null,
   watch:[],search:'',category:'all',priority:'all',pollError:null,marketError:null,loading:false,role:null};
 const client=new EngineClient(),chartBus=new ChartLinkBus(),pagePanes=new Map();
-let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,pollBusy=false;
+let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,pollBusy=false,lastMountedDesk=null;
 const deskIds=['strategy','market','backtest','analysis','execution','admin'];
 const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,
   content:p=>{const s=screens.get(p.type),ctx=paneContext(screenContext('window'),p,s);return selectionBar(ctx,p,s)+screens.render(p.type,ctx,p)},
@@ -111,7 +111,7 @@ const actions=Object.freeze({render,api,operation,setSymbol,openScreen:openTool,
   showEvent:id=>openDialog('event-detail',{eventId:id}),closeEvent:closeDialog,
   setFilter:(key,value)=>{if(['search','category','priority'].includes(key))state[key]=value},
   toggleWatch:id=>{state.watch=state.watch.includes(id)?state.watch.filter(v=>v!==id):[...state.watch,id];render()},
-  mountWorkspace:root=>{const desk=desks[state.desk];desk.mount(root);return ()=>desk.dispose()}
+  mountWorkspace:root=>{const desk=desks[state.desk];desk.mount(root);if(lastMountedDesk!==state.desk)root.classList.add('workspace-reveal');lastMountedDesk=state.desk;return ()=>desk.dispose()}
 });
 $('nav').innerHTML=screens.navigation().map(s=>`<button data-page="${s.id}" title="${s.number} / ${s.command}">${esc(s.navLabel||s.title)}</button>`).join('');
 $('nav').onclick=e=>{const b=e.target.closest('[data-page]');if(b)openTool(b.dataset.page)};

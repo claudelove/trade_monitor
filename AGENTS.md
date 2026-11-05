@@ -117,3 +117,8 @@
 ## Open-window shortcuts — latest user request (2026-11-05)
 
 - Each desk has a bottom strip of currently open functions only. Preserve focus/close/maximize synchronization, keyboard navigation, desktop/mobile behavior and surviving chart DOM. These requested shortcuts are distinct from the retired all-functions toolbar; do not expand them into launch/menu/layout-management controls. Common styles are terminal-ui 0.4.1; application owns pane identities and selection.
+
+## Interaction feedback and magnetic placement — latest user request (2026-11-05)
+
+- Use restrained 90–110ms control/focus/desk/open feedback with reduced-motion support; never animate drag coordinates or replay effects for publication refreshes.
+- Optional SNAP (default on): only the user's active moving/resizing pane aligns to workspace/peer boundaries or 4px adjacency within 10 CSS px. Alt bypasses; cancellation restores geometry/clears guides. Never restore automatic tiling. Keyboard movement stays precise. The browser may additionally persist the explicit presentation boolean krx-terminal-snap-v1; no financial payload persistence. Common UI 0.5.0 owns primitives/styles, application owns peer geometry and preference.

@@ -118,3 +118,8 @@ input:not([type=checkbox]):not([type=radio]),select { background:var(--field); c
 input:not([type=checkbox]):not([type=radio])::placeholder { color:#4c4028; }
 button { border-color:#819099 #23313a #23313a #819099; }
 button[aria-pressed=true] { background:var(--selection); color:#fff; }
+
+/* Short input feedback only: no geometry/plot transitions or delayed actions. */
+button,a,select { transition:background-color 90ms ease-out,color 90ms ease-out,border-color 90ms ease-out; }
+button:not(:disabled):active { filter:brightness(.82); }
+@media(prefers-reduced-motion:reduce) { button,a,select { transition:none!important; } }
