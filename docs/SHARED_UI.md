@@ -4,7 +4,7 @@ The public repository owns `packages/terminal-ui`. The private repository owns a
 
 ## Ownership and delivery
 
-`@trade-monitor/terminal-ui` version 0.6.1, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
+`@trade-monitor/terminal-ui` version 0.6.2, UI contract major 1 is a buildless ESM/CSS/font bundle. No npm registry, runtime CDN or private network endpoint is required. It includes typography/theme tokens, shell/panel/chart styles, native/SVG chart engines, model/time-link semantics, DOM lifecycle helpers and window chrome interactions. It never imports screen registries, function numbers, portfolios, strategies, API clients or application state.
 
 The public source is canonical. `web/shared/` is generated for the public preview. The private application vendors the same bytes under `src/krx_system/monitoring/web/shared/`, pinned by a **full public commit SHA**, manifest SHA256, API major and per-file hashes in `terminal-ui.lock.json`. `scripts/sync_shared_ui.py --check` is offline and rejects drift. There is no automatic production download or silent branch tracking.
 
@@ -118,3 +118,9 @@ Non-GP market panes default to the canonical snapshot independently of GP histor
 Market, disclosure, native-report, strategy/holdings/risk/correlation, account sleeve, execution, stored book and OMS adapters adopt explicit numeric metadata/formatters while preserving source values, callbacks and partial/unavailable states. Modern browsers with :has support are the UI target.
 
 0.6.1 adds 1px body-column separators using --table-column-line (fallback #3b535f); the last cell has no right border, avoiding a doubled outer edge. Applies to all shared table bodies, including live-updated rows. No formatter, data or interaction changes.
+
+## Security-monitor row alignment, 0.6.2
+
+Market quote rows now separate ticker and security name into distinct columns instead of a two-line first cell. Standard rows are 30px and vertically centered. Identifier/name columns align left, numeric columns right, source bar date/time centered. Numeric columns use stable widths (close 144px, change 112px, volume 160px); name absorbs the flexible space. The preset table is bounded at 1120px with an 880px scrollable minimum, so wide windows do not distribute empty space across every value column. Long source names/timestamps may wrap without rewriting values. Other tables retain their existing vertical layout. Ticker/name actions preserve the exact source symbol and one primary keyboard tab stop per row.
+
+Column metadata accepts explicit align left/right/center and optional finite positive CSS-pixel width; explicit alignment overrides the default numeric alignment. Typed renderTable applies alignment to headers and cells. Legacy action-row callers retain responsibility for body classes. Optional className enables semantic presets, escaped as an attribute. Raw data/units/order/formatters and API behavior are unchanged.

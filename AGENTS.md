@@ -130,3 +130,7 @@
 ## Terminal tables and visibility — latest user request (2026-11-05)
 
 - Common UI 0.6.0 table layer owns 14/13/12px body/header/secondary hierarchy, aligned numeric headings/cells, restrained row rules and readable red/blue on selected rows. Use shared renderTable/formatNumber/formatPercent; financial types/units and ratio-vs-points basis are explicit. Missing is —, zero is zero, identifier leading zeros/source clocks are preserved. No positional all-columns-numeric rules or per-screen tiny table fonts. Keep action callbacks and API/data/engine policy unchanged.
+
+## Market quote alignment — latest user feedback (2026-11-05)
+
+- Common UI 0.6.2 quote preset: separate ticker/name, one-line 30px rows with vertical centering, left identifiers, right numerics, centered source date/time and stable column widths. Preserve ticker identity/actions and narrow-pane horizontal scrolling. Do not revert to two-line quote identifiers or stretch every numeric column across wide windows; other tables keep their own row layout. Explicit column align overrides numeric defaults.

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import {formatNumber,formatPercent,valueTone,renderTable,tableMarkup} from '../web/shared/ui/table.js';
+import {marketTable} from '../web/terminal-ui.js';
 import {tableRows,eventPanel} from '../web/market-ui.js';
 import {holdingsView} from '../web/screens/0102-holdings.js';
 import {context} from '../web/strategy-analysis.js';
@@ -17,5 +18,7 @@ const cells=doc.querySelectorAll('tbody tr:first-child td');assert.equal(cells[1
 assert.match(renderTable({columns,rows:[],emptyText:'No source <rows>'}),/No source &lt;rows&gt;/);assert.match(tableMarkup(['KEY'],[],{bodyId:'live',keepEmpty:true}),/id="live"/);
 const data={prices:{X:[{date:'2026-11-01',close:null}]},events:[{id:'e',ticker:'X',company:'SYNTHETIC',title:'Source headline',date:'2026-11-01'}],news:[],event_types:{}};
 const ctx={state:{data,watch:[],search:'',category:'all',priority:'all'}};assert.ok(tableRows(ctx,data.events).includes('—'),'unknown prices must not become zero');assert.ok(!tableRows(ctx,data.events).includes('class="numeric positive"'),'missing change is not positive');assert.match(eventPanel(ctx),/id="event-rows"/);
-const run=nativeRun(),strategy=context({account:null,runs:[run]},{runs:[]},run.id),h=new JSDOM(holdingsView(strategy));assert.equal(h.window.document.querySelectorAll('th.numeric').length,5);h.window.close();dom.window.close();
+const run=nativeRun(),strategy=context({account:null,runs:[run]},{runs:[]},run.id),h=new JSDOM(holdingsView(strategy));assert.equal(h.window.document.querySelectorAll('th.numeric').length,5);h.window.close();
+const aligned=new JSDOM(renderTable({columns:[{key:'n',label:'CENTER',type:'number',align:'center',width:120},{key:'id',label:'ID',align:'left'}],rows:[{n:1,id:'005930'}],className:'example-table'}));assert.equal(aligned.window.document.querySelector('th').className,'table-center');assert.ok(aligned.window.document.querySelector('td').classList.contains('table-center'));assert.equal(aligned.window.document.querySelector('col').style.width,'120px');assert.ok(aligned.window.document.querySelector('table').classList.contains('example-table'));assert.throws(()=>tableMarkup([{label:'bad',width:'10px'}],['<tr><td>1</td></tr>']),/width/);aligned.window.close();
+const quote=new JSDOM(marketTable({prices:{'005930':[{date:'2026-11-01',close:1234,volume:500}]},events:[{ticker:'005930',company:'Synthetic Name'}]},'005930'));const q=quote.window.document;assert.equal(q.querySelectorAll('th').length,6);assert.equal(q.querySelector('tbody td').textContent,'005930');assert.equal(q.querySelector('tbody td button').dataset.symbol,'005930');assert.equal(q.querySelector('tbody td button').tabIndex,-1);assert.equal(q.querySelector('tbody td:nth-child(2) button').textContent,'Synthetic Name');assert.equal(q.querySelectorAll('tbody td small').length,0,'quote is a single-line record');assert.ok(q.querySelector('th:last-child').classList.contains('table-center'));assert.ok(q.querySelector('td:last-child').classList.contains('table-center'));assert.equal(q.querySelectorAll('th.numeric').length,3);quote.window.close();dom.window.close();
 console.log('Table presentation: strict missing/zero/ID handling, ratio vs percentage-points, immutable exact source, safe HTML, semantic numeric headers, live filing rows and holdings columns passed.');

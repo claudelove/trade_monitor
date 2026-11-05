@@ -4,6 +4,12 @@
 
 
 
+## 2026-11-05 market security-monitor alignment — current
+
+User identified Market quote-table alignment. Browser measurement showed matching primary text/header coordinates, but a two-line security cell created 44px rows with values sitting at the top, and full-width automatic columns exaggerated whitespace. Shared UI 0.6.2 / API 1 provides explicit left/right/center and validated pixel column widths. The host quote table separates ticker/name, uses 30px vertically centered rows, stable numeric columns and centered source date/time, with a bounded table width and horizontal scrolling in narrow panes. Other tables remain unchanged. Source symbols/values/units/order and chart actions are preserved.
+
+Public ten UI suites/Python 37/Pages checks passed. Renderer regressions cover explicit center vs numeric defaults, widths, leading-zero ticker, one-line row structure and chart action metadata. Actual Chromium verified glyph centers/header grid offsets <=1px for all public quote rows, 30px row height, stable numeric widths at 1440/900px, GP click-through and mobile contained scroll. Consumer-specific evidence remains in its own handoff; remote deployment verification follows push.
+
 ## 2026-11-05 table body column separators — current
 
 Shared UI 0.6.1 adds 1px vertical rules between body cells, aligned with existing header divisions. Last cells omit the right rule to avoid a doubled outer edge. Shared table styles apply across all desks, including dynamic rows; source data/formatters/geometry remain unchanged. Public ten UI suites, Python 37 and Pages asset checks passed. Actual Chromium confirmed 1px body dividers and no last-cell outer divider. Release fd2210cb9926c82789c7ef0de78bd21e23db2c27 passed [Actions 41985623356](https://github.com/claudelove/trade_monitor/actions/runs/41985623356) and deployed; live shared table CSS and version match.

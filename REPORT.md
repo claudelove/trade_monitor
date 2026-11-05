@@ -1,3 +1,7 @@
+## 2026-11-05 market table alignment
+
+Separated ticker/security columns, centered single-line quote rows, stabilized numeric column widths and bounded excessive table expansion. Dates use matching centered heading/cells; numbers stay right aligned. Shared table metadata now honors explicit alignment and pixel widths. Source data/units/chart routing unchanged; see HANDOFF for pixel-level browser validation.
+
 ## 2026-11-05 shared terminal tables and visibility
 
 Common table layer / renderer / explicit financial formatters unify headers, numeric alignment, 14/13/12px typography, row states and missing-value display. Identifier/clock/percentage-point semantics and source values remain. Common labels/readout contrast improve, disclosure headlines wrap, and smaller/positional overrides are removed. Browser contrast/filter/sticky/mobile and 29-screen checks passed; see HANDOFF/SHARED_UI.

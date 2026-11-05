@@ -12,6 +12,8 @@ tbody tr.selected,tbody tr[aria-selected=true],tbody tr:focus-within { backgroun
 tbody tr:is(:hover,.selected,[aria-selected=true],:focus-within) .positive { color:var(--table-positive-selected); }
 tbody tr:is(:hover,.selected,[aria-selected=true],:focus-within) .negative { color:var(--table-negative-selected); }
 .numeric { text-align:right; font-variant-numeric:tabular-nums lining-nums; }
+.table-center { text-align:center; }
+.table-left { text-align:left; }
 .table-key { color:var(--accent); }
 .table-missing { color:#b6c1c7; }
 .wrap-cell { white-space:normal!important; overflow-wrap:anywhere; text-align:left!important; min-width:170px; }
@@ -48,3 +50,9 @@ table:has(> thead > tr > th:nth-child(21).numeric) > tbody > tr > td:nth-child(2
 table:has(> thead > tr > th:nth-child(22).numeric) > tbody > tr > td:nth-child(22):not(.wrap-cell) { text-align:right; }
 table:has(> thead > tr > th:nth-child(23).numeric) > tbody > tr > td:nth-child(23):not(.wrap-cell) { text-align:right; }
 table:has(> thead > tr > th:nth-child(24).numeric) > tbody > tr > td:nth-child(24):not(.wrap-cell) { text-align:right; }
+
+/* Security monitors: one observation per line, bounded numeric columns, flexible name. */
+.market-table { table-layout:fixed; min-width:880px; max-width:1120px; }
+.market-table td { height:30px; vertical-align:middle; }
+.market-table td .text-action { display:block; min-height:0; width:100%; line-height:inherit; white-space:normal; overflow-wrap:anywhere; }
+.market-table .table-source-date { white-space:normal; overflow-wrap:anywhere; }
