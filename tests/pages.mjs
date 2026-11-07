@@ -9,7 +9,7 @@ assert.match(html,/lang="en" data-hosting="pages"/);assert.ok(!html.includes('="
 const dom=new JSDOM(html,{url:'https://example.invalid/trade_monitor/'});globalThis.document=dom.window.document;
 const prior=globalThis.fetch,calls=[];
 globalThis.fetch=async(url,options)=>{calls.push([String(url),options]);assert.ok(!options?.method,'no POST from public preview');assert.ok(String(url).endsWith('/data/live.json'));return {ok:true,json:async()=>JSON.parse(readFileSync('dist/assets/data/live.json'))}};
-assert.equal(screens.navigation().length,6);assert.equal(screens.list.length,34);
+assert.equal(screens.navigation().length,6);assert.equal(screens.list.length,35);
 const client=new EngineClient(),value=await client.load();assert.deepEqual(value.choices,[]);assert.equal(value.report,null);assert.equal(value.marketError,null);assert.equal(Object.keys(value.data.prices).length,12);assert.equal(value.data.events.length,502);
 value.data.events=[];assert.equal((await api('/api/monitor/snapshot')).events.length,502,'preview returns clones');
 const record=(await api('/api/monitor/snapshot')).events[0],detail=await api('/api/data/events/'+record.id);assert.equal(detail.event.received_at,null);assert.equal(detail.event.available_at,null);assert.equal(detail.event.payload.title,record.title);

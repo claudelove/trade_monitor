@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {JSDOM} from 'jsdom';
+import screen from '../web/screens/0412-universe.js';
+const flush=()=>new Promise(r=>setImmediate(r)),dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main');
+const rule={id:'main',name:'Synthetic pool',markets:['KOSPI'],top_n:2,minimum_listing_days:0,exclude_halted:true,exclude_preferred:true,revision:'c'.repeat(64)};
+let posts=[];const settings={default:{id:'main',revision:rule.revision,generation:3},rules:[rule],master:{available_at:'2026-11-07T01:00:00Z'},history_credentials_configured:false};
+const ctx={signal:new AbortController().signal,actions:{api:async()=>settings,operation:async(path,body)=>{posts.push({path,body});if(path.endsWith('preview'))return {members:[{rank:1,symbol:'000001',name:'Synthetic',market:'KOSPI',market_cap_krw:'9007199254740993',lot_size:1,listing_date:'2000-01-01'}],eligible_count:3,source:'SYNTHETIC',master_available_at:'2026-11-07T01:00:00Z',snapshot_id:'d'.repeat(64)};return {...rule,default:{generation:4}}}}};
+root.innerHTML=screen.render();let off=screen.mount(root,ctx,{});await flush();assert.equal(root.querySelector('[data-univ-controls]').disabled,false);assert.match(root.textContent,/KEYS MISSING/);
+root.querySelector('[data-univ-preview]').click();await flush();assert.equal(posts[0].body.rule.top_n,2);assert.match(root.textContent,/9,007,199,254,740,993/);assert.match(root.textContent,/000001/);
+root.querySelector('form').dispatchEvent(new dom.window.Event('submit',{cancelable:true}));await flush();await flush();assert.equal(posts.at(-1).body.expected_revision,rule.revision);assert.equal(posts.at(-1).body.expected_default_generation,3);assert.equal(posts.at(-1).body.make_default,true);
+off();const previous=posts.length;root.querySelector('[data-univ-preview]').click();await flush();assert.equal(posts.length,previous,'disposed module cannot submit requests');
+root.innerHTML=screen.render();off=screen.mount(root,{signal:ctx.signal,actions:{api:async()=>{throw Error('Protected host required')}}},{});await flush();assert.equal(root.querySelector('[data-univ-controls]').disabled,true);off();dom.window.close();
+console.log('Universe UI: protected settings, source preview, exact capital/IDs, CAS and cleanup.');

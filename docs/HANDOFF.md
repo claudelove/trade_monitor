@@ -306,3 +306,15 @@ Pages Source=GitHub Actions 및 환경의 work 브랜치 허용은 사용자 설
 - Python 32개, UI/Pages/새 chart-registry 검사와 실제 Chromium 번호 호출/선·캔들/volume/커서·구간 연동/휠·포인터·키보드/SVG 다운로드/날짜 precision/문맥·닫기/mobile 검증. 화면 캡처 직접 확인. 비공개 저장소/엔진/실주문 변경 없음.
 
 모듈/차트 배포 확인: CI 41780865100 전체 success, 공개 version.json=10d576ac4c6f50f3e494ba60409d7cbf453725e9. catalog의 화면 19개와 공통 하위 자산 합계 26개 HTTP 200 확인. 공개 runtime-state 전략/실행 0건 유지. 인계 기록 문서 커밋은 [skip ci]로 보존한다.
+
+## 2026-11-07 — Managed universe frontend
+
+Added UNIV 0412 (35 numbered modules), editable saved/default pool, exact-cap
+preview, explicit master refresh and revision/default CAS. CODE now accepts
+research conditions and a managed-universe manifest; removed normal dataset
+selection, added explicit legacy-policy conversion and durable automatic research
+progress/cancel/result routing. Review invalidates on condition/source/default
+changes. Public Pages still blocks every protected operation. Common UI 0.7.0
+unchanged. See UNIVERSES_UI.md; the separately reviewed universes-1 frontend
+manifest is the private host import contract. UI DOM 14 suites and Pages boundary
+passed locally. No private backend or runtime payload is included in this commit.

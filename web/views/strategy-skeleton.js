@@ -177,3 +177,6 @@ export const strategyTemplates = {
  contract:{label:'Contract skeleton — implement hooks',source:defaultSource,manifest:defaultManifest},
  reference:{label:'Runnable OHLCV reference — synthetic data',source:referenceSource,manifest:defaultManifest.replace('name = "new_strategy"','name = "reference_momentum"')}
 };
+
+// Default authoring binds the saved server universe, never a hardcoded ticker list.
+export const managedManifest = defaultManifest.replace(/\[\[instruments\]\][\s\S]*?(?=\[risk\])/, '[universe]\nuse_default = true\n\n').replace('# SYNTHETIC demo instrument specifications, not verified live KRX master data.', '# Server-managed universe. Research instrument assumptions are reported in each resolved plan.');

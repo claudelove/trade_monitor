@@ -33,3 +33,10 @@
 .dataflow-review textarea { display:block; box-sizing:border-box; width:100%; min-height:80px; margin-top:5px; padding:7px; resize:vertical; border:1px solid var(--border); background:var(--panel); color:var(--text); }
 .dataflow-review > button { margin:0 8px 8px; }
 [data-flow-status] { padding:7px 8px; }
+
+.research-conditions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; }
+.research-conditions > label { display:block; min-width:0; margin:4px 0; }
+.research-conditions .wide,.research-conditions .review-check { grid-column:1/-1; }
+.research-conditions input:not([type=checkbox]),.research-conditions select { display:block; width:100%; min-width:0; margin-top:4px; }
+.research-conditions .review-check { display:flex; }
+.research-conditions .review-check input { flex:none; }
