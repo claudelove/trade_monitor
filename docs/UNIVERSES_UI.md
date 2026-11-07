@@ -27,3 +27,18 @@ host's inert convert-policy endpoint, preserving risk/execution settings.
 The frontend release includes 0304, 0411, 0412, the generic strategy skeleton and
 scoped workbench CSS. Common terminal-ui remains unchanged. All tests are synthetic;
 no strategy, account, credential or operational dataset is exported to Pages.
+
+## 2026-11-08 audit fixes / universes-2
+
+Background polling preserves the selected rule and unsaved form; it never advances
+reviewed rule/default CAS. RELOAD SETTINGS explicitly renders the selected saved
+rule and replaces draft edits, refreshing the revision/generation for review. LOAD
+RULE on NEW RULE clears the old revision and resets the form. Requests disable
+editing/load controls; editing invalidates old preview rows. Key status names the
+selected real/demo environment and distinguishes presence from actual connectivity.
+Public Pages remains protected-operation-free. The common package is unchanged.
+
+The app-owned command adapter also clears stale error tooltips on a successful
+command/refresh. Toast callbacks retain their own node and reset the timer rather
+than querying a disposed document. Private hosts apply these small reviewed host
+adapter changes; they do not mirror the public app/Pages transport wholesale.

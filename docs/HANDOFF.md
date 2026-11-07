@@ -318,3 +318,16 @@ changes. Public Pages still blocks every protected operation. Common UI 0.7.0
 unchanged. See UNIVERSES_UI.md; the separately reviewed universes-1 frontend
 manifest is the private host import contract. UI DOM 14 suites and Pages boundary
 passed locally. No private backend or runtime payload is included in this commit.
+
+## 2026-11-08 frontend audit
+
+Reviewed real protected host screens while preserving public source ownership.
+Fixed UNIV poll selection loss, inability to recover loaded CAS via explicit
+reload, NEW RULE retaining old data, stale member previews, and edits during save.
+Added regression coverage for polling vs reviewed revisions, explicit reload,
+new-rule identity, pending locks and disposal. No server policy/CAS is weakened.
+App command success clears old error tooltip; toast callback no longer queries a
+closed document or hides a newer toast on an older timer. Common UI0.7 unchanged.
+Both 14-suite UI runs and public 37 Python/Pages checks passed during audit.
+Release universes-2 pins the five reviewed screen/style/template files. Private
+engine/credential/OMS/account data is not in this public commit.

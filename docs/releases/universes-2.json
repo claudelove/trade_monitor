@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "release": "universes-2",
+  "capability": "universes-1",
+  "files": {
+    "web/screens/0411-data-pipeline.js": "9ff509972e63ec6c6122c2dc482a56175352a775c065edf1995e566acbd15ffb",
+    "web/screens/0304-strategy-lab.js": "58e70d3ed3250b66d37d8648bb023c29596db131e211ff9703ba87d2fbf9d9a5",
+    "web/screens/0412-universe.js": "e1759c51bfdc923cc39d7734427c7a522023b2cecc7aa415844c53483a3e6261",
+    "web/views/strategy-skeleton.js": "0e368cbc0e6e87934525a510124b486c78c9848e1253696d03ae6ae371b78d01",
+    "web/workbench.css": "beca270633735e6b9213608fabc3c2a1a9efd6b15350d4a4b50d957f6af3a9b0"
+  },
+  "host_adapter": "Protected same-origin routes unchanged. Apply the reviewed command-status/toast host patch independently; never mirror the public Pages transport."
+}

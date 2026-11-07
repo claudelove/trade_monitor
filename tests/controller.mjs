@@ -26,6 +26,7 @@ const count=w.document.querySelectorAll('.tool-window').length;command.value='GP
 
 command.value='GP';command.dispatchEvent(new w.Event('input',{bubbles:true}));const popup=w.document.querySelector('.screen-picker');market.version='new-publication';intervals[0]();await new Promise(resolve=>setImmediate(resolve));assert.equal(command.value,'GP');assert.equal(popup.hidden,false,'publication refresh preserves search query and dropdown');assert.equal(w.document.querySelector('[data-workspace-host]').classList.contains('workspace-reveal'),false,'publication refresh must not replay navigation effects');command.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
 submit('0107');assert.match(w.document.querySelector('#page').textContent,/0402/);command.value='0107';command.dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('[data-search-index]').length,1,'legacy number is searchable');
+submit('EVENT');assert.match(w.document.querySelector('#command-status').title,/requires a canonical event ID/);submit('GP SYNTHETIC');assert.equal(w.document.querySelector('#command-status').title,'','successful command clears the prior error tooltip');
 submit('0109');assert.match(w.document.querySelector('#page').textContent,/0304/);
 submit('ORD');
 const query=w.document.querySelector('[data-order-query]');query.value='missing-symbol';query.dispatchEvent(new w.Event('change',{bubbles:true}));

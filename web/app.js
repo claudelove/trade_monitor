@@ -22,7 +22,8 @@ const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace
 function strategyContext(){return analysis.context(state.nativeReport,state.runtime,state.selectedRunId)}
 function nativeRun(){return strategyContext().run}
 function displayMarket(){return state.marketSource==='run'?native.marketData(nativeRun()):state.data}
-function toast(message){$('#toast').textContent=message;$('#toast').classList.add('visible');setTimeout(()=>$('#toast').classList.remove('visible'),4000)}
+let toastTimer=null;
+function toast(message){const box=$('#toast');if(!box)return;clearTimeout(toastTimer);box.textContent=message;box.classList.add('visible');toastTimer=setTimeout(()=>box.classList.remove('visible'),4000)}
 function setSymbol(symbol){state.symbol=symbol}
 function screenContext(presentation='window',extra={}){return {state:{...state,data:state.desk==='market'?displayMarket():state.data},strategy:strategyContext(),nativeRun:nativeRun(),market:displayMarket(),
   storedMarket:state.data,marketSource:state.marketSource,staticHosting:false,presentation,chartBus,actions,...extra}}
@@ -120,7 +121,7 @@ const functionSearch=bindFunctionSearch($('#command-form'),{
   onSubmit:(text,selection,{selected})=>{
     const [command='',...args]=text.split(/\s+/),upper=command.toUpperCase();
     if(!selected&&upper==='HELP'){functionSearch.open(true);return false}
-    if(!selected&&upper==='REFRESH'){refresh();return true}
+    if(!selected&&upper==='REFRESH'){refresh();$('#command-status').textContent='REFRESH REQUESTED';$('#command-status').removeAttribute('title');return true}
     const direct=selected?null:screens.resolve(command),s=selected?selection&&screens.get(selection.id):direct||selection&&screens.get(selection.id);
     if(!s)throw Error('No matching function. Enter a screen number, command or name.');
     if(s.id==='security'&&direct&&args.length){
@@ -130,7 +131,7 @@ const functionSearch=bindFunctionSearch($('#command-form'),{
     }
     const params=direct?s.parseArgs?.(args,screenContext('page'))||{}:{};
     if(direct&&s.id==='security'&&args.length)params.marketSource=state.marketSource;
-    openTool(s.id,params);$('#command-status').textContent=s.number+' / '+s.command;return true;
+    openTool(s.id,params);$('#command-status').textContent=s.number+' / '+s.command;$('#command-status').removeAttribute('title');return true;
   },
   onError:message=>{$('#command-status').textContent=message;$('#command-status').title=message;toast(message)}
 });
