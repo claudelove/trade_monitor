@@ -370,3 +370,9 @@ only with an applicable job. BROKER drops duplicate CODE/reload buttons; safety
 pause/stop/flatten, exact setup/apply and explicit read-only balance query remain.
 Validation:15 UI suites, Pages write/privacy guard and37 public Python checks
 passed before publication. No private runtime/code/account data exported.
+
+Final preview gate: BROKER setup/query/actions remain disabled when protected
+services are unavailable (including Pages). Execution header is neutral about
+research accounts and uses per-function broker clocks; it never calls a stored
+research publication a current broker observation. Browser/host operation
+evidence remains private.

@@ -34,6 +34,6 @@ assert.match(w.document.querySelector('[data-tool="runs"]').textContent,/0 \/ 1 
 assert.ok(calls.every(([path,options])=>path.startsWith('/api/')&&!options?.method));
 for(let i=0;i<w.localStorage.length;i++){const text=w.localStorage.getItem(w.localStorage.key(i));assert.ok(!text.includes(account.id));assert.ok(!text.includes('synthetic-run'));assert.ok(!text.includes('SYNTHETIC'));}
 assert.equal(w.document.querySelectorAll('input[type=file]').length,0);
-w.document.querySelector('nav button').click();
+submit('BROKER');assert.match(w.document.querySelector('#banner').textContent,/KIS OPERATING CONTROL/);assert.match(w.document.querySelector('#asof').textContent,/PER FUNCTION/);w.document.querySelector('nav button').click();
 globalThis.fetch=previousFetch;globalThis.setInterval=previousInterval;dom.window.close();
 console.log('Controller passed: real API bootstrap, six desks, account/strategy scope, command aliases, run-market isolation, no file upload or private browser persistence.');

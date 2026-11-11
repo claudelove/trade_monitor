@@ -44,11 +44,11 @@ function health(){
   const ctx=strategyContext(),a=ctx.account,stale=a?.status==='running'&&Date.now()-Date.parse(a.updated_at)>15000;
   $('#connection-state').textContent=preview?'PUBLIC PREVIEW · ENGINE DISCONNECTED':state.loading?'LOADING ENGINE…':state.pollError?'API ERROR · last successful publication retained':state.marketError?'DATA ERROR · account query succeeded':stale?'STALE RUNNING SNAPSHOT':'ENGINE API · '+(a?.status||ctx.run?.summary.mode||'NO RUNS');
   $('#connection-state').className=state.pollError||state.marketError||stale?'negative':'connection';
-  const source=state.desk==='admin'?'ADMINISTRATION / ACCESS POLICY & DATA OPERATIONS':state.desk==='market'?(state.marketSource==='run'?'RUN SOURCE BARS · '+(ctx.entry?.name||''):'CANONICAL SOURCE SAMPLE'):
+  const source=state.desk==='execution'?'KIS OPERATING CONTROL / SEPARATE RESEARCH HISTORY':state.desk==='admin'?'ADMINISTRATION / ACCESS POLICY & DATA OPERATIONS':state.desk==='market'?(state.marketSource==='run'?'RUN SOURCE BARS · '+(ctx.entry?.name||''):'CANONICAL SOURCE SAMPLE'):
     a?`${a.name} · ${a.status} · ACCOUNT / STRATEGY LEDGER`:ctx.entry?'STRATEGY / '+ctx.entry.name:'NO STORED RUN';
   $('#context-scope').textContent=source;
   $('#banner').textContent=preview?'PUBLIC UI PREVIEW / PUBLIC MARKET SNAPSHOT ONLY / PRIVATE ENGINE, ACCOUNTS AND SERVER OPERATIONS DISCONNECTED':state.pollError?'QUERY ERROR: '+state.pollError+' · DISPLAYING LAST SUCCESSFUL QUERY':state.marketError&&(state.desk==='analysis'||state.desk==='market')?'SOURCE QUERY ERROR / LAST SOURCE SNAPSHOT RETAINED: '+state.marketError:
-    state.desk==='admin'?'ADMINISTRATOR POLICY / NO LIVE ORDER CONTROLS':state.desk==='market'?'INDEPENDENT SOURCE / SYMBOL PANES · STORED EVENTS OR HISTORICAL RUN BARS · NO LIVE QUOTE FEED'+(state.data.synthetic_sources_present?' · INCLUDES SYNTHETIC SOURCES':''):
+    state.desk==='execution'?'KIS OPERATING CONTROL IN BROKER [0504] · RESEARCH HISTORY IN BLOTTER / FILLS · REAL DISPATCH DISABLED':state.desk==='admin'?'ADMINISTRATOR POLICY / NO LIVE ORDER CONTROLS':state.desk==='market'?'INDEPENDENT SOURCE / SYMBOL PANES · STORED EVENTS OR HISTORICAL RUN BARS · NO LIVE QUOTE FEED'+(state.data.synthetic_sources_present?' · INCLUDES SYNTHETIC SOURCES':''):
     (a?.source?.synthetic||ctx.run?.source?.synthetic?'SYNTHETIC / PAPER · SYNTHETIC RESEARCH / ':'ENGINE REPORT · ')+
       (stale?'RUNNING PUBLICATION STALE / ':'')+'INTERNAL LEDGER / BROKER DISCONNECTED';
 }
@@ -71,7 +71,7 @@ function render(){
   const current=screens.get(state.page);$('#crumb').textContent=current.title;
   $$('nav button').forEach(b=>b.classList.toggle('active',screens.get(b.dataset.page).desk===state.desk));
   const stamp=state.desk==='market'?market.as_of:ctx.account?.as_of||ctx.run?.curve.at(-1)?.timestamp;
-  $('#asof').textContent=state.desk==='admin'?'ACCESS / DATABASE OPERATIONS':stamp?new Date(stamp).toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour12:false})+' KST · CONTEXT AS OF':'NO SOURCE OBSERVATION';
+  $('#asof').textContent=state.desk==='execution'?'BROKER CLOCKS SHOWN PER FUNCTION':state.desk==='admin'?'ACCESS / DATABASE OPERATIONS':stamp?new Date(stamp).toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour12:false})+' KST · CONTEXT AS OF':'NO SOURCE OBSERVATION';
   const root=$('#page');root.innerHTML=screens.render(state.page,screenContext('page'),pagePanes.get(state.page)||{});
   const pane=pagePanes.get(state.page)||{};pagePanes.set(state.page,pane);
   pageDispose=screens.mount(state.page,root,screenContext('page'),pane);

@@ -11,12 +11,12 @@
     "web/screen-registry.js": "f9f96736fcb05b06bc758d1b11c24a177ed36878810ce3a39c00307e744751f1",
     "web/screens.js": "8c3a5c2c64ae2b1e9379bb58dff2259e1215897088e531a2c21c73799650659c",
     "web/window-workspace.js": "f051f643d95e559df702c02d896eec3c335abe42fbdad8adc2f8b1a6f423848f",
-    "web/screens/0504-broker.js": "6794a2000ea2fa26d9e9a27d329bd70f75eacd6cade652557bc6a252fee6f520",
+    "web/screens/0504-broker.js": "f630a86b6cf1f91869d7856ca6915dc96a091fc6959ad7bb3e2a28f334e2d307",
     "web/views/execution.js": "265bf62e5ab23f0815b8626fda71ab97ae88d113077b60259436d03f9fbf1786"
   },
   "removed": [
     "web/screens/0406-readiness.js",
     "web/screens/0503-event-oms.js"
   ],
-  "host_adapter": "Apply exact typed DEMO setup/command and explicit read-only capture allowlist additions to the protected host. Never copy the public Pages transport. Real dispatch stays blocked."
+  "host_adapter": "Apply exact typed DEMO setup/command and explicit read-only capture allowlist additions to the protected host. Never copy the public Pages transport. Real dispatch stays blocked. Apply neutral Execution desk banner/clock patch without copying public hosting adapters."
 }
