@@ -1,42 +1,34 @@
-# Terminal UI — shared presentation and interaction modules
+# KRX Terminal
 
-Strategy CODE 0304 now uses a bundled code editor and the current version's validate/save/backtest/status/stop/result workflow. See [the workbench contract](docs/STRATEGY_WORKBENCH.md). Public Pages is UI-only; actual operations require the protected engine. Live broker transport remains disconnected.
+전략을 작성하고 검증하며, 시장 데이터와 포트폴리오를 확인하는 모니터링 터미널입니다.
 
-[Open the preview](https://claudelove.github.io/trade_monitor/) · [UI source and synchronization](docs/UI_SYNC.md) · [Handoff](docs/HANDOFF.md)
+**[터미널 열기](https://claudelove.github.io/trade_monitor/) · [사용자 가이드](docs/USER_GUIDE.md)**
 
-The public repository owns **packages/terminal-ui**, the shared typography, styles, chart rendering and UI interaction library. The public repository also owns numbered frontend screen/view sources. The private repository owns protected application adapters, API/data/state, trading logic and strategies, and serves reviewed frontend copies. Both consume the same UI contract through versioned local bundles and stable adapters. Changing a private screen number or function does not require copying the UI again.
+## 처음 사용하는 순서
 
-[Shared contract and update commands](docs/SHARED_UI.md) · [Canonical package](packages/terminal-ui) · [Consumer lock](terminal-ui.lock.json)
+1. 상단 **FUNCTION**에 `GP 005930`을 입력해 차트를 열어봅니다.
+2. 비공개 서버에 접속했다면 `UNIV`에서 투자 대상을 저장합니다.
+3. `CODE`에서 전략을 작성하고 연구 조건을 정해 **BACKTEST THIS STRATEGY**를 실행합니다.
+4. 결과를 검토하고, 모의 운용은 `BROKER`에서 별도로 준비·적용·시작합니다.
 
-The existing six-desk frontend remains a preview host for the visual modules. It does not publish or implement the private engine. Shared changes belong in packages/terminal-ui/src/, not generated web/shared/ or private screen code. The historical whole-UI import is recorded in docs/UI_UPSTREAM.json; it is no longer the update workflow.
+**GitHub Pages는 공개 UI 미리보기입니다.** 서버 저장·백테스트·계좌 조회·주문은 비공개 서버에서만 사용할 수 있습니다. 미리보기에서 버튼이 비활성화된 것은 이 연결 경계 때문입니다. 실계좌 주문은 현재 지원하지 않습니다.
 
-## Public preview
+## 무엇을 하고 싶나요?
 
-GitHub Pages displays the existing public market snapshot: DART disclosure titles, news candidates and selected NAVER/pykrx adjusted daily bars. It is not a real-time KRX feed. Account/run lists are empty. The banner identifies the preview and its disconnected engine.
+| 작업 | 시작할 화면 | 안내 |
+| --- | --- | --- |
+| 뉴스·공시·가격 확인 | `GP` · `EVENTMON` · `FIL` | [마켓 사용법](docs/USER_GUIDE.md#3-시장과-이벤트-확인하기) |
+| 투자 대상 설정 | `UNIV` | [유니버스 설정](docs/USER_GUIDE.md#4-투자할-종목군-정하기--univ) |
+| 전략 작성·백테스트 | `CODE` · `BTRESULT` | [전략 작업 흐름](docs/USER_GUIDE.md#5-전략-작성과-백테스트--code) |
+| KIS 모의 운용 | `BROKER` | [준비·시작·중지](docs/USER_GUIDE.md#6-kis-모의투자-준비와-실행--broker) |
+| 계좌·전략 성과 확인 | `ACC` · `PERF` · `RISK` · `ATTR` | [포트폴리오 보기](docs/USER_GUIDE.md#7-포트폴리오-확인하기) |
+| 데이터 수집 점검 | `DATAFLOW` | [기록·원천 상태](docs/USER_GUIDE.md#8-데이터-수집-상태-확인하기--dataflow) |
+| 상태나 오류의 의미 찾기 | 연결 표시·작업 상태 | [문제 해결](docs/USER_GUIDE.md#9-상태-표시와-문제-해결) |
 
-Strategy authoring/research, statistical execution, canonical event/book history, IP management and DB services require the protected engine. The UI is present, but Pages does not execute those operations or transmit requests to a private server. No strategy examples or private registry entries are included in the preview catalog. A snapshot date is not an availability clock.
+창은 제목 표시줄을 드래그해 옮기고, 가장자리를 드래그해 크기를 바꿉니다. **SCREENS**로 화면을 검색하고 아래 탭으로 열린 창 사이를 이동할 수 있습니다.
 
-## Local preview and checks
+## 개발·설치 문서
 
-```sh
-npm ci
-npm run test:ui
-npm run test:pages
-python -m http.server 8768 --directory dist
-```
+[개발자 안내](docs/DEVELOPER_GUIDE.md) · [공통 UI](docs/SHARED_UI.md) · [화면 모듈](docs/SCREEN_MODULES.md) · [전략 편집기 계약](docs/STRATEGY_WORKBENCH.md) · [배포](docs/DEPLOYMENT.md) · [작업 인계](docs/HANDOFF.md)
 
-Open `http://localhost:8768`. A non-Pages deployment retains the same-origin private engine contract through `web/engine-client.js`; no URL or credentials are embedded in the client.
-
-The pre-existing Python collector/runtime-v1 backend remains in this repository for compatibility and its tests. It is **not** the integrated `/api/accounts`, `/api/runs`, `/api/monitor/snapshot` engine and cannot supply this UI's private functions by itself. Its original Python dependencies and CLI are retained. Run `.venv/bin/python -m pytest -q` for backend checks.
-
-## Modules, charts and licenses
-
-Add a numbered file under `web/screens/`, assign its workspace, and regenerate `python scripts/sync_screens.py`. [Screen contract](docs/SCREEN_MODULES.md).
-
-Charts use locally bundled **TradingView Lightweight Charts 5.2.1** and retain TradingView attribution; **Bergoom** is the self-hosted, OFL-licensed Bloomberg-inspired default; it is not Bloomberg Prop. IBM Plex Mono remains for source-code blocks. All licenses, notices and provenance are in [third_party](third_party/) and are copied into the site build. [Chart notes](docs/CHART_MODULE.md).
-
-`work` deploys after GitHub Actions checks. No private host or paid cloud resource is created by this UI import. Never put private account/strategy data, `.env`, SQLite, credentials or artifacts in this repository or Pages. [Deployment](docs/DEPLOYMENT.md).
-
-2026-11-11 UI cleanup: removed the disconnected event-paper OMS and static READY
-functions. DATAFLOW keeps recording review/status; UNIV + CODE own automatic
-historical selection. Historical portfolio/order results remain research tools.
+공개 저장소는 공통 UI와 화면 모듈을 관리합니다. 비공개 서버는 API·데이터·전략·계좌·실행 상태를 관리합니다. 인증키와 개인 계좌·전략 데이터는 공개 저장소와 Pages에 포함하지 않습니다.
