@@ -59,4 +59,14 @@ const otherRoot=w.document.createElement('div');w.document.body.append(otherRoot
 w.localStorage.setItem(desktop.storageKey,JSON.stringify([{id:'pane-1',type:'security',x:.9,y:.9,w:.1,h:.1},{id:'pane-2',type:'security',x:0,y:0,w:.5,h:.5}]));
 const migrated=new WindowWorkspace(config);assert.equal(migrated.panes.length,1,'old duplicate GP layouts are consolidated');assert.equal(migrated.panes[0].x,.9);migrated.open('security');assert.equal(migrated.panes.length,1);assert.equal(JSON.parse(w.localStorage.getItem(desktop.storageKey)).length,1);
 w.localStorage.setItem(desktop.storageKey,'[{"id":"<img>","type":"security","x":0,"y":0,"w":1,"h":1}]');assert.equal(new WindowWorkspace(config).panes.length,1);
+for(const [profile,removed,survivor] of [['analysis','readiness','statistical-lab'],['execution','event-oms','fill-tape']]){
+ const key='krx-terminal-layout-v2-'+profile;
+ const keep={id:'pane-2',type:survivor,x:.21,y:.13,w:.61,h:.71};
+ w.localStorage.setItem(key,JSON.stringify([{id:'pane-1',type:removed,x:0,y:0,w:1,h:1},keep]));
+ const cleaned=new WindowWorkspace({...config,profile});
+ assert.deepEqual(cleaned.panes,[keep],'retired panes must not reset surviving geometry');
+ cleaned.save();assert.equal(JSON.parse(w.localStorage.getItem(key)).length,1);
+ w.localStorage.setItem(key,JSON.stringify([{id:'pane-1',type:removed,x:0,y:0,w:1,h:1}]));
+ assert.equal(new WindowWorkspace({...config,profile}).panes.length,0,'retired-only layout remains empty, never revives a placeholder');
+}
 dom.window.close();console.log('Window/native contracts passed: unique function reuse, duplicate-layout migration, incremental chart lifecycle, manual geometry, bounds/cancel/restore, keyboard focus and private-data persistence boundary.');

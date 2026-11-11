@@ -14,7 +14,7 @@ The existing six-desk frontend remains a preview host for the visual modules. It
 
 GitHub Pages displays the existing public market snapshot: DART disclosure titles, news candidates and selected NAVER/pykrx adjusted daily bars. It is not a real-time KRX feed. Account/run lists are empty. The banner identifies the preview and its disconnected engine.
 
-Strategy authoring/research, statistical execution, canonical event/book history, OMS, IP management and DB services require the protected engine. The UI is present, but Pages does not execute those operations or transmit requests to a private server. No strategy examples or private registry entries are included in the preview catalog. A snapshot date is not an availability clock.
+Strategy authoring/research, statistical execution, canonical event/book history, IP management and DB services require the protected engine. The UI is present, but Pages does not execute those operations or transmit requests to a private server. No strategy examples or private registry entries are included in the preview catalog. A snapshot date is not an availability clock.
 
 ## Local preview and checks
 
@@ -36,3 +36,7 @@ Add a numbered file under `web/screens/`, assign its workspace, and regenerate `
 Charts use locally bundled **TradingView Lightweight Charts 5.2.1** and retain TradingView attribution; **Bergoom** is the self-hosted, OFL-licensed Bloomberg-inspired default; it is not Bloomberg Prop. IBM Plex Mono remains for source-code blocks. All licenses, notices and provenance are in [third_party](third_party/) and are copied into the site build. [Chart notes](docs/CHART_MODULE.md).
 
 `work` deploys after GitHub Actions checks. No private host or paid cloud resource is created by this UI import. Never put private account/strategy data, `.env`, SQLite, credentials or artifacts in this repository or Pages. [Deployment](docs/DEPLOYMENT.md).
+
+2026-11-11 UI cleanup: removed the disconnected event-paper OMS and static READY
+functions. DATAFLOW keeps recording review/status; UNIV + CODE own automatic
+historical selection. Historical portfolio/order results remain research tools.

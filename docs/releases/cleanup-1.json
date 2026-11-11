@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "release": "cleanup-1",
+  "capability": "universes-1",
+  "files": {
+    "web/screens/0411-data-pipeline.js": "5e5ed5341551b00ce06445f7596f67fd59fd4c3249f152a6c7a4aada6cf9a2b8",
+    "web/screens/0304-strategy-lab.js": "58e70d3ed3250b66d37d8648bb023c29596db131e211ff9703ba87d2fbf9d9a5",
+    "web/screens/0412-universe.js": "e1759c51bfdc923cc39d7734427c7a522023b2cecc7aa415844c53483a3e6261",
+    "web/views/strategy-skeleton.js": "0e368cbc0e6e87934525a510124b486c78c9848e1253696d03ae6ae371b78d01",
+    "web/workbench.css": "beca270633735e6b9213608fabc3c2a1a9efd6b15350d4a4b50d957f6af3a9b0",
+    "web/screen-registry.js": "f9f96736fcb05b06bc758d1b11c24a177ed36878810ce3a39c00307e744751f1",
+    "web/screens.js": "8c3a5c2c64ae2b1e9379bb58dff2259e1215897088e531a2c21c73799650659c",
+    "web/window-workspace.js": "f051f643d95e559df702c02d896eec3c335abe42fbdad8adc2f8b1a6f423848f"
+  },
+  "removed": [
+    "web/screens/0406-readiness.js",
+    "web/screens/0503-event-oms.js"
+  ],
+  "host_adapter": "Reviewed UI-only retirement and dataflow cleanup. Protected transport, engine and account policies unchanged."
+}

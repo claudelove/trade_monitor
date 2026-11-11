@@ -17,6 +17,7 @@ export class WindowWorkspace {
    const ids=new Set(),types=new Set();this.panes=[];
    for(const stored of saved){
     const p={...stored};if(profile==='backtest'&&['strategies','python-registry','backtest-execution'].includes(p.type))p.type='strategy-lab';
+    if(registry.isRetired?.(p.type))continue;
     if(!Object.hasOwn(this.tools,p.type)||typeof p.id!=='string'||!/^pane-\d+$/.test(p.id)||ids.has(p.id)||!['x','y','w','h'].every(k=>Number.isFinite(p[k])))throw Error('Invalid pane');
     ids.add(p.id);
     // Earlier releases persisted repeated copies of GP/PERF. Keep one function per desk.

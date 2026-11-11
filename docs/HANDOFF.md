@@ -331,3 +331,21 @@ closed document or hides a newer toast on an older timer. Common UI0.7 unchanged
 Both 14-suite UI runs and public 37 Python/Pages checks passed during audit.
 Release universes-2 pins the five reviewed screen/style/template files. Private
 engine/credential/OMS/account data is not in this public commit.
+
+## 2026-11-11 — Remove non-operational UI functions
+
+User requested removal of useless UI. Removed static READY0406 and separate
+unconnected event-paper OMS0503 from source/catalog/search/commands. Registry
+tombstones retain only retired IDs for geometry migration; saved layouts drop
+those panes without resetting survivors. DATAFLOW no longer duplicates managed
+universe research with a manual ticker/date history form; recording review,
+request provenance and worker checkpoints remain. Corrected obsolete dataset
+selection guidance by replacing it with UNIV -> CODE automatic selection. No
+backend endpoints, engine policies, account data or shared UI package changed.
+Release docs/releases/cleanup-1.json is the explicit reviewed consumer scope.
+UI14 suites passed locally; retirement aliases and survivor geometry tested.
+
+Validation: all14 UI suites, Pages privacy/assets boundary and37 public Python
+tests passed. Python backend checks used an isolated temporary test environment;
+no production dependencies or configuration were changed. Browser/private-host
+verification is recorded by the consumer, not as a public deployment claim.

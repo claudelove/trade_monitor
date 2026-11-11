@@ -31,3 +31,5 @@ let hits=0;const root=w.document.querySelector('#plugin'),ctx={actions:{hit:()=>
 const bad=createRegistry([{...toy,id:'bad',command:'BAD',number:'0998',mount(root,ctx){listen(root,'click',()=>ctx.actions.hit());throw Error('partial mount failure')}}]);bad.mount('bad',root,ctx);root.click();assert.equal(hits,1,'failed mount must abort listeners');assert.match(root.textContent,/mount failed/);
 assert.ok(!readFileSync('web/app.js','utf8').includes('switch(pane.type)'));dom.window.close();console.log('Chart/registry checks passed: viewports, exact-time links, dual axes, missing-value gaps, immutable inputs, cleanup, safe text, numbered screen routing, dynamic screen addition and mount-error isolation.');
 
+
+for(const token of ['readiness','0406','READY','OPS','event-oms','0503','OMS'])assert.equal(screens.resolve(token),null,'retired functions cannot launch through commands or aliases');
