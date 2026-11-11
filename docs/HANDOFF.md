@@ -349,3 +349,24 @@ Validation: all14 UI suites, Pages privacy/assets boundary and37 public Python
 tests passed. Python backend checks used an isolated temporary test environment;
 no production dependencies or configuration were changed. Browser/private-host
 verification is recorded by the consumer, not as a public deployment claim.
+
+## 2026-11-11 — Protected KIS DEMO control screen
+
+BROKER0504 owns explicit version/cohort/capital/risk preparation, exact reviewed
+apply, separate DEMO start/pause/stop/flatten requests, actual worker/readiness,
+owned order states and read-only broker account query. CODE links to BROKER;
+existing BLOTTER/FILLS are labelled research history and no longer default panes.
+REAL tab is preparation-only: separate bindings, transition-policy preview and
+explicit blockers; no real dispatch route. No keys/private strategies/accounts
+are bundled. Pages rejects all new writes before fetch. Unsaved settings remain
+pane memory only, request identities survive uncertain retries, edits invalidate
+review. DEMO remaining-quantity cancellation acceptance is explicitly labelled
+and never a live-cancellable-quantity claim. See demo-execution-1 release manifest.
+
+Follow-up button cleanup: CODE no longer exposes standalone VALIDATE (backtest
+validates automatically), legacy policy-conversion or redundant universe-reload
+buttons. Version/template operations are collapsed; stop/result controls appear
+only with an applicable job. BROKER drops duplicate CODE/reload buttons; safety
+pause/stop/flatten, exact setup/apply and explicit read-only balance query remain.
+Validation:15 UI suites, Pages write/privacy guard and37 public Python checks
+passed before publication. No private runtime/code/account data exported.

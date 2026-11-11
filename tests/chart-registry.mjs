@@ -33,3 +33,5 @@ assert.ok(!readFileSync('web/app.js','utf8').includes('switch(pane.type)'));dom.
 
 
 for(const token of ['readiness','0406','READY','OPS','event-oms','0503','OMS'])assert.equal(screens.resolve(token),null,'retired functions cannot launch through commands or aliases');
+
+assert.equal(screens.resolve('BROKER').number,'0504');assert.equal(screens.resolve('DEMO').id,'broker');

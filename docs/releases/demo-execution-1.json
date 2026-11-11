@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "release": "demo-execution-1",
+  "capability": "kis-demo-bar-checkpoint-v1",
+  "files": {
+    "web/screens/0411-data-pipeline.js": "5e5ed5341551b00ce06445f7596f67fd59fd4c3249f152a6c7a4aada6cf9a2b8",
+    "web/screens/0304-strategy-lab.js": "b0d64276109a628c178a2ea23dce20f365223fb60a9a47d103215eb7204869cb",
+    "web/screens/0412-universe.js": "e1759c51bfdc923cc39d7734427c7a522023b2cecc7aa415844c53483a3e6261",
+    "web/views/strategy-skeleton.js": "0e368cbc0e6e87934525a510124b486c78c9848e1253696d03ae6ae371b78d01",
+    "web/workbench.css": "beca270633735e6b9213608fabc3c2a1a9efd6b15350d4a4b50d957f6af3a9b0",
+    "web/screen-registry.js": "f9f96736fcb05b06bc758d1b11c24a177ed36878810ce3a39c00307e744751f1",
+    "web/screens.js": "8c3a5c2c64ae2b1e9379bb58dff2259e1215897088e531a2c21c73799650659c",
+    "web/window-workspace.js": "f051f643d95e559df702c02d896eec3c335abe42fbdad8adc2f8b1a6f423848f",
+    "web/screens/0504-broker.js": "6794a2000ea2fa26d9e9a27d329bd70f75eacd6cade652557bc6a252fee6f520",
+    "web/views/execution.js": "265bf62e5ab23f0815b8626fda71ab97ae88d113077b60259436d03f9fbf1786"
+  },
+  "removed": [
+    "web/screens/0406-readiness.js",
+    "web/screens/0503-event-oms.js"
+  ],
+  "host_adapter": "Apply exact typed DEMO setup/command and explicit read-only capture allowlist additions to the protected host. Never copy the public Pages transport. Real dispatch stays blocked."
+}
