@@ -384,3 +384,19 @@ services are unavailable (including Pages). Execution header is neutral about
 research accounts and uses per-function broker clocks; it never calls a stored
 research publication a current broker observation. Browser/host operation
 evidence remains private.
+
+
+## 2026-11-12 — Pages navigation to protected terminal
+
+User requested Pages as an entry point to the separately protected terminal,
+retaining same-origin frontend/API on that destination. Added one build-time
+OPEN PRIVATE TERMINAL link from terminal-entry.json, HTTPS-origin-only, no
+credentials/query/fragment/payload. New-tab navigation uses noopener noreferrer
+and no-referrer. No automatic redirect/fetch, private code/data/account export,
+CORS/authentication change, shared UI update or numbered screen modification.
+The protected endpoint restricts access; opening the preview is not authorization.
+Domain migration changes only terminal-entry.json in this repository.
+
+Verified15 UI suites,37 Python tests and built Pages boundary suite: exactly one
+navigation link and still only one public snapshot fetch, no protected writes.
+Actual production deployment and click verification are recorded after completion.

@@ -1,6 +1,8 @@
 """Build GitHub Pages assets from the public market snapshot, without secrets."""
 import argparse
 import json
+from html import escape
+from urllib.parse import urlsplit
 import shutil
 import subprocess
 import sys
@@ -37,6 +39,20 @@ def build(output):
     html = (ROOT/'web/index.html').read_text()
     html = html.replace('<html lang="en">','<html lang="en" data-hosting="pages">')
     html = html.replace('href="/"','href="./"').replace('="/assets/','="./assets/')
+    # A normal navigation link only: the Pages runtime never fetches this host.
+    entry = json.loads((ROOT/'terminal-entry.json').read_text())
+    if set(entry) != {'url'}:
+        raise ValueError('Only the public terminal URL belongs in entry configuration')
+    url = entry['url']
+    parsed = urlsplit(url)
+    if (parsed.scheme != 'https' or not parsed.hostname or parsed.username is not None
+            or parsed.password is not None or parsed.query or parsed.fragment
+            or parsed.path not in ('', '/') or parsed.port not in (None, 443)):
+        raise ValueError('Use an HTTPS terminal origin without credentials or payloads')
+    link = ('<a id="private-terminal-link" class="button" href="'+escape(url,quote=True)+
+            '" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">'
+            'OPEN PRIVATE TERMINAL ↗</a>')
+    html = html.replace('<div class="header-right">', '<div class="header-right">'+link, 1)
     (output/'index.html').write_text(html)
     shutil.copytree(ROOT/'third_party',output/'third_party',dirs_exist_ok=True)
     live = json.loads((ROOT/'fixtures/bootstrap-live.json').read_text())
