@@ -14,7 +14,7 @@ const state={mode:'persisted',page:'overview',desk:'strategy',marketSource:'stor
   runtime:{runs:[],strategies:[]},nativeReport:null,selectedRunId:null,choices:[],selectedPortfolio:null,
   watch:[],search:'',category:'all',priority:'all',pollError:null,marketError:null,loading:false,role:null};
 const client=new EngineClient(),chartBus=new ChartLinkBus(),pagePanes=new Map();
-let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,pollBusy=false,lastMountedDesk=null;
+let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,lastReportVersion=null,pollBusy=false,lastMountedDesk=null;
 const deskIds=['strategy','market','backtest','analysis','execution','admin'];
 const desks=Object.fromEntries(deskIds.map(profile=>[profile,new WindowWorkspace({profile,storage:localStorage,
   content:p=>{const s=screens.get(p.type),ctx=paneContext(screenContext('window'),p,s);return selectionBar(ctx,p,s)+screens.render(p.type,ctx,p)},
@@ -43,7 +43,7 @@ function health(){
   const preview=document.documentElement.dataset.hosting==='pages';
   const ctx=strategyContext(),a=ctx.account,stale=a?.status==='running'&&Date.now()-Date.parse(a.updated_at)>15000;
   $('#connection-state').textContent=preview?'PUBLIC PREVIEW · ENGINE DISCONNECTED':state.loading?'LOADING ENGINE…':state.pollError?'API ERROR · last successful publication retained':state.marketError?'DATA ERROR · account query succeeded':stale?'STALE RUNNING SNAPSHOT':'ENGINE API · '+(a?.status||ctx.run?.summary.mode||'NO RUNS');
-  $('#connection-state').className=state.pollError||state.marketError||stale?'negative':'connection';
+  $('#connection-state').className=state.pollError||state.marketError||stale?'negative':state.loading?'connection is-loading':'connection';
   const source=state.desk==='execution'?'KIS OPERATING CONTROL / SEPARATE RESEARCH HISTORY':state.desk==='admin'?'ADMINISTRATION / ACCESS POLICY & DATA OPERATIONS':state.desk==='market'?(state.marketSource==='run'?'RUN SOURCE BARS · '+(ctx.entry?.name||''):'CANONICAL SOURCE SAMPLE'):
     a?`${a.name} · ${a.status} · ACCOUNT / STRATEGY LEDGER`:ctx.entry?'STRATEGY / '+ctx.entry.name:'NO STORED RUN';
   $('#context-scope').textContent=source;
@@ -84,12 +84,18 @@ async function refresh(selection=state.selectedPortfolio){
     const oldSelection=state.selectedPortfolio;
     const reportKey=value.report?.account?value.report.account.id+':'+value.report.account.updated_at:
       value.report?.runs[0]?.id||'empty';
-    const version=reportKey+':'+(value.data?.version||'market-error')+':'+(value.marketError||'')+':'+JSON.stringify(value.choices);
+    const reportVersion=reportKey+':'+JSON.stringify(value.choices);
+    const version=reportVersion+':'+(value.data?.version||'market-error')+':'+(value.marketError||'');
     state.pollError=null;state.marketError=value.marketError;state.loading=false;
     if(lastVersion===version&&oldSelection===value.selected){health();return}
     state.choices=value.choices;state.selectedPortfolio=value.selected;state.nativeReport=value.report;if(value.data)state.data=value.data;
     if(oldSelection!==value.selected){state.selectedRunId=null;for(const desk of Object.values(desks))for(const p of desk.panes){delete p.chartStates;delete p.runId}}
-    lastVersion=version;render();
+    // Management panes own their API state. Market-only publication changes
+    // must not destroy unsaved code, operating settings, focus or review.
+    const retainManagement=lastReportVersion===reportVersion&&oldSelection===value.selected&&['backtest','execution','admin'].includes(state.desk)&&screens.get(state.page).kind==='workspace'&&desks[state.desk].root?.isConnected;
+    lastVersion=version;lastReportVersion=reportVersion;
+    if(retainManagement){health();return}
+    render();
     if(activeDialog)openDialog(activeDialog.id,activeDialog.params);
   }catch(error){if(error.name==='AbortError')return;state.loading=false;state.pollError=error.message;health();toast(error.message)}
 }

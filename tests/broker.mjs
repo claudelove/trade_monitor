@@ -4,8 +4,10 @@ import screen from '../web/screens/0504-broker.js';
 const settle=async()=>{for(let i=0;i<8;i++)await new Promise(r=>setImmediate(r))};
 const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main'),pane={};
 const revision='a'.repeat(32),version='b'.repeat(64),review='c'.repeat(64);let posts=[],uncertain=false;
+pane.reviewVersion=version;pane.researchRun='d'.repeat(32);let sourceReads=[];
 const accounts=[{account_id:'demo_account',environment:'demo',revision}];
 const ctx={signal:new AbortController().signal,actions:{openScreen(){},api:async path=>{
+ if(path.includes('/source-review?')){sourceReads.push(path);return {version,blockers:['CHECKPOINT_UNSUPPORTED'],research:{run_id:pane.researchRun,halted:true,halt_reason:'drawdown limit'},limitations:['TEST ONLY'],real_blockers:['REAL_TRANSPORT_NOT_RELEASED']}}
  if(path.endsWith('/accounts'))return accounts;
  if(path.endsWith('/code-drafts'))return [{name:'SYNTHETIC SOURCE',version}];
  if(path.endsWith('/environments'))return {real_orders_enabled:false};
@@ -21,7 +23,7 @@ const ctx={signal:new AbortController().signal,actions:{openScreen(){},api:async
  return {desired:'RUNNING'};
 }}};
 root.innerHTML=screen.render(ctx,pane);let cleanup=screen.mount(root,ctx,pane);await settle();
-assert.equal(posts.length,0,'mounting never starts or prepares a strategy');assert.equal(root.querySelector('[data-broker-reload]'),null);assert.equal(root.querySelector('[data-broker-code]'),null);
+assert.equal(posts.length,0,'mounting never starts or prepares a strategy');assert.equal(root.querySelector('form').elements.version.value,version);assert.ok(sourceReads[0].includes('run_id='+pane.researchRun));assert.match(root.querySelector('[data-broker-source-review]').textContent,/CHECKPOINT_UNSUPPORTED/);assert.match(root.querySelector('[data-broker-source-review]').textContent,/HALTED/);assert.equal(root.querySelector('[data-broker-reload]'),null);assert.equal(root.querySelector('[data-broker-code]'),null);
 const form=root.querySelector('form');form.elements.account_id.value='demo_account';form.elements.version.value=version;
 form.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
 form.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));await settle();

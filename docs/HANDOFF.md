@@ -406,3 +406,28 @@ production version.json matched. Browser clicked OPEN PRIVATE TERMINAL on the
 actual github.io page and reached the protected HTTPS UI, whose DB screen passed.
 Preview remains disconnected and never receives the destination's data. This is
 verified navigation, not a Pages-hosted engine or live-trading certification.
+
+## 2026-11-12 — Control audit, readable loading, exact research → execution review
+
+Reviewed all34 numbered modules (including six workspace wrappers) and supporting
+view/chart controls. USER_GUIDE sections11–12 now enumerate every button/input/
+select, expanders, common chart/window actions, broker JSON settings and the
+research→DEMO→separate real-readiness path. Removed inert DATA0403 journal shortcut
+(no click binding), removed context-free CODE→BROKER shortcut, removed hardcoded
+strategy-ID default. Kept meaningful filters, source clocks, review, stop/flatten.
+BTRESULT0302 now opens BROKER0504 with exact saved source version + owned research
+ID in memory only. No prepare/apply/start occurs on navigation. Backend source
+review is a protected private capability; public Pages still blocks API access.
+The UI shows missing restart hooks, historical halt and real transport blockers.
+No real start button, auto-promotion or daily→five-second conversion introduced.
+
+Shared terminal-ui0.7.1 adds static high-contrast amber busy presentation, no poll
+animation or drag changes. Screen adapters mark/clear actual async busy states.
+Market-only publications preserve CODE, BROKER and ACCESS mounted management DOM
+when account/run publication is unchanged; actual account selection/publication
+changes still render. Regression covers code + operating settings/focus and exact
+version handoff without orders. Public tests use synthetic fixtures only.
+Validation:15UI suites,37Python checks and Pages boundary (final rerun after
+packaging recorded in follow-up). Public release contains no private engine,
+strategy source, account/runtime evidence or credentials. Real-money acceptance
+and private worker commissioning are not certified by this frontend release.

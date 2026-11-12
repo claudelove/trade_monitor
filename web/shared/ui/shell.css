@@ -221,3 +221,6 @@ footer {
 .command-bar > [role=status]:empty { display:none; }
 .command-bar [data-screen-picker] { white-space:nowrap; height:24px; color:#e7edf0; background:#354852; }
 .command-bar input::placeholder { color:#a4b1b9!important; }
+
+/* Static, high-contrast progress feedback; no animation on publication refresh. */
+.connection.is-loading,[role="status"][aria-busy="true"] { color:#ffe29a; background:#303d50; border:1px solid #ffb43b; padding:7px 10px; font-size:14px; font-weight:600; line-height:1.5; opacity:1; }
