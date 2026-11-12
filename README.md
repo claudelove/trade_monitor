@@ -32,3 +32,11 @@
 [개발자 안내](docs/DEVELOPER_GUIDE.md) · [공통 UI](docs/SHARED_UI.md) · [화면 모듈](docs/SCREEN_MODULES.md) · [전략 편집기 계약](docs/STRATEGY_WORKBENCH.md) · [배포](docs/DEPLOYMENT.md) · [작업 인계](docs/HANDOFF.md)
 
 공개 저장소는 공통 UI와 화면 모듈을 관리합니다. 비공개 서버는 API·데이터·전략·계좌·실행 상태를 관리합니다. 인증키와 개인 계좌·전략 데이터는 공개 저장소와 Pages에 포함하지 않습니다.
+
+## Open the protected terminal
+
+The Pages header's **OPEN PRIVATE TERMINAL ↗** link opens the protected host in a
+new tab. Pages remains a public preview and never calls that host's private APIs.
+The authorized network and protected host enforce access. To change the terminal's
+address later, update only the HTTPS origin in [terminal-entry.json](terminal-entry.json)
+and configure TLS/Host/Origin on that host; no strategy code belongs here.

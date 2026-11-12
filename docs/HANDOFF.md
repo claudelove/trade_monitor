@@ -400,3 +400,9 @@ Domain migration changes only terminal-entry.json in this repository.
 Verified15 UI suites,37 Python tests and built Pages boundary suite: exactly one
 navigation link and still only one public snapshot fetch, no protected writes.
 Actual production deployment and click verification are recorded after completion.
+
+Actual deployment verified: source4772114 / Actions43211506906 completed success,
+production version.json matched. Browser clicked OPEN PRIVATE TERMINAL on the
+actual github.io page and reached the protected HTTPS UI, whose DB screen passed.
+Preview remains disconnected and never receives the destination's data. This is
+verified navigation, not a Pages-hosted engine or live-trading certification.
