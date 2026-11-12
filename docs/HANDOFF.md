@@ -438,3 +438,11 @@ known checkpoint/static blockers cannot expose a runnable setup action. Server
 validation remains authoritative.15UI suites passed including blocked→compatible
 source change; no automatic policy apply/start. Prior Pages run43229228384
 succeeded after a single rerun (initial attempt had no jobs/logs).
+
+Actual cloud screen audit covered all34 numbered functions (including workspace
+routing and raw event dialog), read-only controls only, no policy/order writes.
+Loading follow-up: initial/manual refresh has high-contrast progress; background
+AUTO polling retains connected status rather than displaying perpetual initial
+loading. Actual bounded market snapshot measured13.52s on current Atlas/VM path,
+health0.03s/runs0.04s. This source-query latency is unresolved; AUTO2s avoids
+overlap and is not a2-second data freshness promise.15UI suites passed.

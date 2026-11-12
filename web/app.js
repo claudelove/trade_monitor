@@ -12,7 +12,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const emptyMarket=()=>({prices:{},events:[],news:[],sources:[],symbols:[],event_types:{disclosure:{name:'Disclosures'}},as_of:null});
 const state={mode:'persisted',page:'overview',desk:'strategy',marketSource:'stored',symbol:'',data:emptyMarket(),
   runtime:{runs:[],strategies:[]},nativeReport:null,selectedRunId:null,choices:[],selectedPortfolio:null,
-  watch:[],search:'',category:'all',priority:'all',pollError:null,marketError:null,loading:false,role:null};
+  watch:[],search:'',category:'all',priority:'all',pollError:null,marketError:null,loading:false,foregroundLoading:false,role:null};
 const client=new EngineClient(),chartBus=new ChartLinkBus(),pagePanes=new Map();
 let pageDispose=()=>{},dialogDispose=()=>{},dialogRequest=0,activeDialog=null,lastVersion=null,lastReportVersion=null,pollBusy=false,lastMountedDesk=null;
 const deskIds=['strategy','market','backtest','analysis','execution','admin'];
@@ -42,8 +42,8 @@ function openTool(id,parameters={}){
 function health(){
   const preview=document.documentElement.dataset.hosting==='pages';
   const ctx=strategyContext(),a=ctx.account,stale=a?.status==='running'&&Date.now()-Date.parse(a.updated_at)>15000;
-  $('#connection-state').textContent=preview?'PUBLIC PREVIEW · ENGINE DISCONNECTED':state.loading?'LOADING ENGINE…':state.pollError?'API ERROR · last successful publication retained':state.marketError?'DATA ERROR · account query succeeded':stale?'STALE RUNNING SNAPSHOT':'ENGINE API · '+(a?.status||ctx.run?.summary.mode||'NO RUNS');
-  $('#connection-state').className=state.pollError||state.marketError||stale?'negative':state.loading?'connection is-loading':'connection';
+  $('#connection-state').textContent=preview?'PUBLIC PREVIEW · ENGINE DISCONNECTED':state.loading&&state.foregroundLoading?'LOADING ENGINE…':state.pollError?'API ERROR · last successful publication retained':state.marketError?'DATA ERROR · account query succeeded':stale?'STALE RUNNING SNAPSHOT':'ENGINE API · '+(a?.status||ctx.run?.summary.mode||'NO RUNS');
+  $('#connection-state').className=state.pollError||state.marketError||stale?'negative':state.loading&&state.foregroundLoading?'connection is-loading':'connection';
   const source=state.desk==='execution'?'KIS OPERATING CONTROL / SEPARATE RESEARCH HISTORY':state.desk==='admin'?'ADMINISTRATION / ACCESS POLICY & DATA OPERATIONS':state.desk==='market'?(state.marketSource==='run'?'RUN SOURCE BARS · '+(ctx.entry?.name||''):'CANONICAL SOURCE SAMPLE'):
     a?`${a.name} · ${a.status} · ACCOUNT / STRATEGY LEDGER`:ctx.entry?'STRATEGY / '+ctx.entry.name:'NO STORED RUN';
   $('#context-scope').textContent=source;
@@ -77,8 +77,8 @@ function render(){
   pageDispose=screens.mount(state.page,root,screenContext('page'),pane);
   health();
 }
-async function refresh(selection=state.selectedPortfolio){
-  state.loading=true;health();
+async function refresh(selection=state.selectedPortfolio,foreground=true){
+  state.foregroundLoading=foreground;state.loading=true;health();
   try{
     const value=await client.load(selection);if(!value)return;
     const oldSelection=state.selectedPortfolio;
@@ -150,7 +150,7 @@ document.addEventListener('keydown',e=>{
 });
 setInterval(()=>{
   health();if(!$('#auto-poll').checked||pollBusy||state.loading)return;
-  pollBusy=true;refresh().finally(()=>{pollBusy=false});
+  pollBusy=true;refresh(undefined,false).finally(()=>{pollBusy=false});
 },2000);
 api('/api/health').then(h=>{state.role=h.role}).catch(()=>{});
 render();refresh();

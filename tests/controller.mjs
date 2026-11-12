@@ -29,7 +29,7 @@ submit('0107');assert.match(w.document.querySelector('#page').textContent,/0402/
 submit('EVENT');assert.match(w.document.querySelector('#command-status').title,/requires a canonical event ID/);submit('GP SYNTHETIC');assert.equal(w.document.querySelector('#command-status').title,'','successful command clears the prior error tooltip');
 submit('0109');assert.match(w.document.querySelector('#page').textContent,/0304/);
 const codeInput=w.document.querySelector('[data-code-source]');codeInput.value='# unsaved draft preserved';codeInput.dispatchEvent(new w.Event('input',{bubbles:true}));codeInput.focus();
-market.version='history-worker-wrote-new-bars';intervals[0]();await new Promise(resolve=>setImmediate(resolve));
+market.version='history-worker-wrote-new-bars';intervals[0]();assert.doesNotMatch(w.document.querySelector('#connection-state').textContent,/LOADING ENGINE/,'routine background polling is not initial foreground loading');await new Promise(resolve=>setImmediate(resolve));
 assert.equal(w.document.querySelector('[data-code-source]'),codeInput,'market publications cannot remount CODE while editing');
 assert.equal(w.document.activeElement,codeInput,'editing focus survives canonical data ingestion');
 assert.equal(codeInput.value,'# unsaved draft preserved');
