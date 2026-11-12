@@ -431,3 +431,10 @@ Validation:15UI suites,37Python checks and Pages boundary (final rerun after
 packaging recorded in follow-up). Public release contains no private engine,
 strategy source, account/runtime evidence or credentials. Real-money acceptance
 and private worker commissioning are not certified by this frontend release.
+
+Execution-review follow-up: PREPARE stays disabled until protected source review
+returns demo_preparation_supported=true. Missing version, unavailable API and
+known checkpoint/static blockers cannot expose a runnable setup action. Server
+validation remains authoritative.15UI suites passed including blocked→compatible
+source change; no automatic policy apply/start. Prior Pages run43229228384
+succeeded after a single rerun (initial attempt had no jobs/logs).
