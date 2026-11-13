@@ -446,3 +446,20 @@ AUTO polling retains connected status rather than displaying perpetual initial
 loading. Actual bounded market snapshot measured13.52s on current Atlas/VM path,
 health0.03s/runs0.04s. This source-query latency is unresolved; AUTO2s avoids
 overlap and is not a2-second data freshness promise.15UI suites passed.
+
+## 2026-11-14 — Separate historical reference and operating source
+
+BROKER0504 now retains the pinned historical reference while selecting a separate
+OPERATING CODE VERSION. Typed INPUT / AND-CONDITION DIFFERENCES is required for a
+paired preparation; editing conditions invalidates the preparation/review. New
+reference identity clears old preparation IDs. Protected operation-review is a
+new read-only capability; unknown hosts fail closed. Existing strict source-review
+is not weakened. UI shows reference halt and warns historical returns do not
+validate changed operating inputs/source. Preparation/apply/start remain separate.
+
+Public changes contain frontend + synthetic fixtures/docs only; no private source,
+seed/account data, keys or engine implementation. Shared UI package unchanged.
+Verification:15UI suites,37Python tests and Pages isolation checks passed. Fixtures
+cover changing operating version without losing research evidence, difference
+submission, stale review, command identity and real-mode/public guards. Private
+service integration/deployment and actual broker acceptance are separate evidence.

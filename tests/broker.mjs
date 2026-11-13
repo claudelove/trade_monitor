@@ -3,13 +3,13 @@ import {JSDOM} from 'jsdom';
 import screen from '../web/screens/0504-broker.js';
 const settle=async()=>{for(let i=0;i<8;i++)await new Promise(r=>setImmediate(r))};
 const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main'),pane={};
-const revision='a'.repeat(32),version='b'.repeat(64),review='c'.repeat(64);let posts=[],uncertain=false;
+const revision='a'.repeat(32),version='b'.repeat(64),operatingVersion='e'.repeat(64),review='c'.repeat(64);let posts=[],uncertain=false;
 pane.reviewVersion=version;pane.researchRun='d'.repeat(32);let sourceReads=[],sourceBlocked=true;
 const accounts=[{account_id:'demo_account',environment:'demo',revision}];
 const ctx={signal:new AbortController().signal,actions:{openScreen(){},api:async path=>{
- if(path.includes('/source-review?')){sourceReads.push(path);return {version,demo_preparation_supported:!sourceBlocked,blockers:sourceBlocked?['CHECKPOINT_UNSUPPORTED']:[],research:{run_id:pane.researchRun,halted:true,halt_reason:'drawdown limit'},limitations:['TEST ONLY'],real_blockers:['REAL_TRANSPORT_NOT_RELEASED']}}
+ if((path.includes('/source-review?')||path.includes('/operation-review?'))){sourceReads.push(path);const selectedVersion=new URL(path,'https://fixture.invalid').searchParams.get('version');return {version:selectedVersion,operation_transition:{research_run_id:pane.researchRun,research:{version},operation:{version:selectedVersion},reference_summary:{halted:true,halt_reason:'drawdown limit'}},demo_preparation_supported:!sourceBlocked,blockers:sourceBlocked?['CHECKPOINT_UNSUPPORTED']:[],research:{run_id:pane.researchRun,halted:true,halt_reason:'drawdown limit'},limitations:['TEST ONLY'],real_blockers:['REAL_TRANSPORT_NOT_RELEASED']}}
  if(path.endsWith('/accounts'))return accounts;
- if(path.endsWith('/code-drafts'))return [{name:'SYNTHETIC SOURCE',version}];
+ if(path.endsWith('/code-drafts'))return [{name:'SYNTHETIC RESEARCH',version},{name:'SYNTHETIC OPERATING SOURCE',version:operatingVersion}];
  if(path.endsWith('/environments'))return {real_orders_enabled:false};
  if(path.endsWith('/demo'))return {heartbeat:{status:'WAIT_SESSION'},worker_alive:true};
  if(path.endsWith('/execution'))return {orders:[]};
@@ -24,15 +24,15 @@ const ctx={signal:new AbortController().signal,actions:{openScreen(){},api:async
 }}};
 root.innerHTML=screen.render(ctx,pane);let cleanup=screen.mount(root,ctx,pane);await settle();
 assert.equal(posts.length,0,'mounting never starts or prepares a strategy');assert.equal(root.querySelector('form').elements.version.value,version);assert.ok(sourceReads[0].includes('run_id='+pane.researchRun));assert.match(root.querySelector('[data-broker-source-review]').textContent,/CHECKPOINT_UNSUPPORTED/);assert.match(root.querySelector('[data-broker-source-review]').textContent,/HALTED/);assert.equal(root.querySelector('[data-broker-reload]'),null);assert.equal(root.querySelector('[data-broker-code]'),null);
-assert.equal(root.querySelector('form button').disabled,true,'known incompatible code cannot prepare');sourceBlocked=false;root.querySelector('form').elements.version.dispatchEvent(new dom.window.Event('change',{bubbles:true}));await settle();
-const form=root.querySelector('form');form.elements.account_id.value='demo_account';form.elements.version.value=version;
+assert.equal(root.querySelector('form button').disabled,true,'known incompatible code cannot prepare');sourceBlocked=false;root.querySelector('form').elements.version.value=operatingVersion;root.querySelector('form').elements.version.dispatchEvent(new dom.window.Event('change',{bubbles:true}));await settle();
+const form=root.querySelector('form');form.elements.data_difference_note.value='Synthetic operating input and AND-condition differences, no profit claim.';form.elements.account_id.value='demo_account';form.elements.strategy_id.value='synthetic_alpha';form.elements.version.value=operatingVersion;
 form.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
 form.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));await settle();
-assert.equal(posts[0].body.version,version);assert.equal(posts[0].body.expected_revision,revision);assert.equal(posts[0].body.cohort_count,20);
+assert.equal(posts[0].body.version,operatingVersion);assert.equal(posts[0].body.research_run_id,'d'.repeat(32),'switching operating source retains the pinned research reference');assert.match(posts[0].body.data_difference_note,/AND-condition/);assert.equal(posts[0].body.expected_revision,revision);assert.equal(posts[0].body.cohort_count,20);
 assert.equal(root.querySelector('[data-broker-apply]').disabled,true);
 const check=root.querySelector('[data-broker-reviewed]');check.checked=true;check.dispatchEvent(new dom.window.Event('change'));root.querySelector('[data-broker-apply]').click();await settle();
 assert.equal(posts.at(-1).body.expected_review_sha256,review);assert.equal(posts.at(-1).body.reviewed,true);
 uncertain=true;const start=root.querySelector('[data-broker-command="start"]');start.click();await settle();const id=posts.at(-1).body.request_id;start.click();await settle();assert.equal(posts.at(-1).body.request_id,id,'uncertain command retries preserve identity');
 const before=posts.length;root.querySelector('[data-broker-environment]').value='real';root.querySelector('[data-broker-environment]').dispatchEvent(new dom.window.Event('change'));start.click();await settle();assert.equal(posts.length,before);assert.equal(start.disabled,true);assert.equal(root.querySelector('[data-broker-capture]').disabled,true,'REAL preparation cannot query the DEMO account as REAL');assert.equal(root.querySelector('[data-broker-real]').hidden,false);
-cleanup();root.innerHTML=screen.render(ctx,pane);cleanup=screen.mount(root,ctx,pane);await settle();assert.equal(root.querySelector('form').elements.account_id.value,'demo_account','unsaved settings survive pane remount in memory');assert.equal(root.querySelector('form').elements.version.value,version);cleanup();ctx.actions.api=async()=>{throw Error('Public preview')};root.innerHTML=screen.render(ctx,pane);cleanup=screen.mount(root,ctx,pane);await settle();assert.equal(root.querySelector('form button').disabled,true);assert.equal(root.querySelector('[data-broker-capture]').disabled,true);cleanup();dom.window.close();
+cleanup();root.innerHTML=screen.render(ctx,pane);cleanup=screen.mount(root,ctx,pane);await settle();assert.equal(root.querySelector('form').elements.account_id.value,'demo_account','unsaved settings survive pane remount in memory');assert.equal(root.querySelector('form').elements.version.value,operatingVersion);cleanup();ctx.actions.api=async()=>{throw Error('Public preview')};root.innerHTML=screen.render(ctx,pane);cleanup=screen.mount(root,ctx,pane);await settle();assert.equal(root.querySelector('form button').disabled,true);assert.equal(root.querySelector('[data-broker-capture]').disabled,true);cleanup();dom.window.close();
 console.log('Broker UI: inert mount, exact reviewed setup, command retry identity, real-mode guard and memory-only drafts passed.');

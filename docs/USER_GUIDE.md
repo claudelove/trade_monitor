@@ -135,7 +135,7 @@
 
 ## 6. KIS 모의투자 준비와 실행 — BROKER
 
-`BTRESULT`의 **REVIEW EXECUTION [0504]** 또는 명령 `BROKER`로 엽니다. 결과에서 열면 해당 코드 버전을 전달합니다. 다음 순서를 구분해서 사용합니다.
+`BTRESULT`의 **REVIEW EXECUTION [0504]** 또는 명령 `BROKER`로 엽니다. 결과에서 열면 백테스트 원본 버전·결과를 참조 근거로 고정합니다. 운용 코드는 따로 작성·저장하고 OPERATING CODE VERSION에서 선택할 수 있습니다. 다음 순서를 구분해서 사용합니다.
 
 **준비 → 검토·적용 → 시작 → 상태·주문 확인**
 
@@ -143,7 +143,7 @@
 
 1. **ENVIRONMENT**가 `KIS DEMO / VIRTUAL MONEY`인지 확인합니다.
 2. **SETUP / SOURCE / CAPITAL / RISK**를 펼칩니다.
-3. 실행할 저장 코드 버전과 계좌·전략 식별자, 자본 배정·관측 종목 수를 선택합니다.
+3. 별도로 저장한 **OPERATING CODE VERSION**과 계좌·전략 식별자, 자본 배정·관측 종목 수를 선택합니다. **INPUT / AND-CONDITION DIFFERENCES**에 실제 입력·추가 조건 차이를 기록합니다(20자 이상). 원본 백테스트는 변경하지 않습니다.
 4. **EDIT RISK / EXECUTION / BALANCE FLOORS**에서 노출·손실·주문 금액·수량·유효시간·비용 조건을 검토합니다.
 5. **PREPARE DEMO SETTINGS**로 종목·데이터·설정 검토 내용을 준비합니다.
 6. 준비된 내용을 확인하고 승인란과 적용 버튼으로 확정합니다.
@@ -317,7 +317,7 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | OPEN RESULT | 해당 작업의 저장 run 결과를 BTRESULT0302로 엽니다. |
 | Effective risk / execution settings 펼침 | 검증된 입력에서 해석한 엔진 한도·체결 가정 조회. |
 
-`0302 BTRESULT`는 STRATEGY/FOLLOW, NAV/DRAWDOWN/GROSS/PNL와 공통 차트 조작을 제공합니다. 저장 코드 버전이 있는 결과에만 **REVIEW EXECUTION [0504]**가 나타납니다. 정확한 버전·연구 실행을 BROKER로 넘기며 **운용 설정 적용이나 주문 시작은 수행하지 않습니다**. 예전 자료의 버전을 추정해 연결하지 않습니다.
+`0302 BTRESULT`는 STRATEGY/FOLLOW, NAV/DRAWDOWN/GROSS/PNL와 공통 차트 조작을 제공합니다. 저장 코드 버전이 있는 결과에만 **REVIEW EXECUTION [0504]**가 나타납니다. 정확한 원본 버전·연구 실행을 BROKER의 참조 근거로 넘기며 **운용 설정 적용이나 주문 시작은 수행하지 않습니다**. 예전 자료의 버전을 추정해 연결하지 않습니다.
 
 ### Analytics & Data
 
@@ -366,7 +366,8 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | ENVIRONMENT CONFIGURATION… 펼침 | 모의·실전 자격정보 존재 여부와 실전 전환 차단 조건 조회. 비밀값은 표시하지 않습니다. |
 | SETUP / SOURCE / CAPITAL / RISK 펼침 | 운용 설정 준비 폼. |
 | ACCOUNT ID / STRATEGY ID | 서버 내부 계좌 / 전략 슬리브 ID. 특정 전략명을 기본값으로 넣지 않습니다. |
-| SAVED CODE VERSION | 검토할 불변 코드 버전. BTRESULT에서 넘어오면 정확한 버전 선택과 원래 연구 상태를 보여줍니다. |
+| OPERATING CODE VERSION | 실행할 불변 운용 소스 버전. BTRESULT에서 고정한 원본 연구와 별도 버전일 수 있으며, 그 차이는 명시적으로 검토합니다. |
+| INPUT / AND-CONDITION DIFFERENCES | 실제 데이터·입력 주기·추가 AND 조건·비용/체결 가정의 차이를 20–2000자로 기록. 원본의 수익률이 새 코드를 검증했다고 처리하지 않습니다. |
 | ACCOUNT CAPITAL LIMIT / STRATEGY CAPITAL | 전체 계좌·해당 전략의 예산(KRW). 입금액 보장·수익 보장이 아니며 실제 잔고와 별도 검증. |
 | OBSERVED COHORT | 유니버스 중 실제 관측할 종목 수(최대40). 전체 투자 풀과 실시간 동시 구독은 다릅니다. |
 | EDIT RISK / EXECUTION / BALANCE FLOORS 펼침 | 아래 위험·주문 설정 JSON 수정. 비밀키 입력 금지. |
@@ -411,7 +412,7 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 
 1. UNIV 저장 → CODE 소스·조건 검토 → BACKTEST → OPEN RESULT.
 2. 수익뿐 아니라 위험 중단·비용·시점·생존편향을 검토합니다. 위험 중단은 강제 청산 보장이 아닙니다.
-3. BTRESULT의 REVIEW EXECUTION → BROKER에서 같은 버전의 호환성·연구 증거 확인.
-4. 재시작 지원·현재 자료 주기에 맞는 전략만 예산·위험 설정을 준비하고 검토·적용합니다. 코드를 바꿨으면 새 버전으로 백테스트·검토를 반복합니다.
+3. BTRESULT의 REVIEW EXECUTION → BROKER에서 원본 연구를 고정하고, 별도로 작성·저장한 운용 코드 버전과 실제 입력·AND 조건 차이를 선택·검토.
+4. 재시작 지원·현재 자료 주기에 맞는 전략만 예산·위험 설정을 준비하고 검토·적용합니다. 운용 코드를 바꿨으면 새 버전으로 기록하고 그 코드·입력·추가 조건을 별도 검증·검토합니다. 원본 백테스트 성과를 새 코드의 성과로 재사용하지 않습니다.
 5. DEMO START 후 워커·현재 세션·피드·계좌 대사·주문 ACK와 실제 누적 체결을 확인합니다. 응답 불명확 주문은 다시 보내지 말고 조회·대사합니다.
 6. 실전은 별도 키·계좌·명시적인 운용 승인과 실제 제출/부분체결/취소/재연결 복구 검증 및 실전 transport 출시가 필요합니다. **현재 REAL은 준비·조회만 가능하며 실전 주문 전송은 차단돼 있습니다.** 이 설명서나 백테스트 완료는 그 인증을 대신하지 않습니다.
