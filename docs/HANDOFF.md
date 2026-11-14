@@ -1,3 +1,7 @@
+## 2026-11-14 — Operating portfolio visibility
+
+0110 ACC now independently reads protected operating accounts/policy/demo/performance. A running DEMO account is visible even with no historical shared-account publications. Budget is labelled separately from observed NAV/PnL; missing observations remain —. Exact account/policy revisions isolate performance, stale selections and unmounted requests are discarded, and only GET reads run on mount/poll. Historical charts remain separate. No broker writes, strategy changes or shared package changes. Portfolio DOM regressions cover partial data, actual zero, revision mismatch, account-change races, cleanup and protected-preview failures.
+
 # Latest 2026-11-06 — DATAFLOW0411
 
 ## Mondu Terminal product name

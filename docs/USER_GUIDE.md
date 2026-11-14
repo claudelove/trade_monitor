@@ -279,7 +279,7 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | 0104 EXEC | STRATEGY/FOLLOW. 주문·체결 수량 대조, 비용·슬리피지 조회 전용. 조작 버튼 없음. |
 | 0105 ATTR | 전략명 클릭은 해당 전략 선택. 계좌 PnL 기여도(%p)와 전략 자체 수익률을 구분합니다. |
 | 0108 ORD | STRATEGY/FOLLOW. Order search는 종목/클라이언트 주문 ID/사유 검색, ORDER STATE는 해당 실행의 주문 상태 필터. 입력 후 변경을 확정하면 적용. 주문·체결·판단 기록 조회 전용. |
-| 0110 ACC | ALL-STRATEGY ORDERS [0501]은 공통 연구 계좌 주문 내역. STRATEGY CONTRIBUTIONS 펼침은 전략별 장부. 전략명 ↗는 전략 성과 창. 공통 계좌가 없으면 합성 포트폴리오를 만들지 않습니다. |
+| 0110 ACC | OPERATING ACCOUNT는 운용 계좌 선택이며 5초마다 상태를 조회합니다. 운용 예산과 실제 NAV/PnL을 구분하고, 평가 미수신은 —로 표시합니다. 계좌 변경은 조회만 수행하며 전략을 시작하지 않습니다. 아래 HISTORICAL RESEARCH는 별도 연구 계좌입니다. ALL-STRATEGY ORDERS [0501]은 공통 연구 계좌 주문 내역. STRATEGY CONTRIBUTIONS 펼침은 전략별 장부. 전략명 ↗는 전략 성과 창. 공통 계좌가 없으면 합성 포트폴리오를 만들지 않습니다. |
 
 ### Market
 
