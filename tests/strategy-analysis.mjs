@@ -1,13 +1,10 @@
 import assert from 'node:assert/strict';
 import * as a from '../web/strategy-analysis.js';
-import {performanceView} from '../web/screens/0101-performance.js';
+import {performanceView} from '../web/views/performance.js';
 import {holdingsView} from '../web/screens/0102-holdings.js';
 import {riskView} from '../web/screens/0103-risk.js';
-import {executionView} from '../web/screens/0104-execution.js';
-import {attributionView} from '../web/screens/0105-attribution.js';
-import {correlationView} from '../web/screens/0401-correlation.js';
-import {diagnosticsView} from '../web/screens/0402-diagnostics.js';
-const views={performance:performanceView,holdings:holdingsView,risk:riskView,execution:executionView,attribution:attributionView,correlation:correlationView,diagnostics:diagnosticsView};
+import {executionView} from '../web/views/research-costs.js';
+const views={performance:performanceView,holdings:holdingsView,risk:riskView,execution:executionView};
 const ui={...views,riskView,holdingsView,executionView,view:(kind,ctx)=>views[kind](ctx)};
 import {analysisExample} from './analysis-example.mjs';
 import {parseNativeReport} from '../web/native-report.js';
@@ -31,7 +28,7 @@ const rising=points([100,110,99,118.8]),similar=points([200,220,198,237.6]);clos
 assert.equal(a.correlation(rising,points([100,100,100,100])).value,null);assert.equal(a.correlation(rising,similar.slice(1)).value,null,'exact interval matches, minimum three, no forward-fill');
 const report=parseNativeReport(analysisExample()),ctx2=a.context(report,{runs:[]},report.runs[1].id),snapshot=JSON.stringify(report);
 const result=a.analyze(ctx2);assert.equal(ctx2.entry.run.id,report.runs[1].id);assert.equal(result.exposure.complete,true);assert.equal(result.overlap.rows.length,4);
-for(const kind of ['performance','holdings','risk','execution','attribution','correlation','diagnostics'])assert.ok(ui.view(kind,ctx2).includes('panel'));
+for(const kind of ['performance','holdings','risk','execution'])assert.ok(ui.view(kind,ctx2).includes('panel'));
 assert.match(ui.riskView(ctx2),/max_gross/);
 assert.equal(JSON.stringify(report),snapshot,'diagnostics must not mutate engine results');
 const noChildren=structuredClone(report);noChildren.runs=[];const noCtx=a.context(noChildren,{runs:[]},report.account.strategies[1].run_id);assert.equal(noCtx.entry.row.strategy_id,report.account.strategies[1].strategy_id);assert.match(ui.holdingsView(noCtx),/N\/A/);assert.match(ui.executionView(noCtx),/N\/A/);

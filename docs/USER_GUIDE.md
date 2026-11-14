@@ -1,3 +1,5 @@
+> 2026-11-14: [화면 전체 정리·분리 기준](UI_WORKFLOW_AUDIT_2026-11-14.md)이 이전 화면 구성 설명보다 우선합니다. Portfolio=운용 계좌, Research=코드·백테스트, KIS DEMO=모의 주문이며 REAL 주문은 비활성화입니다.
+
 # Mondu Terminal 사용자 가이드
 
 **화면 찾기 → 투자 대상 설정 → 전략 작성 → 백테스트 → 모의 운용 → 상태 확인**
@@ -61,7 +63,7 @@
 
 ### 어떤 전략·종목을 보고 있는지 확인하기
 
-포트폴리오 화면에서는 **ACCOUNT / RUN**과 창 내부의 전략 선택을 확인하세요. `FOLLOW`가 꺼진 창은 선택 대상을 유지합니다. 마켓 차트의 종목·데이터 원천은 해당 창에서 선택합니다. 서로 다른 실행 결과를 같은 계좌처럼 합쳐 해석하지 마세요.
+포트폴리오 화면에서는 **BACKTEST ACCOUNT / RUN**과 창 내부의 전략 선택을 확인하세요. `FOLLOW`가 꺼진 창은 선택 대상을 유지합니다. 마켓 차트의 종목·데이터 원천은 해당 창에서 선택합니다. 서로 다른 실행 결과를 같은 계좌처럼 합쳐 해석하지 마세요.
 
 ## 3. 시장과 이벤트 확인하기
 
@@ -141,7 +143,7 @@
 
 ### 준비·적용
 
-1. **ENVIRONMENT**가 `KIS DEMO / VIRTUAL MONEY`인지 확인합니다.
+1. **0504 BROKER**의 `KIS DEMO / VIRTUAL MONEY` 표시를 확인합니다. 실전 전환 선택창은 없습니다.
 2. **SETUP / SOURCE / CAPITAL / RISK**를 펼칩니다.
 3. 별도로 저장한 **OPERATING CODE VERSION**과 계좌·전략 식별자, 자본 배정·관측 종목 수를 선택합니다. **INPUT / AND-CONDITION DIFFERENCES**에 실제 입력·추가 조건 차이를 기록합니다(20자 이상). 원본 백테스트는 변경하지 않습니다.
 4. **EDIT RISK / EXECUTION / BALANCE FLOORS**에서 노출·손실·주문 금액·수량·유효시간·비용 조건을 검토합니다.
@@ -173,7 +175,7 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 
 ## 7. 포트폴리오 확인하기
 
-대상을 먼저 **ACCOUNT / RUN**에서 선택한 뒤 필요한 화면을 엽니다.
+대상을 먼저 **BACKTEST ACCOUNT / RUN**에서 선택한 뒤 필요한 화면을 엽니다.
 
 | 질문 | 화면 |
 | --- | --- |
@@ -242,8 +244,8 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | SNAP ON/OFF | 이동·크기 조절 시 가까운 경계 정렬 보조. Alt는 일시 해제. |
 | AUTO 2s | 공통 계좌·마켓 발행 조회 자동 갱신. **BROKER·CODE 작업의 독립 상태 조회나 서버 프로세스를 정지하지 않습니다.** |
 | REFRESH | 현재 발행 데이터 다시 조회. 수집 워커를 시작하는 버튼이 아닙니다. |
-| ACCOUNT / RUN | 저장된 공통 계좌 또는 독립 연구 실행 선택. 독립 실행들을 합산하지 않습니다. |
-| STRATEGY DEFAULT 선택 | 새 창의 기본 전략. 기존 고정 창은 자동 변경하지 않습니다. |
+| BACKTEST ACCOUNT / RUN | 저장된 공통 계좌 또는 독립 연구 실행 선택. 독립 실행들을 합산하지 않습니다. |
+| BACKTEST STRATEGY 선택 | 새 창의 기본 전략. 기존 고정 창은 자동 변경하지 않습니다. |
 | 창 내부 STRATEGY / FOLLOW | 이 창의 전략 선택 / 전역 기본 선택을 따라갈지 명시적으로 선택. 기본은 고정. |
 | OPEN PRIVATE TERMINAL ↗ (Pages) | 별도 보호 HTTPS 터미널로 이동. Pages에 키·계좌·백엔드 데이터를 저장하지 않습니다. |
 
@@ -269,17 +271,16 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 
 `0001 Portfolio`, `0002 Market`, `0003 Strategy`, `0004 Analytics & Data`, `0005 Execution`, `0006 Administration`은 창을 담는 공간입니다. 별도 입력 폼이 없습니다. 화면 목록에서 아래 기능을 여세요. 같은 기능을 반복 실행하면 현재 창을 재사용합니다.
 
-### Portfolio
+### Portfolio / 운용 계좌
+
+현재 Portfolio에는 0110 ACC만 있습니다. 아래 0102/0103/0108 및 통합 0302는 Research의 백테스트 전용 기능입니다.
 
 | 화면 | 버튼·입력·선택의 용도 |
 | --- | --- |
-| 0101 PERF | STRATEGY/FOLLOW는 공통 규칙. NAV / DRAWDOWN / GROSS / PNL은 그래프 지표 변경. 차트 조작은 공통 규칙. |
-| 0102 HOLD | STRATEGY/FOLLOW. 종목 ↗는 해당 실행의 저장 가격을 GP로 엽니다. 현 보유·평가 노출을 조회하며 매도하지 않습니다. |
+| 0102 HOLD | STRATEGY/FOLLOW. 종목 ↗는 해당 백테스트의 저장 가격을 GP로 엽니다. 마지막 가상 보유 수량이며 현재 모의·실전 보유가 아닙니다. Research에서만 엽니다. |
 | 0103 RISK | STRATEGY/FOLLOW 및 공통 차트. 표시된 위험한도·노출·낙폭은 연구 실행의 관측값입니다. 이 화면에 운용 한도 변경 폼은 없습니다. |
-| 0104 EXEC | STRATEGY/FOLLOW. 주문·체결 수량 대조, 비용·슬리피지 조회 전용. 조작 버튼 없음. |
-| 0105 ATTR | 전략명 클릭은 해당 전략 선택. 계좌 PnL 기여도(%p)와 전략 자체 수익률을 구분합니다. |
 | 0108 ORD | STRATEGY/FOLLOW. Order search는 종목/클라이언트 주문 ID/사유 검색, ORDER STATE는 해당 실행의 주문 상태 필터. 입력 후 변경을 확정하면 적용. 주문·체결·판단 기록 조회 전용. |
-| 0110 ACC | OPERATING ACCOUNT는 운용 계좌 선택이며 5초마다 상태를 조회합니다. 운용 예산과 실제 NAV/PnL을 구분하고, 평가 미수신은 —로 표시합니다. 계좌 변경은 조회만 수행하며 전략을 시작하지 않습니다. 아래 HISTORICAL RESEARCH는 별도 연구 계좌입니다. ALL-STRATEGY ORDERS [0501]은 공통 연구 계좌 주문 내역. STRATEGY CONTRIBUTIONS 펼침은 전략별 장부. 전략명 ↗는 전략 성과 창. 공통 계좌가 없으면 합성 포트폴리오를 만들지 않습니다. |
+| 0110 ACC | 운용 계좌 선택, 환경(DEMO/REAL), 실제 워커 상태, 예산과 수신된 평가 NAV/PnL·전략 기여도를 조회합니다. 5초 주기 읽기 전용이며 매매하지 않습니다. 백테스트 값은 이 화면에 표시하지 않습니다. 미수신은 —. |
 
 ### Market
 
@@ -323,8 +324,6 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 
 | 화면 | 버튼·입력·선택의 용도 |
 | --- | --- |
-| 0401 CORR | 동일 공통 계좌 내 상관·종목 중복 조회. 별도 입력 없음. |
-| 0402 HEALTH | STRATEGY/FOLLOW. 계좌 발행 시계·소스 해시·평가 커버리지 조회. 제공자 실시간 연결 검사와 다릅니다. |
 | 0403 DATA | 원천의 저장 활동·누락 정보 조회. 별도 버튼 없음. 원문은 JOURNAL0404에서 조회. |
 | 0404 JOURNAL | Event kind는 NEWS/DISCLOSURE/BOOK_SNAPSHOT/BAR/RAW_FRAME/FEED_STATUS, Event symbol은 종목 제한. QUERY는 최대100개 원천 조회. 행 클릭은0290 원문·수정 이력. |
 | 0405 BOOK | Order book symbol 입력 후 QUERY는 최신 저장 전체 호가 스냅샷 조회. RAW / LINEAGE →는 원천 상세. 현재 주문 가능한 호가가 아니며 연속성 미확인이면 OFI를 계산한 척하지 않습니다. |
@@ -357,11 +356,10 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 
 ### Execution
 
-`0501 BLOTTER`와 `0502 FILLS`는 **역사 연구 계좌**의 주문·체결 내역입니다. REFRESH는 재조회, STRATEGY는 전략 필터, SYMBOL은 종목 필터, BLOTTER의 STATE는 주문 상태 필터입니다. 입력을 확정하면 표시를 제한합니다. 실제 KIS 모의 주문·전략 장부는 **0504 BROKER**에 별도로 표시됩니다.
+Execution(KIS DEMO)에는 **0504 BROKER**만 남습니다. 이전 `0501/0502/BLOTTER/FILLS`는 Research의 **0108 ORD**로 연결되며 저장된 백테스트 기록임을 표시합니다. 실제 모의 주문은 BROKER의 OWNED ORDERS에서 조회합니다. 실전 주문 UI와 전환 버튼은 제공하지 않습니다.
 
 | 0504 BROKER 조작 | 용도 |
 | --- | --- |
-| ENVIRONMENT | KIS DEMO 가상자금 / REAL 준비 상태. REAL 선택이 실전 주문을 허용하지 않습니다. |
 | OPERATING ACCOUNT | 서버에 설정된 운용 계좌 선택. 개인 증권 계좌번호 입력칸이 아닙니다. |
 | ENVIRONMENT CONFIGURATION… 펼침 | 모의·실전 자격정보 존재 여부와 실전 전환 차단 조건 조회. 비밀값은 표시하지 않습니다. |
 | SETUP / SOURCE / CAPITAL / RISK 펼침 | 운용 설정 준비 폼. |
@@ -378,7 +376,6 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | PAUSE DEMO | 신규 신호 차단·미체결 취소 요청. |
 | STOP DEMO | 감독 정지 요청. 보유 포지션을 매도하지 않습니다. |
 | FLATTEN DEMO | 전략 소유 보유 종목 매도 요청. 주문·리스크·세션 조건으로 실패할 수 있으므로 체결·잔고를 반드시 확인. |
-| PREVIEW REAL POLICY TRANSITION | 모의 정책에서 별도 실전 준비에 필요한 항목 조회. 실전 정책 저장·주문 전송 버튼이 아닙니다. |
 | QUERY BROKER BALANCE / READ ONLY | 선택한 환경·계좌의 실제 조회 응답 저장. 체결 대사 완료를 보장하지 않습니다. |
 
 소스 검토에는 체크포인트 지원 여부·정확한 연구 버전 일치·중단 사유가 나옵니다. 소스 미선택·검토 조회 실패·체크포인트 미지원 등 알려진 차단 사유가 있으면 PREPARE DEMO SETTINGS도 비활성화됩니다. **정적 체크 통과는 전략 재시작의 정확성이나 실전 적합성 인증이 아닙니다.** 백테스트 일봉을 5초 피드로 자동 변환하지 않습니다.

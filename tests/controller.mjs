@@ -15,7 +15,7 @@ await import('../web/app.js');
 await new Promise(resolve=>setImmediate(resolve));
 assert.equal(w.document.querySelector('nav').children.length,6);
 assert.equal(w.document.querySelector('#context-portfolio').disabled,false);
-assert.match(w.document.querySelector('#page').textContent,/1,002/);
+assert.doesNotMatch(w.document.querySelector('#page').textContent,/1,002/,'research NAV must not populate the operating portfolio');assert.equal(w.document.querySelector('.terminal-context').hidden,true);
 const run=w.document.querySelector('#context-run');assert.equal(run.value,'synthetic-run');
 const command=w.document.querySelector('#command');const submit=text=>{command.value=text;w.document.querySelector('#command-form').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}))};
 submit('0202 SYNTHETIC');assert.match(w.document.querySelector('#page').textContent,/CANDLE/);
@@ -25,7 +25,7 @@ submit('GP STORED');assert.equal(w.document.querySelector('[data-tool=security] 
 const count=w.document.querySelectorAll('.tool-window').length;command.value='GP';command.dispatchEvent(new w.Event('input',{bubbles:true}));assert.equal(w.document.querySelectorAll('.tool-window').length,count,'searching GP opens no panels');w.document.querySelector('[data-search-index]').click();assert.equal(w.document.querySelectorAll('[data-tool=security]').length,1);
 
 command.value='GP';command.dispatchEvent(new w.Event('input',{bubbles:true}));const popup=w.document.querySelector('.screen-picker');market.version='new-publication';intervals[0]();await new Promise(resolve=>setImmediate(resolve));assert.equal(command.value,'GP');assert.equal(popup.hidden,false,'publication refresh preserves search query and dropdown');assert.equal(w.document.querySelector('[data-workspace-host]').classList.contains('workspace-reveal'),false,'publication refresh must not replay navigation effects');command.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
-submit('0107');assert.match(w.document.querySelector('#page').textContent,/0402/);command.value='0107';command.dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('[data-search-index]').length,1,'legacy number is searchable');
+submit('0101');assert.match(w.document.querySelector('#page').textContent,/BACKTEST/);assert.equal(w.document.querySelector('.terminal-context').hidden,false);command.value='0101';command.dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('[data-search-index]').length,1,'consolidated legacy number is searchable');
 submit('EVENT');assert.match(w.document.querySelector('#command-status').title,/requires a canonical event ID/);submit('GP SYNTHETIC');assert.equal(w.document.querySelector('#command-status').title,'','successful command clears the prior error tooltip');
 submit('0109');assert.match(w.document.querySelector('#page').textContent,/0304/);
 const codeInput=w.document.querySelector('[data-code-source]');codeInput.value='# unsaved draft preserved';codeInput.dispatchEvent(new w.Event('input',{bubbles:true}));codeInput.focus();
@@ -42,6 +42,6 @@ assert.match(w.document.querySelector('[data-tool="runs"]').textContent,/0 \/ 1 
 assert.ok(calls.every(([path,options])=>path.startsWith('/api/')&&!options?.method));
 for(let i=0;i<w.localStorage.length;i++){const text=w.localStorage.getItem(w.localStorage.key(i));assert.ok(!text.includes(account.id));assert.ok(!text.includes('synthetic-run'));assert.ok(!text.includes('SYNTHETIC'));}
 assert.equal(w.document.querySelectorAll('input[type=file]').length,0);
-submit('BROKER');assert.match(w.document.querySelector('#banner').textContent,/KIS OPERATING CONTROL/);assert.match(w.document.querySelector('#asof').textContent,/PER FUNCTION/);w.document.querySelector('nav button').click();
+submit('BROKER');assert.match(w.document.querySelector('#banner').textContent,/KIS DEMO ONLY/);assert.match(w.document.querySelector('#asof').textContent,/PER FUNCTION/);w.document.querySelector('nav button').click();
 globalThis.fetch=previousFetch;globalThis.setInterval=previousInterval;dom.window.close();
 console.log('Controller passed: real API bootstrap, six desks, account/strategy scope, command aliases, run-market isolation, no file upload or private browser persistence.');

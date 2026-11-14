@@ -1,7 +1,3 @@
 import {analyze,correlation} from '../strategy-analysis.js';
 import {esc,finite,num,pct,sign,panel,table,cards,empty,scope} from '../ui/strategy-common.js';
-import {bindActions,listen} from '../ui/dom.js';
-import {chartSlot,mountCharts,strategyGroup} from '../charts/host.js';
 export function executionView(ctx){if(!ctx.entry)return empty('EXEC / Execution & Costs');const a=analyze(ctx),x=a.execution;return panel('EXEC / Execution & Costs',scope(ctx)+cards([['ORDERS / FILLS',x.reported?`${x.orders} / ${x.fills}`:'N/A','reported record count'],['QUANTITY FILL RATIO',pct(x.fillRatio),'matched by client order ID'],['FEES',num(x.fees),'KRW · reported fill total'],['SLIPPAGE',num(x.slippage),'KRW · diagnostic total']])+table(['ORDER STATE','COUNT'],Object.entries(x.counts).map(([status,count])=>`<tr><td>${esc(status)}</td><td>${count}</td></tr>`)),'ID Fill ratio is unavailable with missing/duplicate/overfilled identities. State counts differ from quantity fill ratio. Slippage is not subtracted twice from PnL. Actual latency/quote benchmarks are not connected.')}
-export default {scope:'strategy',id:'execution',number:'0104',command:'EXEC',desk:'strategy',title:'Execution & Costs',subtitle:'Order/fill matching and reported transaction costs.',shortcut:6,nav:false,navLabel:'EXEC',defaultSlot:null,render:(ctx,pane)=>executionView(ctx.strategy),mount(root,ctx,pane){const cleanups=[bindActions(root,ctx.actions)];return ()=>cleanups.reverse().forEach(dispose=>dispose());}};
-

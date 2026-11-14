@@ -30,6 +30,7 @@ function screenContext(presentation='window',extra={}){return {state:{...state,d
 function switchDesk(desk){state.desk=desk;state.page=screens.home(desk).id;render()}
 function openTool(id,parameters={}){
   const screen=screens.get(id),params=typeof parameters==='string'?{symbol:parameters}:parameters||{};
+  id=screen.id;
   if(screen.kind==='workspace'){switchDesk(screen.desk);return}
   if(screen.kind==='dialog'){openDialog(id,params);return}
   const sameWorkspace=state.desk===screen.desk&&state.page===screens.home(screen.desk).id&&desks[screen.desk].root?.isConnected;
@@ -42,13 +43,13 @@ function openTool(id,parameters={}){
 function health(){
   const preview=document.documentElement.dataset.hosting==='pages';
   const ctx=strategyContext(),a=ctx.account,stale=a?.status==='running'&&Date.now()-Date.parse(a.updated_at)>15000;
-  $('#connection-state').textContent=preview?'PUBLIC PREVIEW · ENGINE DISCONNECTED':state.loading&&state.foregroundLoading?'LOADING ENGINE…':state.pollError?'API ERROR · last successful publication retained':state.marketError?'DATA ERROR · account query succeeded':stale?'STALE RUNNING SNAPSHOT':'ENGINE API · '+(a?.status||ctx.run?.summary.mode||'NO RUNS');
+  $('#connection-state').textContent=preview?'PUBLIC PREVIEW · ENGINE DISCONNECTED':state.loading&&state.foregroundLoading?'LOADING ENGINE…':state.pollError?'API ERROR · last successful publication retained':state.marketError?'DATA ERROR · account query succeeded':stale?'STALE RUNNING SNAPSHOT':'ENGINE API / '+(['strategy','execution'].includes(state.desk)?'OPERATING SERVICES':(a?.status||ctx.run?.summary.mode||'NO BACKTEST'));
   $('#connection-state').className=state.pollError||state.marketError||stale?'negative':state.loading&&state.foregroundLoading?'connection is-loading':'connection';
-  const source=state.desk==='execution'?'KIS OPERATING CONTROL / SEPARATE RESEARCH HISTORY':state.desk==='admin'?'ADMINISTRATION / ACCESS POLICY & DATA OPERATIONS':state.desk==='market'?(state.marketSource==='run'?'RUN SOURCE BARS · '+(ctx.entry?.name||''):'CANONICAL SOURCE SAMPLE'):
+  const source=state.desk==='strategy'?'OPERATING ACCOUNT / INDEPENDENT OF BACKTEST SELECTION':state.desk==='execution'?'KIS DEMO / VIRTUAL MONEY / REAL DISABLED':state.desk==='admin'?'ADMINISTRATION / ACCESS POLICY & DATA OPERATIONS':state.desk==='market'?(state.marketSource==='run'?'RUN SOURCE BARS · '+(ctx.entry?.name||''):'CANONICAL SOURCE SAMPLE'):
     a?`${a.name} · ${a.status} · ACCOUNT / STRATEGY LEDGER`:ctx.entry?'STRATEGY / '+ctx.entry.name:'NO STORED RUN';
   $('#context-scope').textContent=source;
   $('#banner').textContent=preview?'PUBLIC UI PREVIEW / PUBLIC MARKET SNAPSHOT ONLY / PRIVATE ENGINE, ACCOUNTS AND SERVER OPERATIONS DISCONNECTED':state.pollError?'QUERY ERROR: '+state.pollError+' · DISPLAYING LAST SUCCESSFUL QUERY':state.marketError&&(state.desk==='analysis'||state.desk==='market')?'SOURCE QUERY ERROR / LAST SOURCE SNAPSHOT RETAINED: '+state.marketError:
-    state.desk==='execution'?'KIS OPERATING CONTROL IN BROKER [0504] · RESEARCH HISTORY IN BLOTTER / FILLS · REAL DISPATCH DISABLED':state.desk==='admin'?'ADMINISTRATOR POLICY / NO LIVE ORDER CONTROLS':state.desk==='market'?'INDEPENDENT SOURCE / SYMBOL PANES · STORED EVENTS OR HISTORICAL RUN BARS · NO LIVE QUOTE FEED'+(state.data.synthetic_sources_present?' · INCLUDES SYNTHETIC SOURCES':''):
+    state.desk==='strategy'?'OPERATING PORTFOLIO / ACCOUNT, ENVIRONMENT AND OBSERVATION CLOCKS SHOWN IN ACC [0110]':state.desk==='execution'?'KIS DEMO ONLY [0504] · BACKTEST ORDERS IN RESEARCH [0108] · REAL ORDERS DISABLED':state.desk==='admin'?'ADMINISTRATOR POLICY / NO LIVE ORDER CONTROLS':state.desk==='market'?'INDEPENDENT SOURCE / SYMBOL PANES · STORED EVENTS OR HISTORICAL RUN BARS · NO LIVE QUOTE FEED'+(state.data.synthetic_sources_present?' · INCLUDES SYNTHETIC SOURCES':''):
     (a?.source?.synthetic||ctx.run?.source?.synthetic?'SYNTHETIC / PAPER · SYNTHETIC RESEARCH / ':'ENGINE REPORT · ')+
       (stale?'RUNNING PUBLICATION STALE / ':'')+'INTERNAL LEDGER / BROKER DISCONNECTED';
 }
@@ -60,18 +61,18 @@ function render(){
   if(!symbols.some(s=>s.symbol===state.symbol))state.symbol=symbols[0]?.symbol||'';
   const selected=$('#context-portfolio');selected.replaceChildren();
   const groups={account:document.createElement('optgroup'),run:document.createElement('optgroup')};
-  groups.account.label='SHARED ACCOUNTS';groups.run.label='STANDALONE RESEARCH';
+  groups.account.label='BACKTEST SHARED ACCOUNTS';groups.run.label='BACKTEST RUNS';
   for(const row of state.choices){const option=document.createElement('option');option.value=row.key;option.textContent=row.label;groups[row.kind].append(option)}
   for(const group of Object.values(groups))if(group.children.length)selected.append(group);
   if(!state.choices.length){const o=document.createElement('option');o.value='';o.textContent='NO STORED ACCOUNTS OR RUNS';selected.append(o)}
   selected.value=state.selectedPortfolio||'';selected.disabled=!state.choices.length;
   $('#context-run').innerHTML=ctx.entries.map(e=>`<option value="${esc(e.id)}" ${e.id===state.selectedRunId?'selected':''}>${esc(e.name)} · ${esc(e.state||'STATE UNREPORTED')}</option>`).join('')||'<option>NO STRATEGY</option>';
   $('#context-run').disabled=!ctx.entries.length;$('#context-run').hidden=!ctx.entries.length;$('label[for=context-run]').hidden=!ctx.entries.length;
-  $('.terminal-context').hidden=['market','admin'].includes(state.desk)||!state.choices.length;
+  $('.terminal-context').hidden=!['backtest','analysis'].includes(state.desk)||!state.choices.length;
   const current=screens.get(state.page);$('#crumb').textContent=current.title;
   $$('nav button').forEach(b=>b.classList.toggle('active',screens.get(b.dataset.page).desk===state.desk));
   const stamp=state.desk==='market'?market.as_of:ctx.account?.as_of||ctx.run?.curve.at(-1)?.timestamp;
-  $('#asof').textContent=state.desk==='execution'?'BROKER CLOCKS SHOWN PER FUNCTION':state.desk==='admin'?'ACCESS / DATABASE OPERATIONS':stamp?new Date(stamp).toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour12:false})+' KST · CONTEXT AS OF':'NO SOURCE OBSERVATION';
+  $('#asof').textContent=['strategy','execution'].includes(state.desk)?'OPERATING CLOCKS SHOWN PER FUNCTION':state.desk==='admin'?'ACCESS / DATABASE OPERATIONS':stamp?new Date(stamp).toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour12:false})+' KST · CONTEXT AS OF':'NO SOURCE OBSERVATION';
   const root=$('#page');root.innerHTML=screens.render(state.page,screenContext('page'),pagePanes.get(state.page)||{});
   const pane=pagePanes.get(state.page)||{};pagePanes.set(state.page,pane);
   pageDispose=screens.mount(state.page,root,screenContext('page'),pane);

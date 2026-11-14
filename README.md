@@ -1,3 +1,5 @@
+> 2026-11-14 UI: Portfolio is operating-account-only, Research owns all simulated backtest positions/risk/orders, and KIS DEMO owns virtual-money brokerage control. REAL order controls are unavailable. See the [complete screen/control audit](docs/UI_WORKFLOW_AUDIT_2026-11-14.md) and [user guide](docs/USER_GUIDE.md).
+
 # Mondu Terminal
 
 전략을 작성하고 검증하며, 시장 데이터와 포트폴리오를 확인하는 모니터링 터미널입니다.
