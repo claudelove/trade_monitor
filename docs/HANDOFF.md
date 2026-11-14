@@ -1,3 +1,7 @@
+## 2026-11-14 — Remove redundant 0403 source display
+
+User requested removal of 0403 DATA. Deleted its numbered descriptor and unused sourcesView, retired sources layout identity and DATA/0205 commands. Operational source status remains DATAFLOW0411; raw source/revision evidence stays JOURNAL0404 and market/event views. DATAFLOW becomes the initial Analytics function; no data/API/engine change. Catalog now 26 descriptors.
+
 ## 2026-11-14 — Separate research, operating portfolio and KIS DEMO
 
 See [complete numbered UI audit](UI_WORKFLOW_AUDIT_2026-11-14.md). Removed 7 duplicate/empty screen modules and unused historical execution view; 27 descriptors including 6 desks and source-detail dialog remain. Portfolio owns only operating ACC; research holdings/risk/orders moved to Research with explicit simulated labels. PERF/EXEC consolidate into BTRESULT; BLOTTER/FILLS into historical ORD. ATTR/CORR/old HEALTH retired. Research defaults/clocks disappear from operating desks; REAL prep selector/action removed, DEMO picker filters REAL accounts. Worker/readiness summary replaces default raw JSON; setup review remains in setup details. STATS hides unsupported/irrelevant inputs and DATABASE removes the static shell-command dump. No backend, risk, strategy, auth or transport changes; current DEMO worker must remain intact on deployment. Preserve public Pages preview and private host adapter differences. Validation and actual deployment evidence are recorded by the private consumer.

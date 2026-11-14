@@ -33,7 +33,7 @@ Only Research and Analytics show the **BACKTEST ACCOUNT / RUN** default. Operati
 | 0290 EVENT | Actual selected source record detail; bounded GET, source lineage, safe external original URL and close. |
 | 0302 BTRESULT | Single backtest performance view, explicit historical provenance, simulated-cost details and links to 0102/0103/0108. Separate DEMO source review handoff; never automatic trading. |
 | 0304 CODE | Inert source/policy editing, templates, validate/save/load, exact reviewed historical execution, owned-job status/stop and result selection. Unsaved source is memory-only. |
-| 0403 DATA | Actual stored source lineage/coverage. Retained because query clocks and excluded/mixed source coverage are actionable. No inferred provider heartbeat. |
+| 0403 DATA | Removed at user request. Collection status is in 0411 DATAFLOW; actual source/revision evidence remains in 0404 JOURNAL and market/event views. No data or collector is removed. |
 | 0404 JOURNAL | Bounded raw event/revision queries and lineage; data source evidence, not trading decisions. |
 | 0405 BOOK | Symbol/query, stored full depth, source quality and original event. OFI unavailable for unknown continuity. |
 | 0410 STATS | Supported registry tools only. Window input; peer input only for paired tools; lags only for ACF/stationarity. Current backtest run required to execute. Diagnostic evidence is not a trading approval. |

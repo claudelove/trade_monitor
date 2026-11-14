@@ -324,7 +324,6 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 
 | 화면 | 버튼·입력·선택의 용도 |
 | --- | --- |
-| 0403 DATA | 원천의 저장 활동·누락 정보 조회. 별도 버튼 없음. 원문은 JOURNAL0404에서 조회. |
 | 0404 JOURNAL | Event kind는 NEWS/DISCLOSURE/BOOK_SNAPSHOT/BAR/RAW_FRAME/FEED_STATUS, Event symbol은 종목 제한. QUERY는 최대100개 원천 조회. 행 클릭은0290 원문·수정 이력. |
 | 0405 BOOK | Order book symbol 입력 후 QUERY는 최신 저장 전체 호가 스냅샷 조회. RAW / LINEAGE →는 원천 상세. 현재 주문 가능한 호가가 아니며 연속성 미확인이면 OFI를 계산한 척하지 않습니다. |
 | 0410 STATS | STRATEGY/FOLLOW. TOOL은 등록 통계 도구, PEER STRATEGY는 쌍 분석 대상(단일 분석이면 비활성), WINDOW는 관측 구간, LAGS는 시차. RUN DIAGNOSTIC은 도구 버전·입력 해시·파라미터를 가진 결과 저장. 유의성은 투자 승인과 다릅니다. |

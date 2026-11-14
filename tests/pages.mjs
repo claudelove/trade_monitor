@@ -16,7 +16,7 @@ assert.equal(entry.target,'_blank');
 assert.equal(dom.window.document.querySelectorAll('#private-terminal-link').length,1);
 const prior=globalThis.fetch,calls=[];
 globalThis.fetch=async(url,options)=>{calls.push([String(url),options]);assert.ok(!options?.method,'no POST from public preview');assert.ok(String(url).endsWith('/data/live.json'));return {ok:true,json:async()=>JSON.parse(readFileSync('dist/assets/data/live.json'))}};
-assert.equal(screens.navigation().length,6);assert.equal(screens.list.length,27);
+assert.equal(screens.navigation().length,6);assert.equal(screens.list.length,26);
 const client=new EngineClient(),value=await client.load();assert.deepEqual(value.choices,[]);assert.equal(value.report,null);assert.equal(value.marketError,null);assert.equal(Object.keys(value.data.prices).length,12);assert.equal(value.data.events.length,502);
 value.data.events=[];assert.equal((await api('/api/monitor/snapshot')).events.length,502,'preview returns clones');
 const record=(await api('/api/monitor/snapshot')).events[0],detail=await api('/api/data/events/'+record.id);assert.equal(detail.event.received_at,null);assert.equal(detail.event.available_at,null);assert.equal(detail.event.payload.title,record.title);
@@ -31,4 +31,4 @@ const lock=JSON.parse(readFileSync('terminal-ui.lock.json'));for(const [path,has
 assert.ok(!existsSync('dist/assets/analytics.js'),'retired UI assets must not survive a rebuild');
 globalThis.fetch=prior;delete globalThis.document;dom.window.close();console.log('Pages boundary passed: shared UI dependency, public market only, empty private accounts, no outgoing writes, no invented event clocks, bundled licenses and clean assets.');
 
-for(const file of ['0101-performance.js','0104-execution.js','0105-attribution.js','0401-correlation.js','0402-diagnostics.js','0501-order-monitor.js','0502-fill-tape.js'])assert.ok(!existsSync('dist/assets/screens/'+file),'retired screen must not ship: '+file);
+for(const file of ['0101-performance.js','0104-execution.js','0105-attribution.js','0401-correlation.js','0402-diagnostics.js','0403-sources.js','0501-order-monitor.js','0502-fill-tape.js'])assert.ok(!existsSync('dist/assets/screens/'+file),'retired screen must not ship: '+file);

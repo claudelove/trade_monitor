@@ -16,8 +16,8 @@ assert.deepEqual(screens.panels('execution').map(s=>s.id),['broker']);
 for(const id of ['holdings','risk','runs','backtest-results','strategy-lab'])assert.equal(screens.get(id).desk,'backtest');
 for(const token of ['0101','0104','PERF','EXEC','performance','execution'])assert.equal(screens.resolve(token).id,'backtest-results');
 for(const token of ['0501','0502','BLOTTER','FILLS','order-monitor','fill-tape'])assert.equal(screens.resolve(token).id,'runs');
-for(const token of ['ATTR','CORR','HEALTH','0105','0401','0402'])assert.equal(screens.resolve(token),null,'retired empty display must not appear as an active function');
-assert.equal(screens.list.length,27);
+for(const token of ['ATTR','CORR','HEALTH','DATA','0105','0401','0402','0403','0205'])assert.equal(screens.resolve(token),null,'retired empty display must not appear as an active function');
+assert.equal(screens.list.length,26);
 const dom=new JSDOM('<div></div>',{url:'https://fixture.invalid/'}),storage=dom.window.localStorage;
 
 const keep={id:'pane-1',type:'account',x:.17,y:.1,w:.6,h:.7};
