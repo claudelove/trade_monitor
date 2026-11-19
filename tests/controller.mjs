@@ -34,8 +34,8 @@ assert.equal(w.document.querySelector('[data-code-source]'),codeInput,'market pu
 assert.equal(w.document.activeElement,codeInput,'editing focus survives canonical data ingestion');
 assert.equal(codeInput.value,'# unsaved draft preserved');
 
-submit('BTRESULT');assert.ok(w.document.querySelector('[data-result-execution]'),'exact-version results expose execution review');w.document.querySelector('[data-result-execution]').click();await new Promise(resolve=>setImmediate(resolve));
-const setting=w.document.querySelector('[data-broker-setup] input[name=strategy_id]');setting.value='unsaved_alpha';setting.focus();market.version='new-bars-during-operating-review';intervals[0]();await new Promise(resolve=>setImmediate(resolve));assert.equal(w.document.querySelector('[data-broker-setup] input[name=strategy_id]'),setting,'market refresh cannot replace operating settings');assert.equal(setting.value,'unsaved_alpha');assert.equal(w.document.activeElement,setting);
+submit('BTRESULT');assert.equal(w.document.querySelector('[data-result-execution]'),null,'no duplicate execution setup shortcut');submit('BROKER');await new Promise(resolve=>setImmediate(resolve));
+const setting=w.document.querySelector('[data-program-source]');setting.value='unsaved operating code';setting.dispatchEvent(new w.Event('input'));setting.focus();market.version='new-bars-during-operating-review';intervals[0]();await new Promise(resolve=>setImmediate(resolve));assert.equal(w.document.querySelector('[data-program-source]'),setting,'market refresh cannot replace operating code');assert.equal(setting.value,'unsaved operating code');assert.equal(w.document.activeElement,setting);
 submit('ORD');
 const query=w.document.querySelector('[data-order-query]');query.value='missing-symbol';query.dispatchEvent(new w.Event('change',{bubbles:true}));
 assert.match(w.document.querySelector('[data-tool="runs"]').textContent,/0 \/ 1 ORDERS/);

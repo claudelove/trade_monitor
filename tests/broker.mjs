@@ -1,38 +1,27 @@
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import screen from '../web/screens/0504-broker.js';
-const settle=async()=>{for(let i=0;i<8;i++)await new Promise(r=>setImmediate(r))};
+const settle=async()=>{for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r))};
 const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main'),pane={};
-const revision='a'.repeat(32),version='b'.repeat(64),operatingVersion='e'.repeat(64),review='c'.repeat(64);let posts=[],uncertain=false;
-pane.reviewVersion=version;pane.researchRun='d'.repeat(32);let sourceReads=[],sourceBlocked=true;
-const accounts=[{account_id:'demo_account',environment:'demo',revision},{account_id:'REAL_SHOULD_NOT_APPEAR',environment:'real',revision}];
-const ctx={signal:new AbortController().signal,actions:{openScreen(){},api:async path=>{
- if((path.includes('/source-review?')||path.includes('/operation-review?'))){sourceReads.push(path);const selectedVersion=new URL(path,'https://fixture.invalid').searchParams.get('version');return {version:selectedVersion,operation_transition:{research_run_id:pane.researchRun,research:{version},operation:{version:selectedVersion},reference_summary:{halted:true,halt_reason:'drawdown limit'}},demo_preparation_supported:!sourceBlocked,blockers:sourceBlocked?['CHECKPOINT_UNSUPPORTED']:[],research:{run_id:pane.researchRun,halted:true,halt_reason:'drawdown limit'},limitations:['TEST ONLY'],real_blockers:['REAL_TRANSPORT_NOT_RELEASED']}}
- if(path.endsWith('/accounts'))return accounts;
- if(path.endsWith('/code-drafts'))return [{name:'SYNTHETIC RESEARCH',version},{name:'SYNTHETIC OPERATING SOURCE',version:operatingVersion}];
- if(path.endsWith('/environments'))return {real_orders_enabled:false};
- if(path.endsWith('/demo'))return {heartbeat:{status:'WAIT_SESSION'},worker_alive:true};
- if(path.endsWith('/execution'))return {orders:[]};
- if(path.endsWith('/readiness'))return {can_start:false,constraints:[{code:'SESSION_CLOSED'}]};
- if(path.includes('/demo-setup/'))return {status:'READY_FOR_REVIEW',review_sha256:review,request_id:pane.preparation};
- throw Error('Observation unavailable');
+let posts=[],pendingCheck,checkDelayed=false,failCommand=false,rev='r1';
+const initial='ACCOUNT = {}\nSTRATEGIES = {}\n';
+const ctx={signal:new AbortController().signal,actions:{api:async path=>{
+ if(path.endsWith('/program'))return {program:initial,account_id:'fixture_account',revision:rev};
+ if(path.endsWith('/demo'))return {desired:{desired:'PAUSED',policy_revision:rev},heartbeat:{status:'PAUSED'}};
+ if(path.includes('/readiness'))return {constraints:[{code:'ALLOCATION_EXCEEDS_NAV'}]};
+ if(path.endsWith('/snapshot'))return {nav_krw:'10000000',positions:{}};
+ if(path.endsWith('/execution'))return {orders:[]};throw Error(path);
 },operation:async(path,body)=>{posts.push({path,body});
- if(path.endsWith('/prepare'))return {status:'READY_FOR_REVIEW',review_sha256:review,request_id:body.request_id};
- if(path.endsWith('/apply'))return {account_id:'demo_account'};
- if(uncertain)throw Error('Response interrupted');
- return {desired:'RUNNING'};
+ if(path.endsWith('/check')){if(checkDelayed)return await new Promise(r=>pendingCheck=r);return {review_id:'review',program_sha256:'hash',expected_revision:rev,total_capital_krw:'100',strategies:[],warnings:[]}}
+ if(path.endsWith('/apply')){rev='r2';return {revision:rev}}
+ if(failCommand)throw Error('Interrupted');return {desired:'RUNNING'};
 }}};
-root.innerHTML=screen.render(ctx,pane);let cleanup=screen.mount(root,ctx,pane);await settle();
-assert.ok(!root.querySelector('[data-broker-account]').textContent.includes('REAL_SHOULD_NOT_APPEAR'),'real accounts never enter DEMO selection');assert.equal(posts.length,0,'mounting never starts or prepares a strategy');assert.equal(root.querySelector('form').elements.version.value,version);assert.ok(sourceReads[0].includes('run_id='+pane.researchRun));assert.match(root.querySelector('[data-broker-source-review]').textContent,/CHECKPOINT_UNSUPPORTED/);assert.match(root.querySelector('[data-broker-source-review]').textContent,/HALTED/);assert.equal(root.querySelector('[data-broker-reload]'),null);assert.equal(root.querySelector('[data-broker-code]'),null);
-assert.equal(root.querySelector('form button').disabled,true,'known incompatible code cannot prepare');sourceBlocked=false;root.querySelector('form').elements.version.value=operatingVersion;root.querySelector('form').elements.version.dispatchEvent(new dom.window.Event('change',{bubbles:true}));await settle();
-const form=root.querySelector('form');form.elements.data_difference_note.value='Synthetic operating input and AND-condition differences, no profit claim.';form.elements.account_id.value='demo_account';form.elements.strategy_id.value='synthetic_alpha';form.elements.version.value=operatingVersion;
-form.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
-form.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));await settle();
-assert.equal(posts[0].body.version,operatingVersion);assert.equal(posts[0].body.research_run_id,'d'.repeat(32),'switching operating source retains the pinned research reference');assert.match(posts[0].body.data_difference_note,/AND-condition/);assert.equal(posts[0].body.expected_revision,revision);assert.equal(posts[0].body.cohort_count,20);
-assert.equal(root.querySelector('[data-broker-apply]').disabled,true);
-const check=root.querySelector('[data-broker-reviewed]');check.checked=true;check.dispatchEvent(new dom.window.Event('change'));root.querySelector('[data-broker-apply]').click();await settle();
-assert.equal(posts.at(-1).body.expected_review_sha256,review);assert.equal(posts.at(-1).body.reviewed,true);
-uncertain=true;const start=root.querySelector('[data-broker-command="start"]');start.click();await settle();const id=posts.at(-1).body.request_id;start.click();await settle();assert.equal(posts.at(-1).body.request_id,id,'uncertain command retries preserve identity');
-assert.equal(root.querySelector('[data-broker-environment]'),null);assert.equal(root.querySelector('[data-broker-transition]'),null);assert.equal(root.querySelector('[data-broker-real]'),null);assert.match(root.textContent,/REAL ORDERS DISABLED/);
-cleanup();root.innerHTML=screen.render(ctx,pane);cleanup=screen.mount(root,ctx,pane);await settle();assert.equal(root.querySelector('form').elements.account_id.value,'demo_account','unsaved settings survive pane remount in memory');assert.equal(root.querySelector('form').elements.version.value,operatingVersion);cleanup();ctx.actions.api=async()=>{throw Error('Public preview')};root.innerHTML=screen.render(ctx,pane);cleanup=screen.mount(root,ctx,pane);await settle();assert.equal(root.querySelector('form button').disabled,true);assert.equal(root.querySelector('[data-broker-capture]').disabled,true);cleanup();dom.window.close();
-console.log('Broker UI: inert mount, exact reviewed setup, command retry identity, real-mode guard and memory-only drafts passed.');
+function mount(){root.innerHTML=screen.render(ctx,pane);return screen.mount(root,ctx,pane)}
+let off=mount();await settle();assert.equal(posts.length,0,'mount never applies or starts');assert.equal(root.querySelector('form'),null);assert.equal(root.querySelector('select'),null);assert.equal(root.querySelector('input'),null);assert.equal(root.querySelector('[data-broker-capture]'),null);assert.equal(root.querySelector('[data-program-source]').value,initial);assert.match(root.textContent,/ALLOCATION_EXCEEDS_NAV/);
+let editor=root.querySelector('[data-program-source]');editor.value=initial+'# edited';editor.dispatchEvent(new dom.window.Event('input'));root.querySelector('[data-program-command="start"]').click();await settle();assert.equal(posts.length,0,'unapplied code cannot start');
+checkDelayed=true;root.querySelector('[data-program-check]').click();await settle();editor.value+=' again';editor.dispatchEvent(new dom.window.Event('input'));pendingCheck({review_id:'old',program_sha256:'old'});await settle();assert.equal(root.querySelector('[data-program-apply]').disabled,true,'changed content invalidates pending check');
+checkDelayed=false;root.querySelector('[data-program-check]').click();await settle();assert.equal(posts.at(-1).body.expected_revision,'r1');assert.equal(root.querySelector('[data-program-apply]').disabled,false);root.querySelector('[data-program-apply]').click();await settle();assert.deepEqual(posts.at(-1).body,{review_id:'review',program_sha256:'hash',reviewed:true});assert.equal(posts.filter(x=>x.path.endsWith('/commands')).length,0,'apply never starts worker');
+failCommand=true;root.querySelector('[data-program-command="start"]').click();await settle();const request=posts.at(-1).body.request_id;root.querySelector('[data-program-command="start"]').click();await settle();assert.equal(posts.at(-1).body.request_id,request,'uncertain command retry identity preserved');
+editor.value+=' unsaved';editor.dispatchEvent(new dom.window.Event('input'));off();off=mount();await settle();assert.match(root.querySelector('[data-program-source]').value,/unsaved/,'desk switches preserve edits');off();
+let done;ctx.actions.api=async path=>path.endsWith('/program')?await new Promise(r=>done=r):{};off=mount();await settle();off();const html=root.innerHTML;done({program:'late',account_id:'x',revision:'r3'});await settle();assert.equal(root.innerHTML,html,'late loads do not mutate disposed screen');
+dom.window.close();console.log('Operating code: no account/forms, inert load/check, exact review, edit races, retries and cleanup passed.');

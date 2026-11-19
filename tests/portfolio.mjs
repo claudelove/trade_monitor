@@ -2,26 +2,15 @@ import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
 import screen from '../web/screens/0110-account.js';
 const settle=async()=>{for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r))};
-const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main'),pane={};
-let calls=[],mode='missing',resolveOld;
-const revision='r1';
-const ctx={strategy:{account:null},state:{choices:[]},signal:new AbortController().signal,actions:{api:async(path,options)=>{
- calls.push([path,options]);assert.ok(!options.method,'read-only portfolio');
- if(mode==='offline')throw Error('Public preview / protected reads disabled');
- if(path.endsWith('/accounts'))return [{account_id:'demo_a',environment:'demo'},{account_id:'demo_b',environment:'demo'}];
- const id=path.includes('/demo_b/')?'demo_b':'demo_a';
- if(path.endsWith('/policy'))return {account_id:id,revision,body:{capital_limit_krw:'10000000',strategies:[{id:'alpha',capital_krw:'5000000'}]}};
- if(path.endsWith('/demo'))return {account_id:id,worker_alive:true,heartbeat:{status:'WAIT_SESSION',at:'2026-11-14T00:00:00Z'},heartbeat_age_seconds:1,desired:{desired:'RUNNING'}};
- if(mode==='pending')return await new Promise(r=>{resolveOld=r});
- if(mode==='missing')throw Error('INPUT_UNAVAILABLE');
- return {account_id:id,policy_revision:mode==='mismatch'?'old':revision,nav_krw:'10000000',account_pnl_krw:'0',sleeve_pnl_krw:'0',strategies:[{strategy_id:'alpha',equity_krw:'5000000',pnl_krw:'0',contribution_percentage_points:'0'}]};
-}}};
-function mount(){root.innerHTML=screen.render(ctx,pane);return screen.mount(root,ctx,pane)}
-let off=mount();await settle();
-assert.match(root.textContent,/demo_a/);assert.match(root.textContent,/WAIT_SESSION/);assert.match(root.textContent,/10,000,000/);assert.match(root.textContent,/alpha/);assert.match(root.textContent,/Valuation unavailable/);assert.match(root.querySelector('[data-operating-body]').textContent,/—/);assert.ok(calls.length===4);off();
-mode='complete';off=mount();await settle();assert.match(root.textContent,/VALUATION/);const numeric=[...root.querySelectorAll('td.numeric')].map(e=>e.textContent);assert.ok(numeric.some(v=>/^0(?:\.0+)?$/.test(v)),'genuine zero PnL remains zero');off();
-mode='mismatch';off=mount();await settle();assert.match(root.textContent,/Valuation unavailable/,'a different policy cannot supply account PnL');off();
-mode='pending';off=mount();await settle();const select=root.querySelector('select');select.value='demo_b';select.dispatchEvent(new dom.window.Event('change'));mode='missing';resolveOld({account_id:'demo_a',policy_revision:revision,nav_krw:'999999999'});await settle();assert.equal(pane.operatingAccount,'demo_b');assert.ok(!root.textContent.includes('999,999,999'),'old account response discarded');off();
-mode='pending';off=mount();await settle();off();const before=root.innerHTML;resolveOld({account_id:'demo_b',policy_revision:revision,nav_krw:'123'});await settle();assert.equal(root.innerHTML,before,'cleanup discards late results');
-mode='offline';off=mount();await settle();assert.match(root.textContent,/OPERATING SERVICE UNAVAILABLE/);assert.equal(root.querySelector('[data-operating-body]').textContent,'');off();
-dom.window.close();console.log('Portfolio: operating account without research, partial inputs, zero vs missing, revision isolation, selection races, cleanup and read-only preview passed.');
+const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main');let count=1,mode='missing',writes=0;
+const ctx={signal:new AbortController().signal,actions:{api:async path=>{
+ if(path.endsWith('/accounts'))return Array.from({length:count},(_,i)=>({account_id:'account'+i,environment:'demo'}));
+ if(path.endsWith('/policy'))return {account_id:'account0',revision:'r',body:{capital_limit_krw:'1000',strategies:[{id:'alpha',capital_krw:'500'}]}};
+ if(path.endsWith('/demo'))return {account_id:'account0',heartbeat:{status:'PAUSED'},desired:{desired:'PAUSED'}};
+ if(mode==='missing')throw Error('INPUT_UNAVAILABLE');return {account_id:'account0',policy_revision:mode==='mismatch'?'old':'r',nav_krw:'1000',account_pnl_krw:'0',sleeve_pnl_krw:'0',strategies:[{strategy_id:'alpha',pnl_krw:'0'}]};
+},operation:()=>{writes++;throw Error('read only')}}};
+function mount(){root.innerHTML=screen.render(ctx,{});return screen.mount(root,ctx,{})}
+let off=mount();await settle();assert.equal(root.querySelector('select'),null);assert.match(root.textContent,/PAUSED/);assert.match(root.textContent,/Valuation unavailable/);assert.match(root.textContent,/alpha/);off();
+mode='complete';off=mount();await settle();assert.match(root.textContent,/VALUATION/);assert.ok([...root.querySelectorAll('td.numeric')].some(e=>/^0(?:\.0+)?$/.test(e.textContent)));off();
+mode='mismatch';off=mount();await settle();assert.match(root.textContent,/Valuation unavailable/);off();
+count=2;off=mount();await settle();assert.match(root.textContent,/Multiple accounts/);assert.equal(root.querySelector('[data-operating-body]').textContent,'');off();assert.equal(writes,0);dom.window.close();console.log('Single account portfolio: no selector, ambiguity blocked, missing/zero/revision boundaries preserved.');
