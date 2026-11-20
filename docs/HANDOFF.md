@@ -483,3 +483,16 @@ Verification:15UI suites,37Python tests and Pages isolation checks passed. Fixtu
 cover changing operating version without losing research evidence, difference
 submission, stale review, command identity and real-mode/public guards. Private
 service integration/deployment and actual broker acceptance are separate evidence.
+
+## 2026-11-20 — Update existing user manual for code-first screens
+
+Rewrote affected USER_GUIDE.md sections against the actual ad54291 screen source:
+no account/version/capital/risk setup forms or retired result handoff buttons;
+0504 ACCOUNT/STRATEGIES/check/apply/manual controls/code schedule,0304 research
+JSON,0412 default-rule JSON,0411 recording JSON/search,0410 tool parameters,0602
+capacity/CAS policy and singleton0110. Preserved chart/source/security controls;
+updated26-screen catalog and research-vs-operating boundary. Explicit supported
+paired-input limitations, no live certification or private settings/data added.
+Docs-only follow-up; UI bytes/tests remain ad54291, whose17UI/37Python/Pages
+checks succeeded and Actions44529962723 deployed. No private source/account data
+or deploy scripts exported. Private engine owns actual operation and verification.

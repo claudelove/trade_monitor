@@ -1,6 +1,6 @@
-> 2026-11-14: [화면 전체 정리·분리 기준](UI_WORKFLOW_AUDIT_2026-11-14.md)이 이전 화면 구성 설명보다 우선합니다. Portfolio=운용 계좌, Research=코드·백테스트, KIS DEMO=모의 주문이며 REAL 주문은 비활성화입니다.
-
 # Mondu Terminal 사용자 가이드
+
+2026-11-20 코드 중심 화면 기준. [전체 화면 검토](CODE_FIRST_SCREEN_AUDIT_2026-11-19.md)와 함께 읽습니다. 이전의 계좌/한도/전략 선택 폼 설명은 이 문서로 대체합니다.
 
 **화면 찾기 → 투자 대상 설정 → 전략 작성 → 백테스트 → 모의 운용 → 상태 확인**
 
@@ -63,7 +63,7 @@
 
 ### 어떤 전략·종목을 보고 있는지 확인하기
 
-포트폴리오 화면에서는 **BACKTEST ACCOUNT / RUN**과 창 내부의 전략 선택을 확인하세요. `FOLLOW`가 꺼진 창은 선택 대상을 유지합니다. 마켓 차트의 종목·데이터 원천은 해당 창에서 선택합니다. 서로 다른 실행 결과를 같은 계좌처럼 합쳐 해석하지 마세요.
+포트폴리오 ACC는 서버의 단일 운용 계좌를 자동 조회합니다. Research에서는 **BACKTEST ACCOUNT / RUN**과 창 내부의 전략 선택을 확인하세요. `FOLLOW`가 꺼진 창은 선택 대상을 유지합니다. 마켓 차트의 종목·데이터 원천은 해당 창에서 선택합니다. 서로 다른 실행 결과를 같은 계좌처럼 합쳐 해석하지 마세요.
 
 ## 3. 시장과 이벤트 확인하기
 
@@ -88,17 +88,12 @@
 
 ## 4. 투자할 종목군 정하기 — UNIV
 
-**유니버스**는 전략이 검토할 종목들의 범위입니다. 백테스트를 시작하기 전에 기본 유니버스를 저장합니다.
-
-1. `UNIV`를 엽니다.
-2. 새 규칙의 **ID / NAME**, 시장, **TOP N**, 최소 상장 기간과 제외 조건을 입력합니다.
-3. **PREVIEW MEMBERS**로 선정 종목과 원천 기준을 확인합니다.
-4. 기본으로 사용할 규칙이면 **USE AS DEFAULT**를 선택합니다.
-5. **SAVE RULE**을 누릅니다.
-
-기존 규칙은 **SAVED RULE → LOAD RULE**로 불러옵니다. **RELOAD SETTINGS**는 서버 설정을 다시 읽어 작성 중인 규칙을 교체하므로 수정 내용을 먼저 확인하세요.
-
-현재 시가총액 상위 종목을 과거에도 알 수 있었다고 가정할 수는 없습니다. CODE에서 연구 시작 당시 구성과 현재 구성 중 어떤 기준을 사용하는지 확인해야 합니다. 규칙을 바꿔도 이미 검토·실행한 연구 결과가 소급해서 바뀌지는 않습니다.
+`0412 UNIV`에서 서버의 기본 규칙 JSON을 읽고 `markets`, `top_n`, `minimum_listing_days`,
+`exclude_halted`, `exclude_preferred`, `name`을 편집합니다. 별도 규칙 ID나 기본 지정 체크는 입력하지 않습니다.
+**UPDATE MASTER**는 공식 기준정보 갱신 요청, **PREVIEW**는 실제 선정 종목 확인,
+**SAVE REVIEWED RULE**은 검토한 기본 규칙 저장입니다. 수정/충돌 때만 보이는 **LOAD SAVED RULE**은
+확인 후 저장본을 다시 읽습니다. 저장은 revision/default-generation 충돌을 검사하며 기존 연구를 변경하지 않습니다.
+현재 시총 순위를 과거에도 알았다고 가정하지 마세요. CODE의 구성 기준과 생존편향을 함께 검토합니다.
 
 ## 5. 전략 작성과 백테스트 — CODE
 
@@ -117,14 +112,13 @@
 
 ### 이 전략으로 백테스트
 
-1. 오른쪽에서 저장된 기본 유니버스를 확인합니다. 없다면 **UNIVERSE SETTINGS**로 설정합니다.
-2. **FROM / THROUGH**로 연구 기간을 정합니다.
-3. **PRICES**에서 원주가·수정주가 기준을 확인합니다.
-4. **COHORT BASIS**에서 연구 시작 당시 구성과 현재 구성 중 하나를 선택합니다. 현재 구성 연구는 생존편향 확인이 필요합니다.
-5. 코드·정책·유니버스·조건을 검토한 뒤 실행 확인란을 선택합니다.
-6. **BACKTEST THIS STRATEGY** 또는 **Ctrl/⌘ Enter**를 누릅니다.
-
-서버가 코드를 검증하고 버전을 저장한 다음, 종목과 캐시·제공자 데이터를 준비합니다. 종목이나 데이터셋 파일을 매번 직접 고르는 방식이 아닙니다. 오류가 나오면 표시된 항목을 수정하고 다시 검토하세요. 코드나 조건을 바꾸면 이전 실행 확인은 해제됩니다.
+저장된 기본 유니버스가 없으면 명령 `0412`에서 먼저 저장합니다. **RESEARCH REQUEST / JSON**에
+`start`, `end`, `adjustment`, `cohort_mode`, `acknowledge_current_cohort`, `rank_limit`,
+`minimum_listing_days`, `min_observations`를 입력합니다. 날짜·가격 기준·순위·최소 관측 수를 위한 개별 폼은 없습니다.
+현재 구성의 과거 적용은 생존편향을 표시하고 명시적으로 확인해야 합니다.
+코드·TOML·저장 유니버스·요청 내용을 검토한 뒤 검토 체크와 **BACKTEST THIS STRATEGY** 또는
+**Ctrl/⌘ Enter**로 실행합니다. 서버가 종목과 실제 캐시/제공자 자료를 선택하며 CSV나 종목을 매번 고르지 않습니다.
+입력 변경은 이전 검토를 무효화합니다. 저장·백테스트는 현재 계좌 주문을 시작하지 않습니다.
 
 ### 진행·결과 확인
 
@@ -137,66 +131,62 @@
 
 ## 6. KIS 모의투자 준비와 실행 — BROKER
 
-`BTRESULT`의 **REVIEW EXECUTION [0504]** 또는 명령 `BROKER`로 엽니다. 결과에서 열면 백테스트 원본 버전·결과를 참조 근거로 고정합니다. 운용 코드는 따로 작성·저장하고 OPERATING CODE VERSION에서 선택할 수 있습니다. 다음 순서를 구분해서 사용합니다.
+`0504 OPERATE / BROKER`를 열면 서버의 단일 KIS DEMO 계좌에 적용된 코드 문서를 읽습니다.
+계좌 선택, ACCOUNT ID, 별도 전략 버전/한도/코호트 입력 폼은 없습니다.
 
-**준비 → 검토·적용 → 시작 → 상태·주문 확인**
+1. **ACCOUNT**에서 계좌 잔고 하한·공통 `limits`·`execution`·`broker`·`schedule`을 편집합니다.
+2. **STRATEGIES**의 전략 이름별 `capital_krw`, `limits`, `symbols`, `source`, `manifest`를 검토합니다.
+   이름은 주문·손익을 귀속하는 전략 키이며 추가 증권사 계좌가 아닙니다. Python/manifest는 원문 문자열입니다.
+3. **CHECK CODE**는 정확한 문서/소스/한도/정책을 검증하고 자본 합계·검토 해시를 표시합니다. 전략을 실행하지 않습니다.
+4. **APPLY REVIEWED CODE**는 검토본을 적용합니다. 활성 소유자·보유·미확정 주문·변경된 paired 입력 계약은 차단됩니다.
+   적용 자체는 START 요청이 아닙니다. 편집을 바꾸면 다시 CHECK해야 합니다.
+5. 수동 실행은 **START DEMO**. **PAUSE**는 신규 신호 차단·취소 요청, **STOP**은 중지이며 자동 매도가 아닙니다.
+   **FLATTEN HOLDINGS**는 실제 보유가 있을 때만 표시되는 청산 요청입니다. 체결을 보장하지 않습니다.
+6. 수정/충돌 때 **LOAD APPLIED CODE**로 적용본을 다시 읽을 수 있습니다. 미저장 편집 폐기 확인이 필요합니다.
 
-### 준비·적용
+자본 합계는 가상 배정이며 입금액이 아닙니다. 실제 NAV·매수 가능금액·공통 리스크가 별도 검사됩니다.
+**WORKER / REQUESTED / LAST ACCOUNT NAV / ACCOUNT GATES**와 전략별 주문 상태를 확인하세요.
+오래된 마지막 잔고는 현재 주문 가능 잔고를 뜻하지 않습니다. ACK는 체결이 아닙니다.
 
-1. **0504 BROKER**의 `KIS DEMO / VIRTUAL MONEY` 표시를 확인합니다. 실전 전환 선택창은 없습니다.
-2. **SETUP / SOURCE / CAPITAL / RISK**를 펼칩니다.
-3. 별도로 저장한 **OPERATING CODE VERSION**과 계좌·전략 식별자, 자본 배정·관측 종목 수를 선택합니다. **INPUT / AND-CONDITION DIFFERENCES**에 실제 입력·추가 조건 차이를 기록합니다(20자 이상). 원본 백테스트는 변경하지 않습니다.
-4. **EDIT RISK / EXECUTION / BALANCE FLOORS**에서 노출·손실·주문 금액·수량·유효시간·비용 조건을 검토합니다.
-5. **PREPARE DEMO SETTINGS**로 종목·데이터·설정 검토 내용을 준비합니다.
-6. 준비된 내용을 확인하고 승인란과 적용 버튼으로 확정합니다.
+### 코드 안의 시간표
 
-입력된 자본은 전략 예산입니다. 실제 입금액이나 매수 가능금액을 만들어내지 않습니다. 계좌 조회는 **QUERY BROKER BALANCE**로 별도 확인합니다. 화면의 초기 입력값도 사용자가 승인한 운용 기준은 아닙니다.
+`ACCOUNT.schedule`은 `enabled`, `timezone='Asia/Seoul'`, `weekdays`(월요일0),
+`prepare`, `start`, `pause`, `max_sessions`를 가집니다. 준비·시작·중단 시각과 세션 횟수를
+코드에서 설정하고 CHECK/APPLY합니다. 서버 감독 서비스가 처리하므로 날짜별 타이머를 수동 설치하지 않습니다.
+`max_sessions=1`은 한 세션 시험입니다. 재시작이 예산/체크포인트를 초기화하지 않습니다.
+같은 날 수동 PAUSE/STOP을 자동 재개로 덮어쓰지 않습니다. 휴장·신선도·대사·리스크 조건은 그대로 검사합니다.
 
-투자 유니버스 전체와 실시간으로 관측할 종목군은 다를 수 있습니다. 준비 화면에서 실제 관측 대상을 확인하세요. 지속 실행용 코드는 서버가 요구하는 체크포인트 계약도 충족해야 합니다. 모든 백테스트 코드가 그대로 모의 운용 가능한 것은 아닙니다.
+### 데이터·지원 범위
 
-### 실행 버튼의 의미
+현재 문서는 검토된 cash-equity/bar 전략용 DEMO 경로입니다. 별도 연구와 운용 코드 및 AND 조건의 차이는
+보존됩니다. 이미 paired 입력을 사용하는 코드의 소스/유니버스 변경은 정확한 연구 참조·seed의 별도 서버 검토를
+요구하며 이 화면의 정적 CHECK만으로 새 입력 컨텍스트를 만들지 않습니다. 미지원 계약을 자동 변환하지 않습니다.
+최상위 문서는 리터럴 선언만 해석하며 임의 셸/import/함수 호출은 실행하지 않습니다. 전략 Python 자체는 신뢰한
+코드이지 sandbox가 아닙니다. 키와 계좌번호는 이 문서에 입력하지 않습니다.
 
-| 작업 | 의미 |
-| --- | --- |
-| **START** | 적용된 설정으로 모의 운용 워커를 시작하도록 요청합니다. |
-| **PAUSE** | 신규 신호를 막고 진행 중 주문의 취소를 요청합니다. |
-| **STOP** | 운용을 중지합니다. 보유 주식이 자동 매도되는 뜻은 아닙니다. |
-| **FLATTEN** | 전략 소유 포지션의 청산을 요청합니다. 세션·유동성·공통 리스크 조건에 따라 즉시 완료되지 않을 수 있습니다. |
-
-설정 적용만으로 운용이 시작되지는 않습니다. 시작 후에도 워커 상태·주문·체결을 확인해야 합니다. 주문 접수는 체결 완료와 다릅니다.
-
-### WAIT_SESSION이 보이면
-
-장이 열리기를 기다리는 상태입니다. 워커와 서버가 계속 살아 있고, 제공자가 확인한 유효 세션·실시간 데이터·필요 이력·전략 신호·리스크 조건이 충족돼야 판단과 주문이 이어집니다. **개장 시각에 무조건 주문하는 것은 아닙니다.**
-
-GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니다. 워커를 실행하는 컴퓨터와 비공개 서버가 켜져 있어야 합니다. 데이터 수신 장애나 불확실한 주문 상태가 보이면 해당 원인을 확인한 뒤 복구 절차를 따르세요.
-
-현재 BROKER의 실계좌 메뉴는 **REAL / PREPARATION ONLY**입니다. 설정 미리보기와 실제 주문 실행을 구분하세요. 모의계좌 연결·잔고 조회·장외 대기 성공이 실제 주문·취소·체결 검증 완료를 뜻하지는 않습니다.
+WAIT_SESSION은 장외 대기입니다. 서버·워커 생존, 제공자의 유효 세션, 실제 피드와 신호·리스크 조건이 필요합니다.
+브라우저나 Codex 앱을 켜두는 것으로 워커를 유지하지 않습니다. 서버 감독 서비스가 켜져 있어야 합니다.
+REAL 전송/전환 버튼은 없으며, 모의 조회·합성 검증을 실제 체결 인증으로 취급하지 않습니다.
 
 ## 7. 포트폴리오 확인하기
 
-대상을 먼저 **BACKTEST ACCOUNT / RUN**에서 선택한 뒤 필요한 화면을 엽니다.
+`0110 ACC`는 단일 서버 운용 계좌의 정책·환경·워커·NAV/PnL·전략별 기여도를 읽습니다.
+계좌 선택 입력은 없으며 모호한 복수 계좌는 임의로 고르지 않고 차단합니다. 수신되지 않은 값은 **—**, 실제 0은0입니다.
+전략 수익률과 계좌 기여도(%p)는 분모·단위가 다릅니다.
 
-| 질문 | 화면 |
-| --- | --- |
-| 계좌 전체 자본과 손익은? | `ACC` |
-| 전략 성과와 낙폭은? | `PERF` |
-| 무엇을 얼마나 보유하는가? | `HOLD` |
-| 노출과 리스크 상태는? | `RISK` |
-| 어떤 전략이 계좌 수익에 기여했는가? | `ATTR` |
-| 주문·체결은 어떻게 기록됐는가? | `BLOTTER` / `FILLS` |
-
-저장된 연구 결과의 주문·체결과 실제 브로커 모의 운용 주문은 다릅니다. **연구 이력은 BLOTTER/FILLS의 원천 표시**, 현재 모의 운용은 **BROKER의 계좌 소유 주문·상태**를 확인하세요. 같은 화면 색이나 종목이라는 이유로 두 기록을 연결하지 마세요.
-
-`—`는 정보가 없다는 뜻이며 0이 아닙니다. 전략 수익률과 계좌 기여도도 단위·분모가 다를 수 있습니다. 보고된 기준 시각과 데이터 원천을 함께 확인하세요.
+Research의 `0302 BTRESULT`, `0102 HOLD`, `0103 RISK`, `0108 ORD`는 과거 연구 전용입니다.
+현재 모의계좌 보유·체결로 해석하지 마세요. 실제 DEMO 주문은0504의 전략별 주문 상태에서 확인합니다.
+예전 PERF/ATTR 명령은 통합된 연구 결과 화면으로 연결될 수 있습니다.
 
 ## 8. 데이터 수집 상태 확인하기 — DATAFLOW
 
-`DATAFLOW`에서 연구 요청·데이터 원천·워커 상태·기록 정책을 확인합니다. 일반적인 연구 시작은 **UNIV → CODE**입니다.
-
-연구 결과를 앞으로 관측할 대상으로 남기려면, 완료된 연구를 선택하고 전략 식별자·검토 기간·검토 의견을 작성해 기록 정책을 저장합니다. 이는 **데이터 기록 요청**이며 모의 운용 시작이나 주문 승인이 아닙니다.
-
-워커가 실행 중이어도 특정 원천의 수신이 끊길 수 있습니다. 마지막 수신 시각·오류·누락 구간을 함께 확인하세요. 더 자세한 원본 이력은 `JOURNAL`, 원천 설명은 `DATA`에서 봅니다.
+`0411 DATAFLOW`의 **REFRESH**는 요청·자료 출처·수집 상태 조회입니다.
+**REVIEWED RECORDING / CODE**에서 완료된 실제 연구 목록을 확인하고 JSON의 `strategy_id`,
+`research_job_id`, `expected_generation`, `expires_days`, `review_note`를 작성합니다.
+**APPLY REVIEWED RECORDING**은 정확한 연구·generation에 대한 기록 정책 검토이며 주문 승인이 아닙니다.
+**STRATEGY ID / FIND STRATEGY**는 기존 기록 정책 검색입니다. **FIRST POLICIES / NEXT POLICIES**는 필요한
+페이지에만 표시됩니다. **STOP RECORDING · 전략**은 해당 세대의 정책만 중단하며 공유 구독을 임의 해제하지 않습니다.
+**WORKER / SOURCE EVIDENCE**는 실제 원천·누락·재연결 증거입니다. 원본은 JOURNAL/BOOK에서 확인합니다.
 
 ## 9. 상태 표시와 문제 해결
 
@@ -218,19 +208,19 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 
 | 용도 | 번호 / 명령 |
 | --- | --- |
-| 계좌·성과·보유·리스크·기여도 | `0110 ACC` · `0101 PERF` · `0102 HOLD` · `0103 RISK` · `0105 ATTR` |
-| 가격·차트·이벤트·공시 | `0201 QUOTE` · `0202 GP` · `0203 EVENTMON` · `0204 FIL` |
-| 코드·백테스트 결과 | `0304 CODE` · `0302 BTRESULT` |
-| 상관·통계·이벤트 원본 | `0401 CORR` · `0410 STATS` · `0404 JOURNAL` |
-| 원천·호가·데이터 수집·투자 대상 | `0403 DATA` · `0405 BOOK` · `0411 DATAFLOW` · `0412 UNIV` |
-| 모의 운용·연구 주문·연구 체결 | `0504 BROKER` · `0501 BLOTTER` · `0502 FILLS` |
-| 접속 권한·데이터베이스 확인 | `0601 ACCESS` · `0602 DATABASE` |
+| 현재 운용 계좌·전략 기여도 | 0110 ACC |
+| 저장 가격·차트·이벤트·공시·북마크 | 0201 QUOTE · 0202 GP · 0203 EVENTMON · 0204 FIL · 0206 SAVED |
+| 원천 상세 대화상자 | 0290 |
+| 연구 코드·결과·가상 보유·위험·주문 | 0304 CODE · 0302 BTRESULT · 0102 HOLD · 0103 RISK · 0108 ORD |
+| 이벤트 원문·호가·통계·수집·유니버스 | 0404 JOURNAL · 0405 BOOK · 0410 STATS · 0411 DATAFLOW · 0412 UNIV |
+| KIS DEMO 운용 코드·제어·주문 상태 | 0504 BROKER / OPERATE |
+| 접속권한·DB 용량 관리 | 0601 ACCESS · 0602 DATABASE |
 
-화면 이름이나 버튼이 달라졌다면 최신 **SCREENS** 목록을 기준으로 찾으세요. 개발·설치 정보는 [개발자 안내](DEVELOPER_GUIDE.md), 코드 편집기 계약은 [STRATEGY_WORKBENCH](STRATEGY_WORKBENCH.md), 화면 모듈 규칙은 [SCREEN_MODULES](SCREEN_MODULES.md)를 참고하세요.
+최신 SCREENS 목록이 기준입니다. 0403 등 통합된 과거 번호는 호환 라우팅이며 별도 기능을 되살리지 않습니다.
 
 ## 11. 화면번호별 모든 조작부
 
-2026-11-12 소스 점검 기준입니다. 아래는 현재 등록된 **34개 화면**(6개 데스크 포함)의 버튼·입력·선택·펼침 동작입니다. 데이터가 없으면 표·차트가 비어 있을 수 있습니다. 빈 데이터를 만들어 채우지 않습니다. 미리보기의 비활성화와 실제 서버의 준비 실패를 구분하세요.
+2026-11-20 소스 점검 기준입니다. 아래는 현재 등록된 **26개 화면**(6개 데스크 포함)의 버튼·입력·선택·펼침 동작입니다. 데이터가 없으면 표·차트가 비어 있을 수 있습니다. 빈 데이터를 만들어 채우지 않습니다. 미리보기의 비활성화와 실제 서버의 준비 실패를 구분하세요.
 
 ### 공통 조작 — 모든 화면
 
@@ -280,7 +270,7 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | 0102 HOLD | STRATEGY/FOLLOW. 종목 ↗는 해당 백테스트의 저장 가격을 GP로 엽니다. 마지막 가상 보유 수량이며 현재 모의·실전 보유가 아닙니다. Research에서만 엽니다. |
 | 0103 RISK | STRATEGY/FOLLOW 및 공통 차트. 표시된 위험한도·노출·낙폭은 연구 실행의 관측값입니다. 이 화면에 운용 한도 변경 폼은 없습니다. |
 | 0108 ORD | STRATEGY/FOLLOW. Order search는 종목/클라이언트 주문 ID/사유 검색, ORDER STATE는 해당 실행의 주문 상태 필터. 입력 후 변경을 확정하면 적용. 주문·체결·판단 기록 조회 전용. |
-| 0110 ACC | 운용 계좌 선택, 환경(DEMO/REAL), 실제 워커 상태, 예산과 수신된 평가 NAV/PnL·전략 기여도를 조회합니다. 5초 주기 읽기 전용이며 매매하지 않습니다. 백테스트 값은 이 화면에 표시하지 않습니다. 미수신은 —. |
+| 0110 ACC | 단일 서버 계좌 자동 조회, 환경(DEMO/REAL), 실제 워커 상태, 예산과 수신된 평가 NAV/PnL·전략 기여도를 조회합니다. 5초 주기 읽기 전용이며 매매하지 않습니다. 백테스트 값은 이 화면에 표시하지 않습니다. 미수신은 —. |
 
 ### Market
 
@@ -303,14 +293,7 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | TEMPLATE / NEW FROM TEMPLATE | 미완성 계약 또는 명시적인 합성 데이터 참조 템플릿 생성. 개인 전략 자동 생성이 아닙니다. |
 | PYTHON / SIGNAL / RISK / EXECUTION | 소스 에디터 / TOML 정책 에디터 전환. Python은 신뢰된 서버 코드이며 샌드박스가 아닙니다. |
 | 에디터 검색·바꾸기 / 접기 / Undo·Redo | 코드 편집. 진단 항목 클릭은 해당 파일·줄로 이동. |
-| UNIVERSE SETTINGS | UNIV0412 열기. 정상 경로는 종목·CSV를 매 실행마다 수동 선택하지 않습니다. |
-| FROM / THROUGH | 연구 시작일·종료일. 지원되는 실제 과거 자료로 해석됩니다. |
-| PRICES | ORIGINAL / 최신 ADJUSTED. 최신 수정주가는 당시 알려진 기업행동 자료라는 보장이 없습니다. |
-| COHORT BASIS | 시작 시 알려진 구성 / 현재 구성으로 과거를 보는 회고 연구 선택. |
-| MAX UNIVERSE RANK | 저장 유니버스 시총 순위 상한. 비우면 전체. |
-| LISTED DAYS AT START | 연구 시작 시 최소 상장 경과일 조건. |
-| MIN OBSERVATIONS | 종목별 최소 관측치 수. 일봉과 5초봉은 호환 자료가 아닙니다. |
-| 생존편향 확인 체크 | CURRENT COHORT 사용의 생존편향을 명시적으로 인정. PIT 자료를 만들어주지 않습니다. |
+| RESEARCH REQUEST / JSON | start/end, adjustment, cohort_mode, acknowledge_current_cohort, rank_limit, minimum_listing_days, min_observations를 코드로 설정. 별도 날짜·순위 폼 없음. |
 | 코드·정책·유니버스 검토 체크 | 현재 정확한 입력의 실행 검토. 변경하면 검토가 무효화됩니다. |
 | BACKTEST THIS STRATEGY / Ctrl(⌘)+Enter | 현재 내용을 검증·저장하고 자동 유니버스/자료 해석 후 역사 연구 시작. 주문 아님. |
 | RECENT BACKTESTS | 서버에 저장된 최근 작업 선택 및 상태 복구. |
@@ -318,7 +301,8 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | OPEN RESULT | 해당 작업의 저장 run 결과를 BTRESULT0302로 엽니다. |
 | Effective risk / execution settings 펼침 | 검증된 입력에서 해석한 엔진 한도·체결 가정 조회. |
 
-`0302 BTRESULT`는 STRATEGY/FOLLOW, NAV/DRAWDOWN/GROSS/PNL와 공통 차트 조작을 제공합니다. 저장 코드 버전이 있는 결과에만 **REVIEW EXECUTION [0504]**가 나타납니다. 정확한 원본 버전·연구 실행을 BROKER의 참조 근거로 넘기며 **운용 설정 적용이나 주문 시작은 수행하지 않습니다**. 예전 자료의 버전을 추정해 연결하지 않습니다.
+`0302 BTRESULT`는 STRATEGY/FOLLOW, NAV/DRAWDOWN/GROSS/PNL, 비용 상세와 공통 차트 조작을 제공합니다.
+중복 보유·위험·주문 탐색 및 REVIEW EXECUTION 바로가기는 제거했습니다. 별도 기능은 번호로 엽니다.
 
 ### Analytics & Data
 
@@ -326,67 +310,24 @@ GitHub Pages 탭을 열어두는 것으로 워커가 유지되지는 않습니�
 | --- | --- |
 | 0404 JOURNAL | Event kind는 NEWS/DISCLOSURE/BOOK_SNAPSHOT/BAR/RAW_FRAME/FEED_STATUS, Event symbol은 종목 제한. QUERY는 최대100개 원천 조회. 행 클릭은0290 원문·수정 이력. |
 | 0405 BOOK | Order book symbol 입력 후 QUERY는 최신 저장 전체 호가 스냅샷 조회. RAW / LINEAGE →는 원천 상세. 현재 주문 가능한 호가가 아니며 연속성 미확인이면 OFI를 계산한 척하지 않습니다. |
-| 0410 STATS | STRATEGY/FOLLOW. TOOL은 등록 통계 도구, PEER STRATEGY는 쌍 분석 대상(단일 분석이면 비활성), WINDOW는 관측 구간, LAGS는 시차. RUN DIAGNOSTIC은 도구 버전·입력 해시·파라미터를 가진 결과 저장. 유의성은 투자 승인과 다릅니다. |
+| 0410 STATS | 실제 등록 TOOL 선택, PARAMETERS / JSON, RUN ANALYSIS. 구간·시차·쌍 전략 등 지원 파라미터를 JSON에 입력하며 미지원 필드는 거절. 연구 결과가 필요하고 유의성이 매매 승인은 아님. |
 
-| 0411 DATAFLOW 조작 | 용도 |
-| --- | --- |
-| REFRESH | 요청·정책·워커 상태 재조회. |
-| STRATEGY ID | 앞으로 호가를 기록할 전략의 정책 소유 ID. |
-| COMPLETED RESEARCH | 검토할 완료된 정확한 연구 결과 선택. |
-| REVIEW VALIDITY / DAYS | 수집 승인 유효 일수(1–365). |
-| REVIEW FINDINGS | 비용·표본 편향·검증 근거 기록(20–2000자). |
-| 검토 체크 / APPLY RECORDING POLICY | 해당 결과·자료 검토 후 공유 구독 수집 정책 적용. 매매 승인이 아닙니다. |
-| Find recording policy / FIND STRATEGY | 특정 전략 ID 정책 조회. |
-| FIRST POLICIES / NEXT POLICIES | 전체 정책 첫 페이지 / 다음 페이지. 전략 검색을 해제하고 전체 목록으로 돌아가는 데 FIRST 사용. |
-| STOP RECORDING · 전략 | 해당 정책의 현재 세대로 수집 중지. 다른 전략이 공유하는 구독을 임의 해제하지 않습니다. |
-
-| 0412 UNIV 조작 | 용도 |
-| --- | --- |
-| RELOAD SETTINGS | 서버 저장 상태·선택 규칙 다시 읽기. 미저장 편집을 교체합니다. |
-| SAVED RULE / LOAD RULE | 저장 규칙 선택 후 폼에 불러오기. NEW RULE은 새 규칙 작성. |
-| REFRESH OFFICIAL MASTER | 공식 마스터 수집 작업 요청. 워커·키가 준비돼야 완료되며 무제한 과거 마스터를 얻는 기능이 아닙니다. |
-| ID / NAME | 규칙의 안정적인 식별자 / 사람이 읽는 이름. |
-| MARKET / TOP N | KOSPI·KOSDAQ·둘 다 / 시총 상위1–100개. 동률은 종목코드순. |
-| MIN LISTED DAYS | 최소 상장 경과일. |
-| EXCLUDE HALTED / EXCLUDE PREFERRED | 거래정지·우선주 제외 조건. |
-| USE AS DEFAULT | 이후 CODE의 기본 유니버스 지정. 이미 시작한 결과 구성은 유지. |
-| PREVIEW MEMBERS | 저장 전 규칙·실제 마스터로 예상 구성 확인. |
-| SAVE RULE | 서버 검증과 revision/default-generation CAS를 통과한 규칙 저장. 주문 없음. |
+0411의 모든 조작은8절,0412의 모든 조작은4절에 설명되어 있습니다. 반복 입력 폼은 없습니다.
 
 ### Execution
 
 Execution(KIS DEMO)에는 **0504 BROKER**만 남습니다. 이전 `0501/0502/BLOTTER/FILLS`는 Research의 **0108 ORD**로 연결되며 저장된 백테스트 기록임을 표시합니다. 실제 모의 주문은 BROKER의 OWNED ORDERS에서 조회합니다. 실전 주문 UI와 전환 버튼은 제공하지 않습니다.
 
-| 0504 BROKER 조작 | 용도 |
-| --- | --- |
-| OPERATING ACCOUNT | 서버에 설정된 운용 계좌 선택. 개인 증권 계좌번호 입력칸이 아닙니다. |
-| ENVIRONMENT CONFIGURATION… 펼침 | 모의·실전 자격정보 존재 여부와 실전 전환 차단 조건 조회. 비밀값은 표시하지 않습니다. |
-| SETUP / SOURCE / CAPITAL / RISK 펼침 | 운용 설정 준비 폼. |
-| ACCOUNT ID / STRATEGY ID | 서버 내부 계좌 / 전략 슬리브 ID. 특정 전략명을 기본값으로 넣지 않습니다. |
-| OPERATING CODE VERSION | 실행할 불변 운용 소스 버전. BTRESULT에서 고정한 원본 연구와 별도 버전일 수 있으며, 그 차이는 명시적으로 검토합니다. |
-| INPUT / AND-CONDITION DIFFERENCES | 실제 데이터·입력 주기·추가 AND 조건·비용/체결 가정의 차이를 20–2000자로 기록. 원본의 수익률이 새 코드를 검증했다고 처리하지 않습니다. |
-| ACCOUNT CAPITAL LIMIT / STRATEGY CAPITAL | 전체 계좌·해당 전략의 예산(KRW). 입금액 보장·수익 보장이 아니며 실제 잔고와 별도 검증. |
-| OBSERVED COHORT | 유니버스 중 실제 관측할 종목 수(최대40). 전체 투자 풀과 실시간 동시 구독은 다릅니다. |
-| EDIT RISK / EXECUTION / BALANCE FLOORS 펼침 | 아래 위험·주문 설정 JSON 수정. 비밀키 입력 금지. |
-| PREPARE DEMO SETTINGS | 실제 일봉을 확보해 관측 코호트·정확한 소스/엔진/한도 미리보기 생성. 적용·주문은 아직 없음. |
-| 정확한 모의 설정 승인 체크 | 표시된 버전·코호트·위험 설정에 대한 KIS DEMO 승인. 값이 바뀌면 다시 검토. |
-| APPLY REVIEWED DEMO SETTINGS | 검토 해시·리비전 검증 후 정책과 코드 바인딩 적용. 워커 시작은 별도. |
-| START DEMO | 설정된 모의 전략 감독 시작 요청. 실제 워커 생존·세션·잔고 대사·신선한 피드와 주문 상태를 아래에서 확인. |
-| PAUSE DEMO | 신규 신호 차단·미체결 취소 요청. |
-| STOP DEMO | 감독 정지 요청. 보유 포지션을 매도하지 않습니다. |
-| FLATTEN DEMO | 전략 소유 보유 종목 매도 요청. 주문·리스크·세션 조건으로 실패할 수 있으므로 체결·잔고를 반드시 확인. |
-| QUERY BROKER BALANCE / READ ONLY | 선택한 환경·계좌의 실제 조회 응답 저장. 체결 대사 완료를 보장하지 않습니다. |
-
-소스 검토에는 체크포인트 지원 여부·정확한 연구 버전 일치·중단 사유가 나옵니다. 소스 미선택·검토 조회 실패·체크포인트 미지원 등 알려진 차단 사유가 있으면 PREPARE DEMO SETTINGS도 비활성화됩니다. **정적 체크 통과는 전략 재시작의 정확성이나 실전 적합성 인증이 아닙니다.** 백테스트 일봉을 5초 피드로 자동 변환하지 않습니다.
+0504의 문서와 모든 버튼은6절을 참고하세요. 계좌 선택/버전/자본/리스크 준비 폼·별도 잔고 조회 버튼은 없습니다.
 
 | 위험·체결 JSON 항목 | 의미 |
 | --- | --- |
 | min_account_nav_krw / min_free_cash_krw | 실제 계좌 NAV / 가용현금 하한. |
-| account_limits / sleeve_limits | 전체 계좌 / 전략 한도. max_gross 총노출, max_symbol 단일종목, max_order 단일주문, max_margin 증거금, max_drawdown 낙폭, max_daily_loss 일손실. 비율은0.02=2%. |
+| ACCOUNT.limits / STRATEGIES[name].limits | 전체 계좌 / 전략 한도. max_gross 총노출, max_symbol 단일종목, max_order 단일주문, max_margin 증거금, max_drawdown 낙폭, max_daily_loss 일손실. 비율은0.02=2%. |
 | max_order_notional_krw / max_working_notional_krw / max_daily_turnover_krw | 단일 주문 / 미체결 예약 / 일일 거래대금 상한. |
 | max_slippage_bps / fee_buffer_bps | 허용 슬리피지 / 주문 자금 예약 비용 버퍼. |
 | max_event_age_seconds / max_quote_age_seconds / max_balance_age_seconds | 이벤트·호가·잔고 허용 최대 경과시간. |
-| order_ttl_seconds / max_quantity | 주문 유효시간 / 주문 수량 상한. |
+| broker.order_ttl_seconds / max_quantity | 주문 유효시간1–120초 / 주문 수량 상한. |
 | fee_bps / sell_tax_bps | 수수료 / 매도 세금 비용 추정치(bps). 실제 비용과 대조 필요. |
 | cancel_evidence_mode | 취소 수량 근거. DEMO_REMAINING_ACCEPTANCE는 모의 잔량 검증 경로이며 실전 인증 아님. |
 
@@ -395,20 +336,22 @@ Execution(KIS DEMO)에는 **0504 BROKER**만 남습니다. 이전 `0501/0502/BLO
 | 화면 | 버튼·입력·선택의 용도 |
 | --- | --- |
 | 0601 ACCESS | RELOAD POLICY는 현재 접속 IP·두 슬롯·generation 조회. REPLACE SLOT은 다른 관리자 슬롯, NEW ADMINISTRATOR IP는 새 단일 IP. PREVIEW ROTATION은 변경 전·후와 살아남는 슬롯 확인, 생성되는 CONFIRM IP ROTATION은 서버 CAS·survivor 검증 후 적용. 현재 접속 슬롯 자체는 변경 불가. IP 변경은 접근권한 변경이므로 복구 경로를 확보하세요. |
-| 0602 DB | INSPECT SCHEMA는 실제 구성 DB의 연결·인덱스·TTL 상태 조회. DB 삭제·마이그레이션·백업 실행 버튼이 아닙니다. |
+| 0602 DATABASE | CHECK STORAGE는 실제 용량·정책·마지막 pass·schema 증거 조회. retention JSON을 검토한 APPLY REVIEWED POLICY는 generation CAS 저장. LOAD APPLIED POLICY는 편집/충돌 시 확인 후 재조회. schema 상세는 읽기 전용이며 쓰기 성공 인증이 아님. |
 
-### 제거한 조작과 유지 이유
+### 저장 용량 정책
 
-- CODE의 맥락 없는 **DEMO EXECUTION** 바로가기 제거. 결과에서 정확한 코드 버전을 전달하는 **REVIEW EXECUTION**으로 대체했습니다.
-- DATA0403의 클릭 처리 없는 **OPEN EVENT JOURNAL** 버튼 제거. JOURNAL은 공통 SCREENS에서 엽니다.
-- BROKER의 특정 전략명 기본 입력 제거. 사용자가 전략 ID를 정하며 전략에 하드코딩하지 않습니다.
-- 조회 필터·위험 승인·STOP·FLATTEN은 각각 별도 의미가 있으므로 유지했습니다. 숨긴 실전 START나 성공하는 척하는 미구현 조작은 추가하지 않았습니다.
+0602 retention JSON은 enabled, trigger_bytes, target_bytes, max_events_per_pass, batch_size,
+archive_max_bytes, minimum_free_bytes를 가집니다. 실제 서버 적용본에서 편집하고 검토합니다.
+압력이 기준을 넘으면 제한된 워커가 오래된 시세 원문을 Parquet/ZSTD로 보관하고 fsync/checksum/전체 원문을
+검증한 뒤에만 Mongo 사본을 지웁니다. NEWS/DISCLOSURE는 보호됩니다. 보관 데이터는 hot DB와 함께 조회합니다.
+보관 예산 소진·디스크 부족·원문 불일치면 삭제를 강행하지 않습니다. 로컬 압축 파일은 외부 백업이 아닙니다.
 
 ## 12. 백테스트에서 운용까지
 
-1. UNIV 저장 → CODE 소스·조건 검토 → BACKTEST → OPEN RESULT.
-2. 수익뿐 아니라 위험 중단·비용·시점·생존편향을 검토합니다. 위험 중단은 강제 청산 보장이 아닙니다.
-3. BTRESULT의 REVIEW EXECUTION → BROKER에서 원본 연구를 고정하고, 별도로 작성·저장한 운용 코드 버전과 실제 입력·AND 조건 차이를 선택·검토.
-4. 재시작 지원·현재 자료 주기에 맞는 전략만 예산·위험 설정을 준비하고 검토·적용합니다. 운용 코드를 바꿨으면 새 버전으로 기록하고 그 코드·입력·추가 조건을 별도 검증·검토합니다. 원본 백테스트 성과를 새 코드의 성과로 재사용하지 않습니다.
-5. DEMO START 후 워커·현재 세션·피드·계좌 대사·주문 ACK와 실제 누적 체결을 확인합니다. 응답 불명확 주문은 다시 보내지 말고 조회·대사합니다.
-6. 실전은 별도 키·계좌·명시적인 운용 승인과 실제 제출/부분체결/취소/재연결 복구 검증 및 실전 transport 출시가 필요합니다. **현재 REAL은 준비·조회만 가능하며 실전 주문 전송은 차단돼 있습니다.** 이 설명서나 백테스트 완료는 그 인증을 대신하지 않습니다.
+UNIV 기본 규칙 → CODE 소스/TOML/연구 JSON 검토 → BACKTEST → OPEN RESULT로 과거 근거를 남깁니다.
+별도 운용 코드·입력·AND 조건·체크포인트 계약을 검토한 뒤0504의 실제 적용 문서를 CHECK/APPLY합니다.
+기존 paired 입력의 소스/유니버스를 바꾸면 새 연구 참조/seed의 서버 검토가 필요합니다. 백테스트 결과를 덮어쓰거나
+과거 수익률로 새 운용 코드를 검증한 것으로 취급하지 않습니다.
+START 또는 코드 schedule 이후 실제 수신·전략 판단 사유·리스크·주문·체결 대사를 확인합니다.
+UNKNOWN 주문은 조회·대사 전 다시 보내지 않습니다. REAL은 별도 어댑터·실제 브로커 수락 검증과 승인이 필요하며
+현재 전송은 차단되어 있습니다. 화면·문서·합성 테스트만으로 실전 인증을 주장하지 않습니다.
