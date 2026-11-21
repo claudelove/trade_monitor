@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {EngineClient,api} from '../web/engine-client.js';
+import {EngineClient,api,operation} from '../web/engine-client.js';
 import {nativeAccount,nativeRun} from './native-fixtures.mjs';
 const account=nativeAccount(),single=nativeRun('standalone');delete single.account_id;
 const requests=[];
@@ -17,3 +17,15 @@ assert.equal(newer.report.runs[0].id,'standalone');assert.equal(await old,null);
 for(const url of ['https://public.invalid/api/accounts','//public.invalid/api/accounts','/private/key'])await assert.rejects(api(url));
 assert.equal(account.status,'completed_with_errors');
 console.log('Engine client passed: native account/standalone, independent source failure, stale response/error rejection and same-origin-only requests.');
+
+const savedFetch=globalThis.fetch,posts=[];
+try{
+ globalThis.fetch=async(path,options)=>{posts.push({path,options});return {ok:true,json:async()=>({accepted:true})}};
+ for(const path of ['/api/v1/operations/program/check','/api/v1/operations/program/apply','/api/v1/data/retention/policy']){
+  assert.deepEqual(await operation(path,{reviewed:true}),{accepted:true});
+ }
+ for(const path of ['/api/admin/shell','https://invalid.example/api/v1/operations/program/apply','//invalid.example/api/v1/data/retention/policy'])await assert.rejects(operation(path,{}));
+ assert.equal(posts.length,3);
+ for(const {options} of posts){assert.equal(options.method,'POST');assert.equal(options.credentials,'same-origin');assert.equal(options.redirect,'error');assert.equal(options.cache,'no-store');assert.equal(options.headers['Content-Type'],'application/json')}
+}finally{globalThis.fetch=savedFetch}
+console.log('Operating code check/apply and retention use exact allowlisted same-origin POSTs; unknown/cross-origin writes rejected.');

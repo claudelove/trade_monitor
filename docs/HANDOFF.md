@@ -496,3 +496,18 @@ paired-input limitations, no live certification or private settings/data added.
 Docs-only follow-up; UI bytes/tests remain ad54291, whose17UI/37Python/Pages
 checks succeeded and Actions44529962723 deployed. No private source/account data
 or deploy scripts exported. Private engine owns actual operation and verification.
+
+## 2026-11-21 — Document optional Telegram temporary access
+
+USER_GUIDE section13 documents existing personal-bot /access, extension/status/
+close,30min server lease, one-use private link/no IP entry and no Telegram trading.
+This is documentation of the protected host integration; no private implementation,
+settings, live tokens/links, account data or bot recipient is exported. Numbered
+UI/common package remain be60d31/ad54291 bytes; no screen or design change.
+
+Also corrected the generic transport allowlist for new code check/apply and
+retention-policy writes. It had rejected those current UI requests before fetch.
+Only3exact same-origin routes added; unknown/external writes still reject.
+Transport regression tests cover JSON POST/cookie/same-origin/no-redirect/cache
+flags.17UI suites and Pages no-write boundary pass. Private host adapts only the
+allowlist entries; Pages preview remains inert and has no private data/keys.
